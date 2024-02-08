@@ -4,6 +4,10 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Task {
+
+    public static final String TODO = "todo-cards";
+    public static final String DOING = "doing-cards";
+    public static final String DONE = "done-cards";
     @XmlElement
     String column;
     @XmlElement
@@ -11,34 +15,28 @@ public class Task {
     @XmlElement
     String description;
     @XmlElement
-    String priority;
-    @XmlElement
     String startDate;
     @XmlElement
     String endDate;
 
-    // final LOW_PRIORITY = 100;
-    // final MEDIUM_PRIORITY = 300;
-    // final HIGH_PRIORITY = 500;
+    public static final int LOW_PRIORITY = 100;
+    public static final int MEDIUM_PRIORITY = 300;
+    public static final int HIGH_PRIORITY = 500;
 
-    // TODO = "todo-cards";
-    // DOING = "doing-cards";
-    // DONE = "done-cards";
-
-
+    @XmlElement
+    String priority;
 
     public Task() {
     }
 
     public Task(String column, String title, String description, String priority, String startDate, String endDate) {
-        this.column = column;
+        this.column = TODO;
         this.title = title;
         this.description = description;
         this.priority = priority;
         this.startDate = startDate;
         this.endDate = endDate;
     }
-
 
     public String getColumn() {
         return column;
@@ -88,5 +86,3 @@ public class Task {
         this.endDate = endDate;
     }
 }
-
-
