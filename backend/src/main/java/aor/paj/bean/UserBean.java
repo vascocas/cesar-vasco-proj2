@@ -17,6 +17,7 @@ public class UserBean {
     final String filename = "users.json";
     private ArrayList<User> users;
 
+
     public UserBean() {
         File f = new File(filename);
         if(f.exists()){
@@ -75,5 +76,32 @@ public class UserBean {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean usernameExists(String username,ArrayList<User> users){
+        boolean exists=false;
+
+        for (User u : users){
+            if (u.getUsername().equals(username)) exists=true;
+        }
+        return exists;
+    }
+
+    public boolean emailExists(String email,ArrayList<User> users){
+        boolean exists=false;
+
+        for (User u : users){
+            if (u.getEmail().equals(email)) exists=true;
+        }
+        return exists;
+    }
+
+    public boolean phoneExists(String phone,ArrayList<User> users) {
+        boolean exists = false;
+
+        for (User u : users) {
+            if (u.getPhoneNumber().equals(phone)) exists = true;
+        }
+        return exists;
     }
 }

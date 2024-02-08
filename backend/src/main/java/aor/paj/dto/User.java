@@ -4,6 +4,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class User {
+
     @XmlElement
     String username;
     @XmlElement
@@ -77,5 +78,4 @@ public class User {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
 }
