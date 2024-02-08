@@ -1,0 +1,219 @@
+/* Formatação relativa à scrum.html --> */
+/* Formatação relativa a todo o body do documento html */
+body {
+  background-color: var(--color_light);
+  font-family: var(--type_font);
+  font-size: var(--font_size_medium_low);
+  color: var(--white);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+}
+
+nav {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.btn-nav {
+  width: 25%;
+  padding: 10px 0;
+  margin: 5px;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--white);
+  background: var(--color_regular);
+  cursor: pointer;
+  box-shadow: 5px 5px 20px -12px;
+  font-size: var(--font_size_medium_low);
+}
+
+.btn-nav:hover {
+  background-color: var(--color_dark);
+}
+
+.left-menu,
+.center-menu,
+.right-menu {
+  width: 100%;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background: var(--color_regular);
+  border-radius: 10px;
+  box-shadow: 5px 5px 20px -12px;
+  margin: 30px;
+}
+
+.left-menu {
+  justify-content: flex-start;
+}
+
+.cards {
+  height: 280px;
+  width: 340px;
+  margin-top: 10px;
+  padding: 5px;
+  background-color: var(--color_dark);
+  color: var(--white);
+  border-radius: 10px;
+  overflow: auto;
+}
+
+.card-header {
+  border-radius: 6px;
+  box-shadow: 5px 5px 20px -12px;
+  margin: 10px;
+  border: 2px solid var(--color_regular);
+  cursor: pointer;
+  text-align: left;
+  padding: 5px;
+  font-family: var(--type_font);
+  font-size: var(--font_size_small);
+}
+
+.card-header:hover {
+  background-color: var(--color_light);
+}
+
+.task-options button {
+  padding: 4px;
+  margin-bottom: 10px;
+  border: 2px solid var(--color_regular);
+  background-color: var(--color_light);
+  cursor: pointer;
+  font-family: var(--type_font);
+  font-size: var(--font_size_small);
+  display: inline-block; 
+}
+
+.task-options button:hover {
+  background-color: var(--color_dark);
+  color: var(--white);
+}
+
+/* Formatação relativa às tasks.html --> */
+
+.task-form {
+  width: 100%;
+  padding: 30px;
+  background: var(--color_regular);
+  border-radius: 10px;
+  box-shadow: 5px 5px 20px -12px;
+  margin: 20 auto;
+}
+
+#taskH1 {
+  font-family: var(--type_font);
+  color: var(--white);
+  font-size: var(--font_size_medium_high);
+  text-align: left;
+}
+
+.containerT {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-submit {
+  width: 30%;
+  padding: 14px 0;
+  margin: 10px;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--white);
+  background: var(--color_dark);
+  cursor: pointer;
+  box-shadow: 5px 5px 20px -12px;
+  font-size: var(--font_size_medium_high);
+}
+
+.btn-submit:hover {
+  background-color: var(--color_regular);
+}
+
+.textfield {
+  margin-bottom: 20px;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 10px;
+  background: var(--color_dark);
+  color: var(--white);
+  font-family: var(--type_font);
+  font-size: var(--font_size_medium_low);
+  box-shadow: 5px 5px 20px -12px;
+  text-transform: uppercase;
+}
+
+.textfield label {
+  display: block;
+  margin-bottom: 5px;
+  font-family: var(--type_font);
+  color: var(--white);
+  width: 400px;
+  font-size: var(--font_size_medium_low);
+  font-weight: 700;
+}
+
+#newTask_title,
+#editTask_title,
+#newTask_description,
+#editTask_description {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 10px;
+  background: var(--color_dark);
+  color: var(--white);
+  font-family: var(--type_font);
+  font-size: var(--font_size_small);
+  box-shadow: 5px 5px 20px -12px;
+  border: 2px solid var(--color_regular);
+  word-wrap: break-word;  
+}
+
+#newTask_title,
+#editTask_title {
+  height: 50px;
+}
+
+#newTask_description,
+#editTask_description {
+  height: 120px;
+}
+
+#newTask_title::placeholder,
+#editTask_title::placeholder,
+#newTask_description::placeholder, 
+#editTask_description::placeholder {
+  font-family:var(--type_font);
+  font-size: var(--font_size_small);
+  color: var(--color_light);
+}

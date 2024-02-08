@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scrum</title>
+    <link rel="stylesheet" href="../Style/layout.css" />
+    <link rel="stylesheet" href="../Style/scrum&tasks.css" />
+  </head>
+  <body class="tarefa">
+    <header>
+      <!--Cabeçalho-->
+      <h1>SCRUM BOARD</h1>
+      <h2 id="userHeader"></h2>
+    </header>
+    <nav>
+      <!--Menu navegação com o botão Voltar ao Scrum Board-->
+      <input type="button" class="btn-nav" value="Voltar" onclick="location.href = 'scrum.html'"/>
+    </nav>
+    <div class="container">
+      <form>
+        <div class="task-form">
+          <h1 id="taskH1">TAREFA</h1>
+          <div class="textfield">
+            <label for="newTask_title" class="label">Título</label>
+            <!--Campo para receber o título-->
+            <textarea type="text" id="newTask_title" placeholder="Insira o titulo da tarefa"></textarea>
+          </div>
+          <div class="textfield">
+            <label for="newTask_description" class="label">descrição</label>
+            <!--Campo para receber a descrição-->
+            <textarea type="text" id="newTask_description" placeholder="Insira a descrição da tarefa"></textarea>
+          </div>
+          <div>
+            <!--Botão gravar-->
+            <input type="button" id="newTask_btn_submit" class="btn-submit" value="Gravar"/>
+          </div>
+        </div>
+      </form>
+    </div>
+    <footer>
+      <p>2024 AoR. Todos os direitos reservados.</p>
+    </footer>
+  </body>
+  <!--Ficheiro javascript associado-->
+  <script src="newTask.js"></script>
+</html>

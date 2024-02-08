@@ -1,0 +1,43 @@
+/* Criação de variáveis CSS*/
+:root{
+    --color_light: rgb(139, 151, 180);
+    --color_regular: rgb(105, 156, 182);
+    --color_dark: #01041e;
+    --white: white;
+    --type_font: sans-serif;
+    --font_size_small: 16px;
+    --font_size_medium_low: 20px;
+    --font_size_medium_high: 26px;
+    --font_size_large: 28px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--type_font);
+    font-size: var(--font_size_large);
+    text-align: left;
+    background-color: var(--color_dark);
+    padding: 2px;
+    color: var(--white);
+}
+
+#userHeader{
+    margin-right: 50px;
+}
+
+footer{
+    width: 100%;
+    height: 25px;
+    font-family: var(--type_font);
+    font-size: var(--font_size_medium_low);
+    color: var(--white);
+    text-align: center;
+    bottom: 0;
+    background: var(--color_regular); 
+}
+ 
+footer p{
+    margin: 0;
+}

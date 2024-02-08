@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scrum</title>
+    <link rel="stylesheet" href="Style/layout.css" />
+    <link rel="stylesheet" href="Style/index.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!--Div para separar o ecrã a meio. É colocada uma imagem do lado esquerdo-->
+      <div class="left-login">
+        <img
+          src="Resources/imageLogin.svg" class="left-login-image" alt="escritorio animação"
+        />
+      </div>
+      <!--Div do lado direito que contém o painel login-->
+      <div class="right-login">
+        <form>
+          <!--Painel login-->
+          <div class="card-login">
+            <h2>Bem vindo ao</h2>
+            <h1>SCRUM BOARD</h1>
+            <div class="textfield">
+              <!--Campos para receber o nome de utilizador-->
+              <label for="index_usertext" class="label">Utilizador</label>
+              <input type="text" id="index_usertext" placeholder="Insira o seu nome de utilizador"/>
+            </div>
+            <div class="textfield">
+              <!--Campos para receber a password-->
+              <label for="index_password" class="label">Password</label>
+              <input type="password" id="index_password" placeholder="Insira a sua password"/>
+            </div>
+            <div>
+              <!--Botão login-->
+              <input
+                type="button" id="index_btn_login" class="btn-login" value="Login"/>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <footer>
+      <p>&copy;2024 AoR. Todos os direitos reservados.</p>
+    </footer>
+  </body>
+  <!--Ficheiro javascript associado-->
+  <script src="index.js"></script>
+</html>
