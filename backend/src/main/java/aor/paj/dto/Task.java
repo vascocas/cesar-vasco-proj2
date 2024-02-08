@@ -10,19 +10,33 @@ public class Task {
     String title;
     @XmlElement
     String description;
+    @XmlElement
+    String priority;
+    @XmlElement
+    String startDate;
+    @XmlElement
+    String endDate;
+
+    // final LOW_PRIORITY = 100;
+    // final MEDIUM_PRIORITY = 300;
+    // final HIGH_PRIORITY = 500;
+
+    // TODO = "todo-cards";
+    // DOING = "doing-cards";
+    // DONE = "done-cards";
+
 
 
     public Task() {
-        this.column = "todo-cards";
-        this.title = null;
-        this.description = null;
-
     }
 
-    public Task(String title, String description) {
-        this.column = "todo-cards";
+    public Task(String column, String title, String description, String priority, String startDate, String endDate) {
+        this.column = column;
         this.title = title;
         this.description = description;
+        this.priority = priority;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
 
@@ -48,6 +62,30 @@ public class Task {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }
 

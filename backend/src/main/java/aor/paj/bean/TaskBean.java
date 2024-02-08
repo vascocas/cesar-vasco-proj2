@@ -16,7 +16,7 @@ import jakarta.json.bind.JsonbConfig;
 @ApplicationScoped
 public class TaskBean {
 
-    final String filename = "task.json";
+    final String filename = "tasks.json";
     private ArrayList<Task> tasks;
 
     public TaskBean() {
@@ -53,6 +53,17 @@ public class TaskBean {
         for (Task t : tasks) {
             if (t.getTitle().equals(title)){
                 tasks.remove(t);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean updateColumn(String title, String column) {
+        for (Task t : tasks) {
+            if (t.getTitle().equals(title)) {
+                t.setColumn(column);
+                writeIntoJsonFile();
                 return true;
             }
         }

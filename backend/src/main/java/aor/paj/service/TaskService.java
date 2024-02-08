@@ -2,7 +2,6 @@ package aor.paj.service;
 
 import aor.paj.bean.TaskBean;
 import aor.paj.dto.Task;
-import aor.paj.dto.User;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -11,14 +10,13 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 
 
-@Path("/task")
+@Path("/tasks")
 public class TaskService {
 
     @Inject
     TaskBean taskBean;
 
     @GET
-    @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Task> getTasks() {
         return taskBean.getTasks();
@@ -44,9 +42,9 @@ public class TaskService {
     }
 
     @DELETE
-    @Path("/delete")
+    @Path("/{title}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response removeTask(@QueryParam("title") String title) {
+    public Response removeTask(@PathParam("title") String title) {
         boolean deleted =  taskBean.removeTask(title);
         if (!deleted)
             return Response.status(200).entity("Task with this title is not found").build();
@@ -54,13 +52,24 @@ public class TaskService {
     }
 
     @PUT
-    @Path("/update")
+    @Path("/updateColumn/{title}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateDescription(Task t, @HeaderParam("title") String description) {
+    public Response updateColumn(Task t, @PathParam("title") String column) {
+        boolean updated = taskBean.updateColumn(t.getTitle(), column);
+        if (!updated)
+            return Response.status(200).entity("Task with this title is not found").build();
+        return Response.status(200).entity("Task column updated").build();
+    }
+
+    @PUT
+    @Path("/updateDescription/{title}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateDescription(Task t, @PathParam("title") String description) {
         boolean updated = taskBean.updateDescription(t.getTitle(), description);
         if (!updated)
             return Response.status(200).entity("Task with this title is not found").build();
         return Response.status(200).entity("Task description updated").build();
     }
+
 
 }
