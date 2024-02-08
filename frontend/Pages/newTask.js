@@ -12,7 +12,7 @@ const submitButton = document.getElementById("newTask_btn_submit");
 submitButton.onclick = addTask;
 
 // Criar uma nova tarefa
-function addTask() {
+async function addTask() {
   // Declara e atribui variáveis para guardaar os elementos: título e descrição da tarefa
   const titleInput = document.getElementById("newTask_title");
   const descriptionInput = document.getElementById("newTask_description");
@@ -41,15 +41,35 @@ function addTask() {
   } else {
     // Cria uma nova tarefa com os atributos title, column e description. Todas as tarefas começam na coluna TODO
     const newTask = {
-      title: title,
       column: "todo-cards",
-      description: description,
+      title: title,
+      description: description
     };
-    // Adicionar a nova tarefa ao array
-    tasks.push(newTask);
-    // Grava as alterações no armazenamento local
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-    alert("Nova tarefa adicionada com sucesso!");
+    
+
+    await fetch('http://localhost:8080/backend/rest/task/add', 
+    { 
+        method: 'POST', 
+        headers:  
+        { 
+            'Accept': '*/*', 
+            'Content-Type': 'application/json' 
+        }, 
+        body: JSON.stringify(newTask) 
+            
+      } 
+      ).then(function (response) { 
+        if (response.status == 200) { 
+          alert('task added successfully :)'); 
+          // Adicionar a nova tarefa ao array
+          tasks.push(newTask);
+          localStorage.setItem("tasks", JSON.stringify(tasks));
+        } else { 
+          alert('something went wrong :('); 
+        } 
+    });
+    
+
   }
 
   // Limpar os campos após adicionar uma nova tarefa
