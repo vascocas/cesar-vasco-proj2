@@ -2,7 +2,6 @@ package aor.paj.service;
 
 import aor.paj.bean.TaskBean;
 import aor.paj.dto.Task;
-import aor.paj.dto.User;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -11,17 +10,26 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 
 
-@Path("/task")
+@Path("/tasks")
 public class TaskService {
 
     @Inject
     TaskBean taskBean;
 
     @GET
-    @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Task> getTasks() {
         return taskBean.getTasks();
+    }
+
+    @GET
+    @Path("/{title}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTask(@PathParam("title") String title) {
+        Task task =  taskBean.getTask(title);
+        if (task==null)
+            return Response.status(200).entity("Task with this title is not found").build();
+        return Response.status(200).entity(task).build();
     }
 
     @POST
@@ -30,17 +38,6 @@ public class TaskService {
     public Response addTask(Task t) {
         taskBean.addTask(t);
         return Response.status(200).entity("A new task is created").build();
-    }
-
-    @GET
-    @Path("/{title}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getTask(@PathParam("title") String title) {
-        Task task =  taskBean.getTask(title);
-
-        if (task==null)
-            return Response.status(200).entity("Task with this title is not found").build();
-        return Response.status(200).entity(task).build();
     }
 
     @DELETE
@@ -54,13 +51,24 @@ public class TaskService {
     }
 
     @PUT
-    @Path("/update")
+    @Path("/moveTask")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateDescription(Task t, @HeaderParam("title") String description) {
-        boolean updated = taskBean.updateDescription(t.getTitle(), description);
+    public Response moveTask(Task t) {
+        boolean updated = taskBean.moveTask(t.getTitle(), t.getColumn());
         if (!updated)
             return Response.status(200).entity("Task with this title is not found").build();
-        return Response.status(200).entity("Task description updated").build();
+        return Response.status(200).entity("Task moved to the new column").build();
     }
+
+    @PUT
+    @Path("/updateTask")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateDescription(Task t, @QueryParam("taskTitle") String taskTitle) {
+        boolean updated = taskBean.updateTask(taskTitle, t.getTitle(), t.getDescription(), t.getPriority(), t.getStartDate(), t.getEndDate());
+        if (!updated)
+            return Response.status(200).entity("Task with this title is not found").build();
+        return Response.status(200).entity("Task content updated").build();
+    }
+
 
 }

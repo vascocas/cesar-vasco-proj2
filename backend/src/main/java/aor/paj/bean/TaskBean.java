@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import aor.paj.dto.Task;
 import jakarta.enterprise.context.ApplicationScoped;
-import aor.paj.dto.User;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
@@ -16,7 +15,7 @@ import jakarta.json.bind.JsonbConfig;
 @ApplicationScoped
 public class TaskBean {
 
-    final String filename = "task.json";
+    final String filename = "tasks.json";
     private ArrayList<Task> tasks;
 
     public TaskBean() {
@@ -24,7 +23,7 @@ public class TaskBean {
         if(f.exists()){
             try {
                 FileReader filereader = new FileReader(f);
-                tasks = JsonbBuilder.create().fromJson(filereader, new ArrayList<User>() {}.getClass().getGenericSuperclass());
+                tasks = JsonbBuilder.create().fromJson(filereader, new ArrayList<Task>() {}.getClass().getGenericSuperclass());
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -59,10 +58,25 @@ public class TaskBean {
         return false;
     }
 
-    public boolean updateDescription(String title, String description) {
+    public boolean moveTask(String title, String newColumn) {
         for (Task t : tasks) {
             if (t.getTitle().equals(title)) {
-                t.setDescription(description);
+                t.setColumn(newColumn);
+                writeIntoJsonFile();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean updateTask(String title, String newTitle, String newDescription, String newPriority, String newStartDate, String newEndDate) {
+        for (Task t : tasks) {
+            if (t.getTitle().equals(title)) {
+                t.setTitle(newTitle);
+                t.setDescription(newDescription);
+                t.setPriority(newPriority);
+                t.setStartDate(newStartDate);
+                t.setEndDate(newEndDate);
                 writeIntoJsonFile();
                 return true;
             }

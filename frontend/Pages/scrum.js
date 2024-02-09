@@ -14,48 +14,70 @@ function homeMenu() {
   document.location.href = "../index.html";
 }
 
-// Carregar as tarefas existentes do armazenamento local
-let tasks = JSON.parse(localStorage.getItem("tasks"));
+// Cria array para armazenar as tarefas
+let tasks = [];
+
+async function getAllTasks() {
+  await fetch("http://localhost:8080/backend/rest/tasks", {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch tasks");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      tasks = data;
+      showTasks();
+    })
+    .catch((error) => {
+      console.error("Error fetching tasks:", error);
+    });
+}
+
+// Função para listar as tarefas nos quadros
+function showTasks() {
+  // Limpar os quadros antes de listar novamente
+  document.getElementById("todo-cards").innerHTML = "";
+  document.getElementById("doing-cards").innerHTML = "";
+  document.getElementById("done-cards").innerHTML = "";
+
+  // Iterar sobre as tarefas e adicioná-las aos quadros apropriados
+  for (const t of tasks) {
+    const cardElement = createCardElement(t.title);
+    const columnElement = document.getElementById(t.column);
+    columnElement.appendChild(cardElement);
+  }
+}
+
+// Função para criar um elemento de cartão HTML para uma tarefa
+function createCardElement(title) {
+  // Cria uma Div e atribui a className "card"
+  const cardElement = document.createElement("div");
+  cardElement.className = "card";
+  // Cria uma Div e atribui a className "card-header"
+  const cardHeaderElement = document.createElement("div");
+  cardHeaderElement.className = "card-header";
+  // Altera o textContent para o título da tarefa
+  cardHeaderElement.textContent = title;
+
+  // Adicionar Event Listener para exibir opções
+  cardHeaderElement.addEventListener("click", function () {
+    showOptions(cardElement);
+  });
+
+  // Adiciona a Div cardHeaderElement dentro da cardElement
+  cardElement.appendChild(cardHeaderElement);
+  return cardElement;
+}
 
 window.onload = () => {
-  // Listar as tarefas nos quadros
-  showTasks();
-
-  // Função para listar as tarefas nos quadros
-  function showTasks() {
-    // Limpar os quadros antes de listar novamente
-    document.getElementById("todo-cards").innerHTML = "";
-    document.getElementById("doing-cards").innerHTML = "";
-    document.getElementById("done-cards").innerHTML = "";
-
-    // Iterar sobre as tarefas e adicioná-las aos quadros apropriados
-    for (const t of tasks) {
-      const cardElement = createCardElement(t.title);
-      const columnElement = document.getElementById(t.column);
-      columnElement.appendChild(cardElement);
-    }
-  }
-
-  // Função para criar um elemento de cartão HTML para uma tarefa
-  function createCardElement(title) {
-    // Cria uma Div e atribui a className "card"
-    const cardElement = document.createElement("div");
-    cardElement.className = "card";
-    // Cria uma Div e atribui a className "card-header"
-    const cardHeaderElement = document.createElement("div");
-    cardHeaderElement.className = "card-header";
-    // Altera o textContent para o título da tarefa
-    cardHeaderElement.textContent = title;
-
-    // Adicionar Event Listener para exibir opções
-    cardHeaderElement.addEventListener("click", function () {
-      showOptions(cardElement);
-    });
-
-    // Adiciona a Div cardHeaderElement dentro da cardElement
-    cardElement.appendChild(cardHeaderElement);
-    return cardElement;
-  }
+  // Call getAllTasks() when the page loads
+  getAllTasks();
 };
 
 // Mostra os botões de opções de cada tarefa
@@ -70,10 +92,15 @@ function showOptions(cardElement) {
   const optionsContainer = document.createElement("div");
   optionsContainer.className = "task-options";
   // Cria botões, adicionar Event Listener e chama função correspondente com o parâmetro de entrada o título da tarefa
-  optionsContainer.innerHTML =
-   `<button onclick="consultTask('${cardElement.querySelector(".card-header").textContent}')">Consultar</button>
-    <button onclick="deleteTask('${cardElement.querySelector(".card-header").textContent}')">Apagar</button>
-    <button onclick="moveTask('${cardElement.querySelector(".card-header").textContent}')">Mover</button>`;
+  optionsContainer.innerHTML = `<button onclick="consultTask('${
+    cardElement.querySelector(".card-header").textContent
+  }')">Consultar</button>
+    <button onclick="deleteTask('${
+      cardElement.querySelector(".card-header").textContent
+    }')">Apagar</button>
+    <button onclick="moveTask('${
+      cardElement.querySelector(".card-header").textContent
+    }')">Mover</button>`;
 
   // Adicionar opções de tarefa ao cardElement
   cardElement.appendChild(optionsContainer);
@@ -98,22 +125,34 @@ function consultTask(title) {
 }
 
 // Função apagar tarefa (Segunda das opções da tarefa)
-function deleteTask(title) {
-  // Pesquisa pelo título, o índice da tarefa dentro do array, através do método findIndex()
-  const taskIndex = tasks.findIndex((task) => task.title === title);
-
+async function deleteTask(title) {
   //Confirmação do utilizador de apagar tarefa
-  const userConfirmed = confirm("Tem a certeza que pretende remover esta tarefa?");
+  const userConfirmed = confirm(
+    "Tem a certeza que pretende remover esta tarefa?"
+  );
   if (userConfirmed) {
     // Remover a tarefa da lista
-    tasks.splice(taskIndex, 1);
+    await fetch(
+      "http://localhost:8080/backend/rest/tasks/delete/?title=" + title,
+      {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    ).then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to delete task");
+      }
 
-    // Atualiza o array de tarefas no armazenamento local
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+      // Remove a tarefa da lista local
+      tasks = tasks.filter((task) => task.title !== title);
 
-    alert(" A tarefa com o título: " + title + ",  foi eliminada com sucesso.");
-    // Chama a função para actualizar a página após remoção da tarefa
-    window.onload();
+      // Atualiza a UI para refletir a remoção da tarefa
+      showTasks();
+
+      alert("A tarefa com o título: " + title + ", foi eliminada com sucesso.");
+    });
   }
 }
 
