@@ -51,7 +51,7 @@ public class User {
     public User() {
     }
 
-    public User(String username, String password, String email, String firstName, String lastName, String phoneNumber) {
+    public User(String username, String password, String email, String firstName, String lastName, String phoneNumber, String profileImageUrl) {
         this.id = getNextId();
         this.username = username;
         this.password = password;

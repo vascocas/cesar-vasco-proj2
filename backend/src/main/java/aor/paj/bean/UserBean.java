@@ -78,30 +78,19 @@ public class UserBean {
         }
     }
 
-    public boolean usernameExists(String username,ArrayList<User> users){
-        boolean exists=false;
-
-        for (User u : users){
-            if (u.getUsername().equals(username)) exists=true;
-        }
-        return exists;
-    }
-
     public boolean emailExists(String email,ArrayList<User> users){
-        boolean exists=false;
-
         for (User u : users){
-            if (u.getEmail().equals(email)) exists=true;
+            if (u.getEmail().equals(email)){
+                return true;
+            }
         }
-        return exists;
+        return false;
     }
 
     public boolean phoneExists(String phone,ArrayList<User> users) {
-        boolean exists = false;
-
         for (User u : users) {
-            if (u.getPhoneNumber().equals(phone)) exists = true;
+            if (u.getPhoneNumber().equals(phone)) return true;
         }
-        return exists;
+        return false;
     }
 }

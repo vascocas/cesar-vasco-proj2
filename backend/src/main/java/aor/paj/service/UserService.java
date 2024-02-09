@@ -2,6 +2,7 @@ package aor.paj.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import aor.paj.bean.UserCredentialsBean;
 import aor.paj.bean.UserBean;
 import aor.paj.dto.User;
 import aor.paj.dto.UserCredentials;
@@ -25,6 +26,8 @@ public class UserService {
 
     @Inject
     UserBean userBean;
+    @Inject
+    UserCredentialsBean userCredentialsBean;
 
 
     @GET
@@ -32,6 +35,13 @@ public class UserService {
     @Produces(MediaType.APPLICATION_JSON)
     public List<User> getUsers() {
         return userBean.getUsers();
+    }
+
+    @GET
+    @Path("/allCredentials")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<UserCredentials> getUsersCredentials() {
+        return userCredentialsBean.getAllCredentials();
     }
 
 
@@ -50,8 +60,9 @@ public class UserService {
     public Response getUser(@PathParam("username") String username) {
         User user =  userBean.getUser(username);
 
-        if (user==null)
-            return Response.status(200).entity("User with this username is not found").build();
+        if (user==null) {
+            return Response.status(400).entity("User with this username is not found").build();
+        }
         return Response.status(200).entity(user).build();
     }
 
@@ -85,7 +96,7 @@ public class UserService {
         User user = userBean.getUser(username);
 
         if (user == null) {
-            return Response.status(404).entity("User with this username is not found").build();
+            return Response.status(401).entity("User with this username is not found").build();
         } else if (!user.getPassword().equals(password)) {
             return Response.status(401).entity("Invalid password").build();
         } else {
@@ -104,22 +115,35 @@ public class UserService {
     @POST
     @Path("/signup")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response signUp(User u) {
+    public Response signUp(User newUser) {
+
+        String username = newUser.getUsername();
+        String password = newUser.getPassword();
+        String email = newUser.getEmail();
+        String phoneNumber = newUser.getPhoneNumber();
 
         ArrayList users = userBean.getUsers();
 
-        if (userBean.usernameExists(u.getUsername(), users)) {
-            return Response.status(400).entity("Username already in use").build();
-        } else if (userBean.emailExists(u.getEmail(), users)) {
-            return Response.status(400).entity("Email already in use").build();
-        } else if (userBean.phoneExists(u.getPhoneNumber(), users)) {
-            return Response.status(400).entity("This phone number is already in use").build();
-        } else {
-            u.setUserTasks(new ArrayList<>()); //Coloca Arraylist vazia
-            u.setId(u.getNextId()); //Coloca ID na criação
-            userBean.addUser(u);
-            return Response.status(200).entity("Thanks for being awesome! Your account has been successfully created.").build();
-        }
-    }
+        if (username == null || username.isEmpty() || password == null || password.isEmpty() || email == null || email.isEmpty()) {
+            return Response.status(400).entity("Username, password, and email are required").build();
+        }else{
+            if (userCredentialsBean.usernameExists(username, userCredentialsBean.getAllCredentials())) {
+                return Response.status(400).entity("Username already taken").build();
+            }else if (userBean.emailExists(email, users)) {
+                return Response.status(400).entity("Email already in use").build();
+            } else if (userBean.phoneExists(phoneNumber, users)) {
+                return Response.status(400).entity("This phone number is already in use").build();
+            }else {
+                //Adiciona as credenciais de login a um ficheiro separado
+                userCredentialsBean.addCredentials(new UserCredentials(username, password));
+                userBean.addUser(newUser);
 
+                return Response.status(201).entity("Thanks for being awesome! Your account has been successfully created.").build();
+            }
+        }
+
+
+
+
+    }
 }
