@@ -34,6 +34,10 @@ public class TaskService {
     @Path("/{title}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTask(@PathParam("title") String title) {
+        System.out.println("Titulo ==> " + title);
+        if(title instanceof String){
+            System.out.println("Titulo é String" );
+        }
         Task task =  taskBean.getTask(title);
 
         if (task==null)
@@ -42,9 +46,9 @@ public class TaskService {
     }
 
     @DELETE
-    @Path("/{title}")
+    @Path("/delete")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response removeTask(@PathParam("title") String title) {
+    public Response removeTask(@QueryParam("title") String title) {
         boolean deleted =  taskBean.removeTask(title);
         if (!deleted)
             return Response.status(200).entity("Task with this title is not found").build();
@@ -52,20 +56,20 @@ public class TaskService {
     }
 
     @PUT
-    @Path("/updateColumn/{title}")
+    @Path("/updateColumn")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateColumn(Task t, @PathParam("title") String column) {
-        boolean updated = taskBean.updateColumn(t.getTitle(), column);
+    public Response updateColumn(Task t) {
+        boolean updated = taskBean.updateColumn(t.getTitle(), t.getColumn());
         if (!updated)
             return Response.status(200).entity("Task with this title is not found").build();
         return Response.status(200).entity("Task column updated").build();
     }
 
     @PUT
-    @Path("/updateDescription/{title}")
+    @Path("/updateDescription")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateDescription(Task t, @PathParam("title") String description) {
-        boolean updated = taskBean.updateDescription(t.getTitle(), description);
+    public Response updateDescription(Task t, @QueryParam("taskTitle") String taskTitle) {
+        boolean updated = taskBean.updateDescription(taskTitle, t.getTitle(), t.getDescription());
         if (!updated)
             return Response.status(200).entity("Task with this title is not found").build();
         return Response.status(200).entity("Task description updated").build();

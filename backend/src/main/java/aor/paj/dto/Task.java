@@ -5,9 +5,9 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Task {
 
-    public static final String TODO = "todo-cards";
-    public static final String DOING = "doing-cards";
-    public static final String DONE = "done-cards";
+    private static final String TODO = "todo-cards";
+    private static final String DOING = "doing-cards";
+    private static final String DONE = "done-cards";
     @XmlElement
     String column;
     @XmlElement
@@ -19,9 +19,9 @@ public class Task {
     @XmlElement
     String endDate;
 
-    public static final int LOW_PRIORITY = 100;
-    public static final int MEDIUM_PRIORITY = 300;
-    public static final int HIGH_PRIORITY = 500;
+    private static final int LOW_PRIORITY = 100;
+    private static final int MEDIUM_PRIORITY = 300;
+    private static final int HIGH_PRIORITY = 500;
 
     @XmlElement
     String priority;

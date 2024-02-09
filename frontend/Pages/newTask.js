@@ -47,7 +47,7 @@ async function addTask() {
     };
     
 
-    await fetch('http://localhost:8080/backend/rest/task/add', 
+    await fetch('http://localhost:8080/backend/rest/tasks/add', 
     { 
         method: 'POST', 
         headers:  

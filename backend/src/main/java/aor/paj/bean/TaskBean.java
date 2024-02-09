@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import aor.paj.dto.Task;
 import jakarta.enterprise.context.ApplicationScoped;
-import aor.paj.dto.User;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
@@ -24,7 +23,7 @@ public class TaskBean {
         if(f.exists()){
             try {
                 FileReader filereader = new FileReader(f);
-                tasks = JsonbBuilder.create().fromJson(filereader, new ArrayList<User>() {}.getClass().getGenericSuperclass());
+                tasks = JsonbBuilder.create().fromJson(filereader, new ArrayList<Task>() {}.getClass().getGenericSuperclass());
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -39,6 +38,8 @@ public class TaskBean {
 
     public Task getTask(String title) {
         for (Task t : tasks) {
+            System.out.println("Tarefa ==> "+ t);
+            System.out.println("Titulo ==> "+ t.getTitle());
             if (t.getTitle().equals(title))
                 return t;
         }
@@ -70,9 +71,10 @@ public class TaskBean {
         return false;
     }
 
-    public boolean updateDescription(String title, String description) {
+    public boolean updateDescription(String title, String newTitle, String description) {
         for (Task t : tasks) {
             if (t.getTitle().equals(title)) {
+                t.setTitle(newTitle);
                 t.setDescription(description);
                 writeIntoJsonFile();
                 return true;
