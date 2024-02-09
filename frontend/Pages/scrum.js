@@ -14,8 +14,33 @@ function homeMenu() {
   document.location.href = "../index.html";
 }
 
-// Carregar as tarefas existentes do armazenamento local
-let tasks = JSON.parse(localStorage.getItem("tasks"));
+// Cria array para armazenar as tarefas
+let tasks = [];
+
+async function getAllTasks() {
+      
+  await fetch('http://localhost:8080/backend/rest/tasks',
+  {
+      method: 'GET',
+      headers: { 
+        'Accept': 'application/json' 
+      },
+    }
+  )
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to fetch tasks');
+    }
+    return response.json();
+  })
+  .then(data => {
+    tasks = data;
+  })
+  .catch(error => {
+    console.error('Error fetching tasks:', error);
+  });
+}
+
 
 window.onload = () => {
   // Listar as tarefas nos quadros

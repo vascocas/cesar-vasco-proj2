@@ -4,8 +4,8 @@ const username = localStorage.getItem("username");
 // Atualizar a mensagem de boas vindas com o nome de utilizador
 document.getElementById("userHeader").innerHTML = "Bem vindo, " + username;
 
-// Carregar as tarefas existentes do armazenamento local, se existir um array senão cria um novo
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+// Cria array para armazenar as tarefas
+let tasks = [];
 
 // Adiciona um Event Listener ao botao Adicionar Tarefa
 const submitButton = document.getElementById("newTask_btn_submit");
@@ -19,19 +19,19 @@ async function addTask() {
 
   // Verifica tamanho máximo de caracteres do título
   const maxLength = 50;
-  let title;
+  let newTitle;
   if (titleInput.value.length > maxLength) {
     alert(
       "Ultrapassou o máximo de caracteres para o Título = " + maxLength + "!"
     );
     return;
   } else {
-    title = titleInput.value;
+    newTitle = titleInput.value;
   }
-  let description = descriptionInput.value;
+  let newDescription = descriptionInput.value;
 
   // Verifica se o título já existe em alguma tarefa, através do método some() e devolve um boolean
-  const existentTitle = tasks.some((task) => task.title === title);
+  const existentTitle = tasks.some((task) => task.title === newTitle);
 
   if (titleInput.value === "") {
     alert("Por favor preencha o título.");
@@ -41,12 +41,12 @@ async function addTask() {
   } else {
     // Cria uma nova tarefa com os atributos title, column e description. Todas as tarefas começam na coluna TODO
     const newTask = {
-      column: "todo-cards",
-      title: title,
-      description: description
+      title: newTitle,
+      description: newDescription
     };
-    
-
+  
+    const requestBody = JSON.stringify(newTask);
+  
     await fetch('http://localhost:8080/backend/rest/tasks/add', 
     { 
         method: 'POST', 
@@ -55,24 +55,28 @@ async function addTask() {
             'Accept': '*/*', 
             'Content-Type': 'application/json' 
         }, 
-        body: JSON.stringify(newTask) 
+        body: requestBody
             
-      } 
-      ).then(function (response) { 
-        if (response.status == 200) { 
-          alert('task added successfully :)'); 
-          // Adicionar a nova tarefa ao array
-          tasks.push(newTask);
-          localStorage.setItem("tasks", JSON.stringify(tasks));
-        } else { 
-          alert('something went wrong :('); 
-        } 
-    });
-    
-
+      })
+      .then(async (response) => {
+        if (!response.ok) {
+          const errorMessage = await response.text();
+          console.error("Response error:", errorMessage); // Log error message
+          throw new Error(`Failed to add task: ${errorMessage}`);
+        }
+        alert('Task added successfully');
+        tasks.push(newTask); // Added this line to push the new task to the tasks array
+        //showTasks(); // Added this line to refresh the scrum board with the updated task list
+      })
+      .catch(error => {
+        console.error('Error adding task:', error);
+        alert('Failed to add task');
+      });
   }
 
   // Limpar os campos após adicionar uma nova tarefa
   titleInput.value = "";
   descriptionInput.value = "";
 }
+
+

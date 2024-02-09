@@ -5,35 +5,41 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Task {
 
-    private static final String TODO = "todo-cards";
-    private static final String DOING = "doing-cards";
-    private static final String DONE = "done-cards";
+    private final String TODO = "todo-cards";
+    private final String DOING = "doing-cards";
+    private final String DONE = "done-cards";
     @XmlElement
-    String column;
+    private String column;
     @XmlElement
-    String title;
+    private String title;
     @XmlElement
-    String description;
+    private String description;
     @XmlElement
-    String startDate;
+    private String startDate;
     @XmlElement
-    String endDate;
+    private String endDate;
 
-    private static final int LOW_PRIORITY = 100;
-    private static final int MEDIUM_PRIORITY = 300;
-    private static final int HIGH_PRIORITY = 500;
+    private final String LOW_PRIORITY = "100";
+    private final String MEDIUM_PRIORITY = "300";
+    private final String HIGH_PRIORITY = "500";
 
     @XmlElement
-    String priority;
+    private String priority;
 
     public Task() {
+        this.column = TODO;
+        this.title = null;
+        this.description = null;
+        this.priority = LOW_PRIORITY;
+        this.startDate = "01.01.2024";
+        this.endDate =  "01.12.2024";
     }
 
-    public Task(String column, String title, String description, String priority, String startDate, String endDate) {
+    public Task(String title, String description, String startDate, String endDate) {
         this.column = TODO;
         this.title = title;
         this.description = description;
-        this.priority = priority;
+        this.priority = LOW_PRIORITY;
         this.startDate = startDate;
         this.endDate = endDate;
     }

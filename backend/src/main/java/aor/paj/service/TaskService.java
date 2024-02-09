@@ -22,27 +22,22 @@ public class TaskService {
         return taskBean.getTasks();
     }
 
+    @GET
+    @Path("/{title}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTask(@PathParam("title") String title) {
+        Task task =  taskBean.getTask(title);
+        if (task==null)
+            return Response.status(200).entity("Task with this title is not found").build();
+        return Response.status(200).entity(task).build();
+    }
+
     @POST
     @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addTask(Task t) {
         taskBean.addTask(t);
         return Response.status(200).entity("A new task is created").build();
-    }
-
-    @GET
-    @Path("/{title}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getTask(@PathParam("title") String title) {
-        System.out.println("Titulo ==> " + title);
-        if(title instanceof String){
-            System.out.println("Titulo é String" );
-        }
-        Task task =  taskBean.getTask(title);
-
-        if (task==null)
-            return Response.status(200).entity("Task with this title is not found").build();
-        return Response.status(200).entity(task).build();
     }
 
     @DELETE
@@ -56,23 +51,23 @@ public class TaskService {
     }
 
     @PUT
-    @Path("/updateColumn")
+    @Path("/moveTask")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateColumn(Task t) {
-        boolean updated = taskBean.updateColumn(t.getTitle(), t.getColumn());
+    public Response moveTask(Task t) {
+        boolean updated = taskBean.moveTask(t.getTitle(), t.getColumn());
         if (!updated)
             return Response.status(200).entity("Task with this title is not found").build();
-        return Response.status(200).entity("Task column updated").build();
+        return Response.status(200).entity("Task moved to the new column").build();
     }
 
     @PUT
-    @Path("/updateDescription")
+    @Path("/updateTask")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateDescription(Task t, @QueryParam("taskTitle") String taskTitle) {
-        boolean updated = taskBean.updateDescription(taskTitle, t.getTitle(), t.getDescription());
+        boolean updated = taskBean.updateTask(taskTitle, t.getTitle(), t.getDescription(), t.getPriority(), t.getStartDate(), t.getEndDate());
         if (!updated)
             return Response.status(200).entity("Task with this title is not found").build();
-        return Response.status(200).entity("Task description updated").build();
+        return Response.status(200).entity("Task content updated").build();
     }
 
 

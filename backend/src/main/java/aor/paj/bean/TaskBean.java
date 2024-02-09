@@ -38,8 +38,6 @@ public class TaskBean {
 
     public Task getTask(String title) {
         for (Task t : tasks) {
-            System.out.println("Tarefa ==> "+ t);
-            System.out.println("Titulo ==> "+ t.getTitle());
             if (t.getTitle().equals(title))
                 return t;
         }
@@ -60,10 +58,10 @@ public class TaskBean {
         return false;
     }
 
-    public boolean updateColumn(String title, String column) {
+    public boolean moveTask(String title, String newColumn) {
         for (Task t : tasks) {
             if (t.getTitle().equals(title)) {
-                t.setColumn(column);
+                t.setColumn(newColumn);
                 writeIntoJsonFile();
                 return true;
             }
@@ -71,11 +69,14 @@ public class TaskBean {
         return false;
     }
 
-    public boolean updateDescription(String title, String newTitle, String description) {
+    public boolean updateTask(String title, String newTitle, String newDescription, String newPriority, String newStartDate, String newEndDate) {
         for (Task t : tasks) {
             if (t.getTitle().equals(title)) {
                 t.setTitle(newTitle);
-                t.setDescription(description);
+                t.setDescription(newDescription);
+                t.setPriority(newPriority);
+                t.setStartDate(newStartDate);
+                t.setEndDate(newEndDate);
                 writeIntoJsonFile();
                 return true;
             }

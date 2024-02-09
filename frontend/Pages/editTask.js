@@ -4,8 +4,8 @@ const username = localStorage.getItem("username");
 // Atualizar a mensagem de boas vindas com o nome de utilizador
 document.getElementById("userHeader").innerHTML = "Bem vindo, " + username;
 
-// Carregar as tarefas existentes no armazenamento local
-const tasks = JSON.parse(localStorage.getItem("tasks"));
+// Cria array para armazenar as tarefas
+let tasks = [];
 
 // Vai buscar o índice guardado no armazenamento da sessão
 const index = sessionStorage.getItem("index");
