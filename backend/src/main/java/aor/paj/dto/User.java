@@ -1,35 +1,76 @@
 package aor.paj.dto;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
+
+import java.util.ArrayList;
 
 @XmlRootElement
 public class User {
 
     @XmlElement
-    String username;
+    private int id;
+
     @XmlElement
-    String password;
+    protected static int ultimoId = 0;
+
     @XmlElement
-    String email;
+    @NotBlank(message = "Username is required")
+    @Size(min = 3, max = 30, message = "Username must be between 3 and 30 characters")
+    private String username;
+
     @XmlElement
-    String firstName;
+    private String password;
+
     @XmlElement
-    String lastName;
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email is not valid")
+    private String email;
+
     @XmlElement
-    String phoneNumber;
+    private String firstName;
+
+    @XmlElement
+    private String lastName;
+
+    @XmlElement
+    @NotBlank(message = "Phone number is required")
+    //reconhecer um padrão, regular expression
+    @Pattern(regexp="^[0-9]{10}$", message = "Phone number must be 10 digits")
+    private String phoneNumber;
+
+    private String profileImageUrl;
+
+    @XmlElement
+    private ArrayList<Task> userTasks;
 
 
     public User() {
     }
 
     public User(String username, String password, String email, String firstName, String lastName, String phoneNumber) {
+        this.id = getNextId();
         this.username = username;
         this.password = password;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
+        this.profileImageUrl = profileImageUrl;
+        this.userTasks = new ArrayList<>();
     }
+
+    //Incrementa o último id identificado
+    public synchronized int getNextId() {
+        return ++ultimoId;
+    }
+
+    public int getId() { return id; }
+
+    public void setId(int id) { this.id = id; }
 
     public String getUsername() {
         return username;
@@ -78,4 +119,12 @@ public class User {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    public ArrayList<Task> getUserTasks() { return userTasks; }
+
+    public void setUserTasks(ArrayList<Task> userTasks) { this.userTasks = userTasks; }
+
+    public String getProfileImageUrl() { return profileImageUrl; }
+
+    public void setProfileImageUrl(String profileImageUrl) { this.profileImageUrl = profileImageUrl; }
 }

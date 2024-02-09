@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import aor.paj.bean.UserBean;
 import aor.paj.dto.User;
+import aor.paj.dto.UserCredentials;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -77,13 +78,16 @@ public class UserService {
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response loginUser(@QueryParam("username") String username, @QueryParam("password") String password) {
+    public Response loginUser(UserCredentials credentials) {
+        String username = credentials.getUsername();
+        String password = credentials.getPassword();
+
         User user = userBean.getUser(username);
 
         if (user == null) {
-            return Response.status(200).entity("User with this username is not found").build();
+            return Response.status(404).entity("User with this username is not found").build();
         } else if (!user.getPassword().equals(password)) {
-            return Response.status(200).entity("Invalid password").build();
+            return Response.status(401).entity("Invalid password").build();
         } else {
             return Response.status(200).entity("User logged in successfully").build();
         }
@@ -104,18 +108,18 @@ public class UserService {
 
         ArrayList users = userBean.getUsers();
 
-        if (userBean.usernameExists(u.getUsername(),users)) {
-            return Response.status(200).entity("Username already in use").build();
-        } else if (userBean.emailExists(u.getEmail(),users)){
-            return Response.status(200).entity("Email already in use").build();
-        } else if (userBean.phoneExists(u.getPhoneNumber(),users)) {
-            return Response.status(200).entity("This phone number is already in use").build();
+        if (userBean.usernameExists(u.getUsername(), users)) {
+            return Response.status(400).entity("Username already in use").build();
+        } else if (userBean.emailExists(u.getEmail(), users)) {
+            return Response.status(400).entity("Email already in use").build();
+        } else if (userBean.phoneExists(u.getPhoneNumber(), users)) {
+            return Response.status(400).entity("This phone number is already in use").build();
         } else {
-            //User user = new User(username,password,email,firstname,lastname,phoneNumber);
+            u.setUserTasks(new ArrayList<>()); //Coloca Arraylist vazia
+            u.setId(u.getNextId()); //Coloca ID na criação
             userBean.addUser(u);
             return Response.status(200).entity("Thanks for being awesome! Your account has been successfully created.").build();
         }
-
     }
 
 }
