@@ -29,15 +29,19 @@ public class TaskService {
         Task task =  taskBean.getTask(title);
         if (task==null)
             return Response.status(200).entity("Task with this title is not found").build();
-        return Response.status(200).entity(task).build();
+        else
+            return Response.status(200).entity(task).build();
     }
 
     @POST
     @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addTask(Task t) {
-        taskBean.addTask(t);
-        return Response.status(200).entity("A new task is created").build();
+        boolean added = taskBean.addTask(t);
+        if(!added)
+            return Response.status(400).entity("Task with this title already exists").build();
+        else
+            return Response.status(200).entity("A new task is created").build();
     }
 
     @DELETE

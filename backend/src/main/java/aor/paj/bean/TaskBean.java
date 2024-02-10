@@ -31,9 +31,17 @@ public class TaskBean {
             tasks = new ArrayList<Task>();
     }
 
-    public void addTask(Task t) {
-        tasks.add(t);
-        writeIntoJsonFile();
+    public boolean addTask(Task newTask) {
+        boolean existe = false;
+        for (Task t : tasks) {
+            if (t.getTitle().equals(newTask.getTitle())) existe = true;
+        }
+        if(!existe) {
+        tasks.add(newTask);
+            writeIntoJsonFile();
+            return true;
+        }
+        else return false;
     }
 
     public Task getTask(String title) {

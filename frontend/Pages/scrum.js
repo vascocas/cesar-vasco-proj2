@@ -158,7 +158,7 @@ async function deleteTask(title) {
 }
 
 // Função mover tarefa (Terceira das opções da tarefa)
-async function moveTask(inputTitle) {
+function moveTask(inputTitle) {
   // Cria uma caixa de diálogo com botões das colunas
   Swal.fire({
     title: "Selecione a coluna de destino",
@@ -172,7 +172,6 @@ async function moveTask(inputTitle) {
     showCancelButton: true,
     inputValidator: (value) => {
       const destinationColumn = value;
-
       // Pesquisa pelo título, o índice da tarefa dentro do array, através do método findIndex()
       const taskIndex = tasks.findIndex((task) => task.title === inputTitle);
       // Verifica se se está a tentar mover para própria coluna e previne essa ação
@@ -180,35 +179,26 @@ async function moveTask(inputTitle) {
         alert("A tarefa já se encontra nesta coluna!");
       } else {
         // Constroi variável com formato JSON para guardar elementos necessários para mudar de coluna (nome e coluna destino)
-        const mTask = {
+        let requestBody = JSON.stringify({
           title: inputTitle,
           column: destinationColumn,
-        };
+        });
 
-        const requestBody = JSON.stringify(mTask);
+        fetch("http://localhost:8080/backend/rest/tasks/moveTask", {
+          method: "PUT",
+          headers: {
+            Accept: "*/*",
+            "Content-Type": "application/json",
+          },
+          body: requestBody,
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            tasks = data;
+          });
       }
     },
   });
-
-  await fetch("http://localhost:8080/backend/rest/tasks/moveTask", {
-    method: "PUT",
-    headers: {
-      Accept: "*/*",
-      "Content-Type": "application/json",
-    },
-    body: requestBody,
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Failed to fetch tasks");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      tasks = data;
-      showTasks();
-    })
-    .catch((error) => {
-      console.error("Error fetching tasks:", error);
-    });
 }
