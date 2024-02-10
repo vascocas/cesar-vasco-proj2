@@ -2,10 +2,9 @@ package aor.paj.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import aor.paj.bean.UserCredentialsBean;
+
 import aor.paj.bean.UserBean;
 import aor.paj.dto.User;
-import aor.paj.dto.UserCredentials;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -26,8 +25,6 @@ public class UserService {
 
     @Inject
     UserBean userBean;
-    @Inject
-    UserCredentialsBean userCredentialsBean;
 
 
     @GET
@@ -36,14 +33,6 @@ public class UserService {
     public List<User> getUsers() {
         return userBean.getUsers();
     }
-
-    @GET
-    @Path("/allcredentials")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<UserCredentials> getUsersCredentials() {
-        return userCredentialsBean.getAllCredentials();
-    }
-
 
     @POST
     @Path("/add")
@@ -79,21 +68,24 @@ public class UserService {
     @PUT
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateUserFirstName(User u, @HeaderParam("username") String firstName) {
-        boolean updated = userBean.updateUserFirstName(u.getUsername(), firstName);
+    public Response updateUser(User updatedUser, @HeaderParam("username") String username) {
+        boolean updated = userBean.updateUser(username,
+                updatedUser.getEmail(),
+                updatedUser.getFirstName(),
+                updatedUser.getLastName(),
+                updatedUser.getPhoneNumber());
         if (!updated)
             return Response.status(200).entity("User with this username is not found").build();
-        return Response.status(200).entity("User first name updated").build();
+        return Response.status(200).entity("User information updated").build();
     }
 
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response loginUser(UserCredentials credentials) {
-        String username = credentials.getUsername();
-        String password = credentials.getPassword();
+    public Response loginUser(String username, String password) {
 
         User user = userBean.getUser(username);
+        System.out.println(user);
 
         if (user == null) {
             System.out.println("user é null");
@@ -126,20 +118,18 @@ public class UserService {
         ArrayList users = userBean.getUsers();
 
         if (username == null || username.isEmpty() || password == null || password.isEmpty() || email == null || email.isEmpty()) {
-            return Response.status(400).entity("Username, password, and email are required").build();
+            return Response.status(400).entity("{\"message\": \"Username, password, and email are required.\"}").build();
         }else{
-            if (userCredentialsBean.usernameExists(username, userCredentialsBean.getAllCredentials())) {
-                return Response.status(400).entity("Username already taken").build();
+            if (userBean.usernameExists(username, users)) {
+                return Response.status(400).entity("{\"message\": \"Username already taken.\"}").build();
             }else if (userBean.emailExists(email, users)) {
-                return Response.status(400).entity("Email already in use").build();
+                return Response.status(400).entity("{\"message\": \"Email already in use.\"}").build();
             } else if (userBean.phoneExists(phoneNumber, users)) {
-                return Response.status(400).entity("This phone number is already in use").build();
+                return Response.status(400).entity("{\"message\": \"This phone number is already in use.\"}").build();
             }else {
-                //Adiciona as credenciais de login a um ficheiro separado
-                userCredentialsBean.addCredentials(new UserCredentials(username, password));
-                userBean.addUser(newUser);
 
-                return Response.status(201).entity("Thanks for being awesome! Your account has been successfully created.").build();
+                userBean.addUser(newUser);
+                return Response.status(201).entity("{\"message\": \"Thanks for being awesome! Your account has been successfully created.\"}").build();
             }
         }
 

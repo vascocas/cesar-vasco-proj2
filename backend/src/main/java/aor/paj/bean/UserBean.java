@@ -58,10 +58,13 @@ public class UserBean {
         return false;
     }
 
-    public boolean updateUserFirstName(String username, String name) {
+    public boolean updateUser(String username,String email, String firstName, String lastName, String phoneNumber) {
         for (User u : users) {
             if (u.getUsername().equals(username)) {
-                u.setFirstName(name);
+                u.setEmail(email);
+                u.setFirstName(firstName);
+                u.setLastName(lastName);
+                u.setPhoneNumber(phoneNumber);
                 writeIntoJsonFile();
                 return true;
             }
@@ -76,6 +79,15 @@ public class UserBean {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean usernameExists(String username,ArrayList<User> users){
+        for (User u : users){
+            if (u.getUsername().equals(username)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean emailExists(String email,ArrayList<User> users){
