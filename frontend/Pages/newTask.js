@@ -21,21 +21,22 @@ async function addTask() {
 
   // Verifica tamanho máximo de caracteres do título
   if (titleInput.value.length > maxLength) {
-    alert("Ultrapassou o máximo de caracteres para o Título = " + maxLength + "!");
+    alert(
+      "Ultrapassou o máximo de caracteres para o Título = " + maxLength + "!"
+    );
     return;
   }
   // Protege criação de tarefas com o título vazio
   else if (titleInput.value === "") {
     alert("Por favor preencha o título.");
     return;
-  } 
-  else {
+  } else {
     // Cria uma nova tarefa com os atributos "title" e "description". Todas as tarefas começam na coluna TODO
     const newTask = {
-      "title": titleInput.value,
-      "description": descriptionInput.value
+      title: titleInput.value,
+      description: descriptionInput.value,
     };
-    
+
     const requestBody = JSON.stringify(newTask);
 
     await fetch("http://localhost:8080/backend/rest/tasks/add", {
@@ -45,24 +46,21 @@ async function addTask() {
         "Content-Type": "application/json",
       },
       body: requestBody,
-    })
-    .then(function(response) {
+    }).then(function (response) {
       if (response.status === 200) {
         tasks.push(newTask);
-        response.text().then(function(successMessage) {
-          alert(successMessage); // Alert the success message after the task is added
+        response.text().then(function (successMessage) {
+          alert(successMessage);
         });
       } else {
-        response.text().then(function(errorMessage) {
-          alert(errorMessage); // Alert any error message
+        response.text().then(function (errorMessage) {
+          alert(errorMessage);
         });
       }
-    })
+    });
 
-  // Limpar os campos após adicionar uma nova tarefa
-  titleInput.value = "";
-  descriptionInput.value = "";
-
-  
-}
+    // Limpar os campos após adicionar uma nova tarefa
+    titleInput.value = "";
+    descriptionInput.value = "";
+  }
 }

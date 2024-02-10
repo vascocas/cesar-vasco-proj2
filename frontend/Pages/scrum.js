@@ -4,6 +4,11 @@ const username = localStorage.getItem("username");
 // Atualizar a mensagem de boas vindas com o nome de utilizador
 document.getElementById("userHeader").innerHTML = "Bem vindo, " + username;
 
+window.onload = () => {
+  // Call getAllTasks() when the page loads
+  getAllTasks();
+};
+
 // Cria uma variável relativa ao botao "Voltar Login" e adiciona um Event Listener
 const btnLogout = document.getElementById("scrum_btn_logout");
 btnLogout.onclick = homeMenu;
@@ -25,17 +30,11 @@ async function getAllTasks() {
     },
   })
     .then((response) => {
-      if (!response.ok) {
-        throw new Error("Failed to fetch tasks");
-      }
       return response.json();
     })
     .then((data) => {
       tasks = data;
       showTasks();
-    })
-    .catch((error) => {
-      console.error("Error fetching tasks:", error);
     });
 }
 
@@ -74,11 +73,6 @@ function createCardElement(title) {
   cardElement.appendChild(cardHeaderElement);
   return cardElement;
 }
-
-window.onload = () => {
-  // Call getAllTasks() when the page loads
-  getAllTasks();
-};
 
 // Mostra os botões de opções de cada tarefa
 function showOptions(cardElement) {
@@ -133,7 +127,8 @@ async function deleteTask(title) {
   if (userConfirmed) {
     // Remover a tarefa da lista
     await fetch(
-      "http://localhost:8080/backend/rest/tasks/delete/?title=" + title,
+      "http://localhost:8080/backend/rest/tasks/delete/?title=" +
+        encodeURIComponent(title),
       {
         method: "DELETE",
         headers: {
@@ -141,24 +136,27 @@ async function deleteTask(title) {
           "Content-Type": "application/json",
         },
       }
-    ).then((response) => {
-      if (!response.ok) {
-        throw new Error("Failed to delete task");
+    ).then(function (response) {
+      if (response.status === 200) {
+        response.text().then(function (successMessage) {
+          alert(successMessage);
+        });
+      } else {
+        response.text().then(function (errorMessage) {
+          alert(errorMessage);
+        });
       }
-
-      // Remove a tarefa da lista local
-      tasks = tasks.filter((task) => task.title !== title);
-
-      // Atualiza a UI para refletir a remoção da tarefa
-      showTasks();
-
-      alert("A tarefa com o título: " + title + ", foi eliminada com sucesso.");
     });
+    // Remove a tarefa da lista local
+    tasks = tasks.filter((task) => task.title !== title);
+
+    // Atualiza a UI para refletir a remoção da tarefa
+    showTasks();
   }
 }
 
 // Função mover tarefa (Terceira das opções da tarefa)
-function moveTask(inputTitle) {
+async function moveTask(inputTitle) {
   // Cria uma caixa de diálogo com botões das colunas
   Swal.fire({
     title: "Selecione a coluna de destino",
@@ -170,7 +168,7 @@ function moveTask(inputTitle) {
     },
     inputPlaceholder: "Selecione a coluna",
     showCancelButton: true,
-    inputValidator: (value) => {
+    inputValidator: async (value) => {
       const destinationColumn = value;
       // Pesquisa pelo título, o índice da tarefa dentro do array, através do método findIndex()
       const taskIndex = tasks.findIndex((task) => task.title === inputTitle);
@@ -184,20 +182,21 @@ function moveTask(inputTitle) {
           column: destinationColumn,
         });
 
-        fetch("http://localhost:8080/backend/rest/tasks/moveTask", {
-          method: "PUT",
-          headers: {
-            Accept: "*/*",
-            "Content-Type": "application/json",
-          },
-          body: requestBody,
-        })
-          .then((response) => {
-            return response.json();
-          })
-          .then((data) => {
-            tasks = data;
+        try {
+          await fetch("http://localhost:8080/backend/rest/tasks/moveTask", {
+            method: "PUT",
+            headers: {
+              Accept: "*/*",
+              "Content-Type": "application/json",
+            },
+            body: requestBody,
           });
+
+          await getAllTasks(); // Fetch all tasks again
+          showTasks(); // Update UI
+        } catch (error) {
+          console.error("Error moving task:", error);
+        }
       }
     },
   });

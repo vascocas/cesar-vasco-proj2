@@ -50,7 +50,7 @@ public class TaskService {
     public Response removeTask(@QueryParam("title") String title) {
         boolean deleted =  taskBean.removeTask(title);
         if (!deleted)
-            return Response.status(200).entity("Task with this title is not found").build();
+            return Response.status(400).entity("Task with this title is not found").build();
         return Response.status(200).entity("Task deleted").build();
     }
 
@@ -60,7 +60,7 @@ public class TaskService {
     public Response moveTask(Task t) {
         boolean updated = taskBean.moveTask(t.getTitle(), t.getColumn());
         if (!updated)
-            return Response.status(200).entity("Task with this title is not found").build();
+            return Response.status(400).entity("Task with this title is not found").build();
         return Response.status(200).entity("Task moved to the new column").build();
     }
 
@@ -70,7 +70,7 @@ public class TaskService {
     public Response updateDescription(Task t, @QueryParam("taskTitle") String taskTitle) {
         boolean updated = taskBean.updateTask(taskTitle, t.getTitle(), t.getDescription(), t.getPriority(), t.getStartDate(), t.getEndDate());
         if (!updated)
-            return Response.status(200).entity("Task with this title is not found").build();
+            return Response.status(400).entity("Task with this title is not found").build();
         return Response.status(200).entity("Task content updated").build();
     }
 
