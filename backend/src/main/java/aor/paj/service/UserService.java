@@ -38,7 +38,7 @@ public class UserService {
     }
 
     @GET
-    @Path("/allCredentials")
+    @Path("/allcredentials")
     @Produces(MediaType.APPLICATION_JSON)
     public List<UserCredentials> getUsersCredentials() {
         return userCredentialsBean.getAllCredentials();
@@ -96,6 +96,7 @@ public class UserService {
         User user = userBean.getUser(username);
 
         if (user == null) {
+            System.out.println("user é null");
             return Response.status(401).entity("User with this username is not found").build();
         } else if (!user.getPassword().equals(password)) {
             return Response.status(401).entity("Invalid password").build();
