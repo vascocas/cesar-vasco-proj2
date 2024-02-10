@@ -137,7 +137,8 @@ async function deleteTask(title) {
       {
         method: "DELETE",
         headers: {
-          Accept: "application/json",
+          Accept: "*/*",
+          "Content-Type": "application/json",
         },
       }
     ).then((response) => {
@@ -157,7 +158,7 @@ async function deleteTask(title) {
 }
 
 // Função mover tarefa (Terceira das opções da tarefa)
-function moveTask(title) {
+async function moveTask(inputTitle) {
   // Cria uma caixa de diálogo com botões das colunas
   Swal.fire({
     title: "Selecione a coluna de destino",
@@ -171,19 +172,43 @@ function moveTask(title) {
     showCancelButton: true,
     inputValidator: (value) => {
       const destinationColumn = value;
+
       // Pesquisa pelo título, o índice da tarefa dentro do array, através do método findIndex()
-      const taskIndex = tasks.findIndex((task) => task.title === title);
+      const taskIndex = tasks.findIndex((task) => task.title === inputTitle);
       // Verifica se se está a tentar mover para própria coluna e previne essa ação
       if (tasks[taskIndex].column === destinationColumn) {
         alert("A tarefa já se encontra nesta coluna!");
       } else {
-        // altera o valor da "column" da tarefa, para fazer a correta colocação nas Div
-        tasks[taskIndex].column = destinationColumn;
-        // Atualiza o array de tarefas no armazenamento local
-        localStorage.setItem("tasks", JSON.stringify(tasks));
-        // Chama a função para actualizar a página após mover a tarefa
-        window.onload();
+        // Constroi variável com formato JSON para guardar elementos necessários para mudar de coluna (nome e coluna destino)
+        const mTask = {
+          title: inputTitle,
+          column: destinationColumn,
+        };
+
+        const requestBody = JSON.stringify(mTask);
       }
     },
   });
+
+  await fetch("http://localhost:8080/backend/rest/tasks/moveTask", {
+    method: "PUT",
+    headers: {
+      Accept: "*/*",
+      "Content-Type": "application/json",
+    },
+    body: requestBody,
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch tasks");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      tasks = data;
+      showTasks();
+    })
+    .catch((error) => {
+      console.error("Error fetching tasks:", error);
+    });
 }

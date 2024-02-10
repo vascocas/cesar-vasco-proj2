@@ -78,5 +78,3 @@ async function addTask() {
   titleInput.value = "";
   descriptionInput.value = "";
 }
-
-
