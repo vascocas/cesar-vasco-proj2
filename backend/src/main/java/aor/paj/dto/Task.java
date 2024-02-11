@@ -32,22 +32,8 @@ public class Task {
     }
 
     // Constructor to set column based on state identifier
-    public Task(int stateId, String title, String description, int priorityId, String startDate, String endDate) {
-        // Set column based on the state identifier
-        switch (stateId) {
-            case TODO_STATE_ID:
-                this.column = "todo-cards";
-                break;
-            case DOING_STATE_ID:
-                this.column = "doing-cards";
-                break;
-            case DONE_STATE_ID:
-                this.column = "done-cards";
-                break;
-            default:
-                this.column = "todo-cards";
-        }
-
+    public Task(String title, String description, int priorityId, String startDate, String endDate) {
+        this.column = "todo-cards";
         this.title = title;
         this.description = description;
 

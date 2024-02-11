@@ -34,7 +34,12 @@
           <div class="textfield">
             <label for="newTask_priority" class="label">Prioridade</label>
             <!--Campo para receber a prioridade-->
-            <textarea type="text" class="newTask_textarea" id="newTask_priority" placeholder="Insira a prioridade"></textarea>
+            <select id="newTask_priority" class="newTask_textarea">
+              <option value="" disabled selected>Defina a prioridade</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+          </select>
           </div>
           <div class="textfield">
             <label for="newTask_startDate" class="label">Data de início</label>
