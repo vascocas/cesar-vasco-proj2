@@ -180,10 +180,8 @@ nav {
   font-weight: 700;
 }
 
-#newTask_title,
-#editTask_title,
-#newTask_description,
-#editTask_description {
+.newTask_textarea,
+.editTask_textarea {
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
@@ -199,20 +197,11 @@ nav {
   word-wrap: break-word;  
 }
 
-#newTask_title,
-#editTask_title {
-  height: 50px;
-}
-
-#newTask_description,
-#editTask_description {
-  height: 120px;
-}
-
 #newTask_title::placeholder,
-#editTask_title::placeholder,
-#newTask_description::placeholder, 
-#editTask_description::placeholder {
+#newTask_description::placeholder,
+#newTask_priority::placeholder,
+#newTask_startDate::placeholder,
+#newTask_endDate::placeholder {
   font-family:var(--type_font);
   font-size: var(--font_size_small);
   color: var(--color_light);

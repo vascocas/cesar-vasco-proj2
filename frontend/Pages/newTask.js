@@ -16,6 +16,9 @@ async function addTask() {
   // Declara e atribui variáveis para guardaar os elementos: título e descrição da tarefa
   const titleInput = document.getElementById("newTask_title");
   const descriptionInput = document.getElementById("newTask_description");
+  const priorityInput = document.getElementById("newTask_priority");
+  const startDateInput = document.getElementById("newTask_startDate");
+  const endDateInput = document.getElementById("newTask_endDate");
 
   const maxLength = 50;
 
@@ -35,6 +38,9 @@ async function addTask() {
     const newTask = {
       title: titleInput.value,
       description: descriptionInput.value,
+      priority: priorityInput.value,
+      startDate: startDateInput.value,
+      endDate: endDateInput.value,
     };
 
     const requestBody = JSON.stringify(newTask);

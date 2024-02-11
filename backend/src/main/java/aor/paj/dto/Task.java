@@ -35,11 +35,11 @@ public class Task {
         this.endDate =  "01.12.2024";
     }
 
-    public Task(String title, String description, String startDate, String endDate) {
+    public Task(String title, String description, String priority, String startDate, String endDate) {
         this.column = TODO;
         this.title = title;
         this.description = description;
-        this.priority = LOW_PRIORITY;
+        this.priority = priority;
         this.startDate = startDate;
         this.endDate = endDate;
     }
