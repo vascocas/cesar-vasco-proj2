@@ -47,20 +47,38 @@ function showTasks() {
 
   // Iterar sobre as tarefas e adicioná-las aos quadros apropriados
   for (const t of tasks) {
-    const cardElement = createCardElement(t.title);
+    const cardElement = createCardElement(t.title, t.priority);
     const columnElement = document.getElementById(t.column);
     columnElement.appendChild(cardElement);
   }
 }
 
 // Função para criar um elemento de cartão HTML para uma tarefa
-function createCardElement(title) {
+function createCardElement(title, priority) {
   // Cria uma Div e atribui a className "card"
   const cardElement = document.createElement("div");
   cardElement.className = "card";
+
   // Cria uma Div e atribui a className "card-header"
   const cardHeaderElement = document.createElement("div");
   cardHeaderElement.className = "card-header";
+
+  // Definir classes com base na prioridade
+  switch (priority) {
+    case "500":
+      cardHeaderElement.classList.add("high-priority");
+      break;
+    case "300":
+      cardHeaderElement.classList.add("medium-priority");
+      break;
+    case "100":
+      cardHeaderElement.classList.add("low-priority");
+      break;
+    default:
+      cardHeaderElement.classList.add("low-priority");
+      break;
+  }
+
   // Altera o textContent para o título da tarefa
   cardHeaderElement.textContent = title;
 

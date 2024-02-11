@@ -20,6 +20,24 @@ async function addTask() {
   const startDateInput = document.getElementById("newTask_startDate");
   const endDateInput = document.getElementById("newTask_endDate");
 
+
+
+  // Função para verificar end Date sempre posterior à start Date
+  /*
+  endDateInput.addEventListener('change', function() {
+    const startDate = new Date(startDateInput.value);
+    const endDate = new Date(endDateInput.value);
+
+    if (endDate < startDate) {
+        errorMessageElement.textContent = 'End date cannot be earlier than start date.';
+        endDateInput.value = ''; // Clear the end date field
+    } else {
+        errorMessageElement.textContent = '';
+    }
+  });
+  */
+
+
   const maxLength = 50;
 
   // Verifica tamanho máximo de caracteres do título

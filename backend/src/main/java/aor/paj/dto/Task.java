@@ -5,9 +5,10 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Task {
 
-    private final String TODO = "todo-cards";
-    private final String DOING = "doing-cards";
-    private final String DONE = "done-cards";
+    public static final int TODO_STATE_ID = 100;
+    public static final int DOING_STATE_ID = 200;
+    public static final int DONE_STATE_ID = 300;
+
     @XmlElement
     private String column;
     @XmlElement
@@ -19,27 +20,52 @@ public class Task {
     @XmlElement
     private String endDate;
 
-    private final String LOW_PRIORITY = "100";
-    private final String MEDIUM_PRIORITY = "300";
-    private final String HIGH_PRIORITY = "500";
+    public static final int LOW_PRIORITY = 100;
+    public static final int MEDIUM_PRIORITY = 300;
+    public static final int  HIGH_PRIORITY = 500;
 
     @XmlElement
     private String priority;
 
     public Task() {
-        this.column = TODO;
-        this.title = null;
-        this.description = null;
-        this.priority = LOW_PRIORITY;
-        this.startDate = "01.01.2024";
-        this.endDate =  "01.12.2024";
+        this.column = "todo-cards";
     }
 
-    public Task(String title, String description, String priority, String startDate, String endDate) {
-        this.column = TODO;
+    // Constructor to set column based on state identifier
+    public Task(int stateId, String title, String description, int priorityId, String startDate, String endDate) {
+        // Set column based on the state identifier
+        switch (stateId) {
+            case TODO_STATE_ID:
+                this.column = "todo-cards";
+                break;
+            case DOING_STATE_ID:
+                this.column = "doing-cards";
+                break;
+            case DONE_STATE_ID:
+                this.column = "done-cards";
+                break;
+            default:
+                this.column = "todo-cards";
+        }
+
         this.title = title;
         this.description = description;
-        this.priority = priority;
+
+        // Set priority based on the priority identifier
+        switch (priorityId) {
+            case LOW_PRIORITY:
+                this.priority = "low-priority";
+                break;
+            case MEDIUM_PRIORITY:
+                this.priority = "medium-priority";
+                break;
+            case HIGH_PRIORITY:
+                this.priority = "high-priority";
+                break;
+            default:
+                this.priority = "low-priority";
+        }
+
         this.startDate = startDate;
         this.endDate = endDate;
     }

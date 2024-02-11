@@ -76,6 +76,18 @@ nav {
   overflow: auto;
 }
 
+.high-priority{
+  background-color: red;
+}
+
+.medium-priority{
+  background-color: yellow;
+}
+
+.low-priority{
+  background-color: green;
+}
+
 .card-header {
   border-radius: 6px;
   box-shadow: 5px 5px 20px -12px;
