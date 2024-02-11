@@ -22,26 +22,25 @@ function homeMenu() {
 // Cria array para armazenar as tarefas
 let tasks = [];
 
-async function getAllTasks() {
-  await fetch("http://localhost:8080/backend/rest/tasks", {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-    },
-  })
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      tasks = data;
-      showTasks();
-    });
-}
-
 // Função para listar as tarefas nos quadros
 function showTasks() {
   // Limpar os quadros antes de listar novamente
   document.getElementById("todo-cards").innerHTML = "";
+  async function getAllTasks() {
+    await fetch("http://localhost:8080/backend/rest/tasks", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        tasks = data;
+        showTasks();
+      });
+  }
   document.getElementById("doing-cards").innerHTML = "";
   document.getElementById("done-cards").innerHTML = "";
 
@@ -65,13 +64,13 @@ function createCardElement(title, priority) {
 
   // Definir classes com base na prioridade
   switch (priority) {
-    case "500":
+    case "high":
       cardHeaderElement.classList.add("high-priority");
       break;
-    case "300":
+    case "medium":
       cardHeaderElement.classList.add("medium-priority");
       break;
-    case "100":
+    case "low":
       cardHeaderElement.classList.add("low-priority");
       break;
     default:
