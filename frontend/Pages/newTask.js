@@ -68,5 +68,8 @@ async function addTask() {
     // Limpar os campos após adicionar uma nova tarefa
     titleInput.value = "";
     descriptionInput.value = "";
+    priorityInput.value = "";
+    startDateInput.value = "";
+    endDateInput.value = "";
   }
 }

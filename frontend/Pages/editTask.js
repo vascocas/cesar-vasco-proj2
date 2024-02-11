@@ -32,10 +32,16 @@ async function getAllTasks() {
     // Declare and assign variables to the title and description elements of the task
     let titleText = document.getElementById("editTask_title");
     let descriptionText = document.getElementById("editTask_description");
-
-    // Assign values to the title and description of the selected task
+    let priorityText = document.getElementById("editTask_priority");
+    let startDateText = document.getElementById("editTask_startDate");
+    let endDateText = document.getElementById("editTask_endDate");
+  
+    // Assign values to the attributes of the selected task
     titleText.value = tasks[index].title;
     descriptionText.value = tasks[index].description;
+    priorityText.value = tasks[index].priority;
+    startDateText.value = tasks[index].startDate;
+    endDateText.value = tasks[index].endDate;
 
     //Create this variable to store the value for the PUT html request
     let queryText = tasks[index].title;
@@ -51,6 +57,9 @@ async function getAllTasks() {
         // Transforma em editável os campos de texto
         titleText.disabled = false;
         descriptionText.disabled = false;
+        priorityText.disabled = false;
+        startDateText.disabled = false;
+        endDateText.disabled = false;
         // Altera o nome do botão para "Gravar"
         editButton.value = "Gravar";
       }
@@ -71,6 +80,9 @@ async function getAllTasks() {
           const requestBody = JSON.stringify({
             title: titleText.value,
             description: descriptionText.value,
+            priority: priorityText.value,
+            startDate: startDateText.value,
+            endDate: endDateText.value,
           });
 
           const response = await fetch(
