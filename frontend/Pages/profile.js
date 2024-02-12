@@ -23,7 +23,8 @@ function fillProfile(user) {
     document.getElementById("firstName").value = user.firstName;
     document.getElementById("lastName").value = user.lastName;
     document.getElementById("phone").value = user.phoneNumber;
-    document.getElementById('photo').value = user.photo;
+
+    //Caso exista foto de perfil lê, se não conseguir ler aparece imagem default
     const profilePic = document.querySelector('.profile-pic');
     if (user.photo) {
         profilePic.src = user.photo;
@@ -38,7 +39,7 @@ const btn_logout=document.getElementById('signout');
 btn_logout.onclick=function(){
     //limpa a localstorage
     localStorage.clear();
-    console.log('clear');
+    
     window.location.href='../index.html';
 };
 
@@ -56,6 +57,7 @@ document.getElementById('profile_save').addEventListener('click', async function
     };
 
         const loggedInUsername = localStorage.getItem("username");
+
         if (loggedInUsername) {
             // Envia dados para o servidor
             const response = await fetch('http://localhost:8080/backend/rest/users/update', {
@@ -66,15 +68,15 @@ document.getElementById('profile_save').addEventListener('click', async function
                 },
                 body: JSON.stringify(updatedUser)
             });
-            
-            if (response.ok) {
-                console.log('User profile updated successfully.');
+
+            if (response.status === 200) { 
+                alert('User profile updated successfully.');
                 // Relê dos dados na página
                 getUser(loggedInUsername);
-            } else{
-                //Mostra mensagem de alerta do backend
-                alert('Erro. ' + await response.text());
-            }
+              } else{
+                  //Mostra mensagem de alerta do backend
+                  alert('Erro. ' + await response.text());
+              }
         } else {
             console.error("No logged-in username found in local storage.");
         }

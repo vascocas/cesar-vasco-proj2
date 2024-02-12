@@ -39,13 +39,14 @@ footer{
 }
 
 #pic-container {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     overflow: hidden;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 5px;
 }
 
 .profile-pic {
