@@ -1,9 +1,6 @@
 package aor.paj.bean;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 import jakarta.enterprise.context.ApplicationScoped;
 import aor.paj.dto.User;
@@ -12,7 +9,7 @@ import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 
 @ApplicationScoped
-public class UserBean {
+public class UserBean implements Serializable {
 
     final String filename = "users.json";
     private ArrayList<User> users;
@@ -128,4 +125,5 @@ public class UserBean {
         //Retorn true se a senha contiver pelo menos uma letra e um número.
         return temLetra && temNumero;
     }
+
 }
