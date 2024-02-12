@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="../Style/layout.css" />
+    <link rel="stylesheet" href="../Style/profile.css" />
+</head>
+<body>
+    <header>
+        <!--Cabeçalho-->
+        <h1>SCRUM BOARD</h1>
+        <div class="profile-info">
+            <div id="pic-container">
+                <img class="profile-pic">
+              </div>
+            <span id="logged-in-username">username</span>
+            <button class="profile_btn" id="signout">Sign Out</button>
+        </div>
+    </header>
+    <div class="container">
+            <h1>Perfil do Utilizador</h1>
+            <form>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Username" disabled>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Password">
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Email">
+
+                <label for="firstName">Primeiro Nome:</label>
+                <input type="text" id="firstName" name="firstName" placeholder="Primeiro Nome">
+
+                <label for="lastName">Último Nome:</label>
+                <input type="text" id="lastName" name="lastName" placeholder="Último Nome">
+
+                <label for="phone">Número de Telefone:</label>
+                <input type="tel" id="phone" name="phone" placeholder="Número de Telefone">
+
+                <label for="photo">Fotografia de Perfil (URL):</label>
+                <input type="url" id="photo" name="photo" placeholder="URL da Fotografia">
+
+                <button class="profile_btn" id="profile_save" type="submit">Atualizar Perfil</button>
+            </form>
+    </div>
+    <footer>
+        <p>2024 AoR. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="profile.js"></script>
+</body>
+</html>
