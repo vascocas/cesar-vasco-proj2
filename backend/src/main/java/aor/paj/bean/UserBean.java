@@ -105,4 +105,26 @@ public class UserBean {
         }
         return false;
     }
+
+    public boolean validatePassword(String password){
+        //Tamanho entre 4 e 12 caracteres
+        if(password.length() < 4 || password.length() > 12){
+            return false;
+        }
+        //Tem de ter pelo menos uma letra e um número.
+        boolean temLetra = false;
+        boolean temNumero = false;
+
+        for(char c : password.toCharArray()){
+            //Verifica se o caracter é uma letra.
+            if(!Character.isLetter(c)){
+                temLetra = true;
+                //Verifica se o caracter é um numero.
+            }else if(!Character.isDigit(c)){
+                temNumero  =true;
+            }
+        }
+        //Retorn true se a senha contiver pelo menos uma letra e um número.
+        return temLetra && temNumero;
+    }
 }

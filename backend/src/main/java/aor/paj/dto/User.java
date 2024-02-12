@@ -42,7 +42,8 @@ public class User {
     @Pattern(regexp="^[0-9]{10}$", message = "Phone number must be 10 digits")
     private String phoneNumber;
 
-    private String profileImageUrl;
+    @XmlElement
+    private String photo;
 
     @XmlElement
     private ArrayList<Task> userTasks;
@@ -51,7 +52,7 @@ public class User {
     public User() {
     }
 
-    public User(String username, String password, String email, String firstName, String lastName, String phoneNumber, String profileImageUrl) {
+    public User(String username, String password, String email, String firstName, String lastName, String phoneNumber, String photo) {
         this.id = getNextId();
         this.username = username;
         this.password = password;
@@ -59,7 +60,7 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-        this.profileImageUrl = profileImageUrl;
+        this.photo = photo;
         this.userTasks = new ArrayList<>();
     }
 
@@ -124,7 +125,7 @@ public class User {
 
     public void setUserTasks(ArrayList<Task> userTasks) { this.userTasks = userTasks; }
 
-    public String getProfileImageUrl() { return profileImageUrl; }
+    public String getPhoto() { return photo; }
 
-    public void setProfileImageUrl(String profileImageUrl) { this.profileImageUrl = profileImageUrl; }
+    public void setPhoto(String profileImageUrl) { this.photo = profileImageUrl; }
 }

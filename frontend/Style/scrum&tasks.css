@@ -217,3 +217,7 @@ nav {
   font-size: var(--font_size_small);
   color: var(--color_light);
 }
+
+#logged-in-username{
+  cursor: pointer;
+}

@@ -82,13 +82,17 @@ public class UserService {
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response loginUser(String username, String password) {
+    public Response loginUser(User u) {
+
+        String username = u.getUsername();
+        String password = u.getPassword();
+
+        System.out.println(username + " , " + password);
 
         User user = userBean.getUser(username);
-        System.out.println(user);
 
         if (user == null) {
-            System.out.println("user é null");
+            System.out.println("user null");
             return Response.status(401).entity("User with this username is not found").build();
         } else if (!user.getPassword().equals(password)) {
             return Response.status(401).entity("Invalid password").build();
@@ -106,30 +110,34 @@ public class UserService {
     }
 
     @POST
-    @Path("/signup")
+    @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response signUp(User newUser) {
+    public Response signUp(User u) {
 
-        String username = newUser.getUsername();
-        String password = newUser.getPassword();
-        String email = newUser.getEmail();
-        String phoneNumber = newUser.getPhoneNumber();
+        String username = u.getUsername();
+        String password = u.getPassword();
+        String email = u.getEmail();
+        String phoneNumber = u.getPhoneNumber();
 
         ArrayList users = userBean.getUsers();
 
         if (username == null || username.isEmpty() || password == null || password.isEmpty() || email == null || email.isEmpty()) {
-            return Response.status(400).entity("{\"message\": \"Username, password, and email are required.\"}").build();
+            return Response.status(400).entity("Username, password, and email are required.").build();
         }else{
             if (userBean.usernameExists(username, users)) {
-                return Response.status(400).entity("{\"message\": \"Username already taken.\"}").build();
-            }else if (userBean.emailExists(email, users)) {
-                return Response.status(400).entity("{\"message\": \"Email already in use.\"}").build();
+                return Response.status(400).entity("Username already taken.").build();
+            } else if (!userBean.validatePassword(password)) {
+                return Response.status(400).entity("Invalid password").build();
+            } else if (userBean.emailExists(email, users)) {
+                return Response.status(400).entity("Email already in use.").build();
             } else if (userBean.phoneExists(phoneNumber, users)) {
-                return Response.status(400).entity("{\"message\": \"This phone number is already in use.\"}").build();
+                return Response.status(400).entity("This phone number is already in use.").build();
             }else {
 
+                //Cria o novo utilizador e adiciona à lista
+                User newUser = new User(username,password,email,u.getFirstName(),u.getLastName(),phoneNumber,u.getPhoto());
                 userBean.addUser(newUser);
-                return Response.status(201).entity("{\"message\": \"Thanks for being awesome! Your account has been successfully created.\"}").build();
+                return Response.status(201).entity("Thanks for being awesome! Your account has been successfully created.").build();
             }
         }
 

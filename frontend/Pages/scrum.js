@@ -1,8 +1,43 @@
+async function getUser(loggedInUsername) {
+  try {
+      const response = await fetch(`http://localhost:8080/backend/rest/users/${loggedInUsername}`, {
+          method: 'GET',
+          headers: {
+              'Accept': 'application/json'
+          },
+      });
+      const data = await response.json();
+      fillProfile(data);
+  } catch (error) {
+      console.error('Error fetching user:', error);
+  }
+}
+
+//Carreagar toda a informação do user
+function fillProfile(user) {
+  console.log(user);
+
+  // Atualizar a mensagem de boas vindas com o nome de utilizador
+  document.getElementById("logged-in-username").innerHTML="Bem vindo, " + user.username;
+
+  //Imagem de perfil
+  const profilePic = document.querySelector('.profile-pic');
+  if (user.photo) {
+    profilePic.src = user.photo;
+  } else {
+    profilePic.src = '../Resources/profile_pic_default.png';
+  }
+}
+
 // Obter o nome de utilizador do armazenamento local
 const username = localStorage.getItem("username");
 
 // Atualizar a mensagem de boas vindas com o nome de utilizador
-document.getElementById("userHeader").innerHTML = "Bem vindo, " + username;
+let userHeader = document.getElementById("logged-in-username");
+userHeader.addEventListener('click', function(){
+  window.location.href="profile.html";
+});
+
 
 // Cria uma variável relativa ao botao "Voltar Login" e adiciona um Event Listener
 const btnLogout = document.getElementById("scrum_btn_logout");
@@ -147,4 +182,15 @@ function moveTask(title) {
       }
     },
   });
+}
+
+// Chamar user com o username gravado na localstorage
+window.onload = function() {
+  const loggedInUsername = localStorage.getItem("username");
+  if (loggedInUsername) {
+      console.log(loggedInUsername);
+      getUser(loggedInUsername);
+  } else {
+      console.error("No logged-in username found in local storage.");
+  }
 }
