@@ -101,13 +101,13 @@ function createCardElement(title, priority) {
 
   // Definir classes com base na prioridade
   switch (priority) {
-    case "high":
+    case "500":
       cardHeaderElement.classList.add("high-priority");
       break;
-    case "medium":
+    case "300":
       cardHeaderElement.classList.add("medium-priority");
       break;
-    case "low":
+    case "100":
       cardHeaderElement.classList.add("low-priority");
       break;
   }
