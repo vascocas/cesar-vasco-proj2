@@ -1,8 +1,48 @@
+async function getUser(loggedInUsername) {
+  try {
+      const response = await fetch(`http://localhost:8080/backend/rest/users/${loggedInUsername}`, {
+          method: 'GET',
+          headers: {
+              'Accept': 'application/json'
+          },
+      });
+      const data = await response.json();
+      fillProfile(data);
+  } catch (error) {
+      console.error('Error fetching user:', error);
+  }
+}
+
+//Carreagar toda a informação do user
+function fillProfile(user) {
+  console.log(user);
+
+  // Atualizar a mensagem de boas vindas com o nome de utilizador
+  document.getElementById("logged-in-username").innerHTML="Bem vindo, " + user.username;
+
+  //Imagem de perfil
+  const profilePic = document.querySelector('.profile-pic');
+  if (user.photo) {
+    profilePic.src = user.photo;
+  } else {
+    profilePic.src = '../Resources/profile_pic_default.png';
+  }
+}
+
 // Obter o nome de utilizador do armazenamento local
 const username = localStorage.getItem("username");
 
 // Atualizar a mensagem de boas vindas com o nome de utilizador
-document.getElementById("userHeader").innerHTML = "Bem vindo, " + username;
+let userHeader = document.getElementById("logged-in-username");
+userHeader.addEventListener('click', function(){
+  window.location.href="profile.html";
+});
+
+
+window.onload = () => {
+  // Call getAllTasks() when the page loads
+  getAllTasks();
+};
 
 // Cria uma variável relativa ao botao "Voltar Login" e adiciona um Event Listener
 const btnLogout = document.getElementById("scrum_btn_logout");
@@ -17,6 +57,7 @@ function homeMenu() {
 // Cria array para armazenar as tarefas
 let tasks = [];
 
+// Função para obter todas as tarefas
 async function getAllTasks() {
   await fetch("http://localhost:8080/backend/rest/tasks", {
     method: "GET",
@@ -25,43 +66,52 @@ async function getAllTasks() {
     },
   })
     .then((response) => {
-      if (!response.ok) {
-        throw new Error("Failed to fetch tasks");
-      }
       return response.json();
     })
     .then((data) => {
       tasks = data;
       showTasks();
-    })
-    .catch((error) => {
-      console.error("Error fetching tasks:", error);
     });
 }
 
 // Função para listar as tarefas nos quadros
 function showTasks() {
-  // Limpar os quadros antes de listar novamente
-  document.getElementById("todo-cards").innerHTML = "";
-  document.getElementById("doing-cards").innerHTML = "";
-  document.getElementById("done-cards").innerHTML = "";
+   // Limpar os quadros antes de listar novamente
+   document.getElementById("todo-cards").innerHTML = "";
+   document.getElementById("doing-cards").innerHTML = "";
+   document.getElementById("done-cards").innerHTML = "";
 
   // Iterar sobre as tarefas e adicioná-las aos quadros apropriados
   for (const t of tasks) {
-    const cardElement = createCardElement(t.title);
+    const cardElement = createCardElement(t.title, t.priority);
     const columnElement = document.getElementById(t.column);
     columnElement.appendChild(cardElement);
   }
 }
 
 // Função para criar um elemento de cartão HTML para uma tarefa
-function createCardElement(title) {
+function createCardElement(title, priority) {
   // Cria uma Div e atribui a className "card"
   const cardElement = document.createElement("div");
   cardElement.className = "card";
+
   // Cria uma Div e atribui a className "card-header"
   const cardHeaderElement = document.createElement("div");
   cardHeaderElement.className = "card-header";
+
+  // Definir classes com base na prioridade
+  switch (priority) {
+    case "high":
+      cardHeaderElement.classList.add("high-priority");
+      break;
+    case "medium":
+      cardHeaderElement.classList.add("medium-priority");
+      break;
+    case "low":
+      cardHeaderElement.classList.add("low-priority");
+      break;
+  }
+
   // Altera o textContent para o título da tarefa
   cardHeaderElement.textContent = title;
 
@@ -74,11 +124,6 @@ function createCardElement(title) {
   cardElement.appendChild(cardHeaderElement);
   return cardElement;
 }
-
-window.onload = () => {
-  // Call getAllTasks() when the page loads
-  getAllTasks();
-};
 
 // Mostra os botões de opções de cada tarefa
 function showOptions(cardElement) {
@@ -133,31 +178,36 @@ async function deleteTask(title) {
   if (userConfirmed) {
     // Remover a tarefa da lista
     await fetch(
-      "http://localhost:8080/backend/rest/tasks/delete/?title=" + title,
+      "http://localhost:8080/backend/rest/tasks/delete/?title=" +
+        encodeURIComponent(title),
       {
         method: "DELETE",
         headers: {
-          Accept: "application/json",
+          Accept: "*/*",
+          "Content-Type": "application/json",
         },
       }
-    ).then((response) => {
-      if (!response.ok) {
-        throw new Error("Failed to delete task");
+    ).then(function (response) {
+      if (response.status === 200) {
+        response.text().then(function (successMessage) {
+          alert(successMessage);
+        });
+      } else {
+        response.text().then(function (errorMessage) {
+          alert(errorMessage);
+        });
       }
-
-      // Remove a tarefa da lista local
-      tasks = tasks.filter((task) => task.title !== title);
-
-      // Atualiza a UI para refletir a remoção da tarefa
-      showTasks();
-
-      alert("A tarefa com o título: " + title + ", foi eliminada com sucesso.");
     });
+    // Remove a tarefa da lista local
+    tasks = tasks.filter((task) => task.title !== title);
+
+    // Atualiza a UI para refletir a remoção da tarefa
+    showTasks();
   }
 }
 
 // Função mover tarefa (Terceira das opções da tarefa)
-function moveTask(title) {
+async function moveTask(inputTitle) {
   // Cria uma caixa de diálogo com botões das colunas
   Swal.fire({
     title: "Selecione a coluna de destino",
@@ -169,21 +219,47 @@ function moveTask(title) {
     },
     inputPlaceholder: "Selecione a coluna",
     showCancelButton: true,
-    inputValidator: (value) => {
+    inputValidator: async (value) => {
       const destinationColumn = value;
       // Pesquisa pelo título, o índice da tarefa dentro do array, através do método findIndex()
-      const taskIndex = tasks.findIndex((task) => task.title === title);
+      const taskIndex = tasks.findIndex((task) => task.title === inputTitle);
       // Verifica se se está a tentar mover para própria coluna e previne essa ação
       if (tasks[taskIndex].column === destinationColumn) {
         alert("A tarefa já se encontra nesta coluna!");
       } else {
-        // altera o valor da "column" da tarefa, para fazer a correta colocação nas Div
-        tasks[taskIndex].column = destinationColumn;
-        // Atualiza o array de tarefas no armazenamento local
-        localStorage.setItem("tasks", JSON.stringify(tasks));
-        // Chama a função para actualizar a página após mover a tarefa
-        window.onload();
+        // Constroi variável com formato JSON para guardar elementos necessários para mudar de coluna (nome e coluna destino)
+        let requestBody = JSON.stringify({
+          title: inputTitle,
+          column: destinationColumn,
+        });
+
+        try {
+          await fetch("http://localhost:8080/backend/rest/tasks/moveTask", {
+            method: "PUT",
+            headers: {
+              Accept: "*/*",
+              "Content-Type": "application/json",
+            },
+            body: requestBody,
+          });
+
+          await getAllTasks(); // Fetch all tasks again
+          showTasks(); // Update UI
+        } catch (error) {
+          console.error("Error moving task:", error);
+        }
       }
     },
   });
+}
+
+// Chamar user com o username gravado na localstorage
+window.onload = function() {
+  const loggedInUsername = localStorage.getItem("username");
+  if (loggedInUsername) {
+      console.log(loggedInUsername);
+      getUser(loggedInUsername);
+  } else {
+      console.error("No logged-in username found in local storage.");
+  }
 }

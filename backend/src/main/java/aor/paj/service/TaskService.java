@@ -29,16 +29,33 @@ public class TaskService {
         Task task =  taskBean.getTask(title);
         if (task==null)
             return Response.status(200).entity("Task with this title is not found").build();
-        return Response.status(200).entity(task).build();
+        else
+            return Response.status(200).entity(task).build();
     }
 
     @POST
     @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addTask(Task t) {
+        // Check if a task with the same title already exists
+        for (Task existingTask : taskBean.getTasks()) {
+            if (existingTask.getTitle().equals(t.getTitle())) {
+                return Response.status(400).entity("Task with this title already exists").build();
+            }
+        }
+
+        // Validate that end date is not earlier than start date
+        /*
+        if (t.getStartDate() != null && t.getEndDate() != null && t.getEndDate().before(t.getStartDate())) {
+            return Response.status(400).entity("End date cannot be earlier than start date").build();
+        }
+         */
+
+        // Proceed with adding the task if validation passes
         taskBean.addTask(t);
         return Response.status(200).entity("A new task is created").build();
     }
+
 
     @DELETE
     @Path("/delete")
@@ -46,7 +63,7 @@ public class TaskService {
     public Response removeTask(@QueryParam("title") String title) {
         boolean deleted =  taskBean.removeTask(title);
         if (!deleted)
-            return Response.status(200).entity("Task with this title is not found").build();
+            return Response.status(400).entity("Task with this title is not found").build();
         return Response.status(200).entity("Task deleted").build();
     }
 
@@ -56,7 +73,7 @@ public class TaskService {
     public Response moveTask(Task t) {
         boolean updated = taskBean.moveTask(t.getTitle(), t.getColumn());
         if (!updated)
-            return Response.status(200).entity("Task with this title is not found").build();
+            return Response.status(400).entity("Task with this title is not found").build();
         return Response.status(200).entity("Task moved to the new column").build();
     }
 
@@ -66,7 +83,7 @@ public class TaskService {
     public Response updateDescription(Task t, @QueryParam("taskTitle") String taskTitle) {
         boolean updated = taskBean.updateTask(taskTitle, t.getTitle(), t.getDescription(), t.getPriority(), t.getStartDate(), t.getEndDate());
         if (!updated)
-            return Response.status(200).entity("Task with this title is not found").build();
+            return Response.status(400).entity("Task with this title is not found").build();
         return Response.status(200).entity("Task content updated").build();
     }
 

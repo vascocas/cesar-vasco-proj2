@@ -17,6 +17,7 @@ public class UserBean {
     final String filename = "users.json";
     private ArrayList<User> users;
 
+
     public UserBean() {
         File f = new File(filename);
         if(f.exists()){
@@ -57,10 +58,14 @@ public class UserBean {
         return false;
     }
 
-    public boolean updateUserFirstName(String username, String name) {
+    public boolean updateUser(String username,String email, String firstName, String lastName, String phoneNumber, String photo) {
         for (User u : users) {
             if (u.getUsername().equals(username)) {
-                u.setFirstName(name);
+                u.setEmail(email);
+                u.setFirstName(firstName);
+                u.setLastName(lastName);
+                u.setPhoneNumber(phoneNumber);
+                u.setPhoto(photo);
                 writeIntoJsonFile();
                 return true;
             }
@@ -75,5 +80,52 @@ public class UserBean {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean usernameExists(String username,ArrayList<User> users){
+        for (User u : users){
+            if (u.getUsername().equals(username)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean emailExists(String email,ArrayList<User> users){
+        for (User u : users){
+            if (u.getEmail().equals(email)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean phoneExists(String phone,ArrayList<User> users) {
+        for (User u : users) {
+            if (u.getPhoneNumber().equals(phone)) return true;
+        }
+        return false;
+    }
+
+    public boolean validatePassword(String password){
+        //Tamanho entre 4 e 12 caracteres
+        if(password.length() < 4 || password.length() > 12){
+            return false;
+        }
+        //Tem de ter pelo menos uma letra e um número.
+        boolean temLetra = false;
+        boolean temNumero = false;
+
+        for(char c : password.toCharArray()){
+            //Verifica se o caracter é uma letra.
+            if(!Character.isLetter(c)){
+                temLetra = true;
+                //Verifica se o caracter é um numero.
+            }else if(!Character.isDigit(c)){
+                temNumero  =true;
+            }
+        }
+        //Retorn true se a senha contiver pelo menos uma letra e um número.
+        return temLetra && temNumero;
     }
 }

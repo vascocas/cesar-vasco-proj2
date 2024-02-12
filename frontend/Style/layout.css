@@ -37,6 +37,29 @@ footer{
     bottom: 0;
     background: var(--color_regular); 
 }
+
+#pic-container {
+    width: 70px;
+    height: 70px;
+    overflow: hidden;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.profile-pic {
+    max-height: 100%; 
+    display: block;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-right: 20px;
+}
  
 footer p{
     margin: 0;

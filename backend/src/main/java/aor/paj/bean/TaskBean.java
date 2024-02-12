@@ -20,19 +20,20 @@ public class TaskBean {
 
     public TaskBean() {
         File f = new File(filename);
-        if(f.exists()){
+        if (f.exists()) {
             try {
                 FileReader filereader = new FileReader(f);
-                tasks = JsonbBuilder.create().fromJson(filereader, new ArrayList<Task>() {}.getClass().getGenericSuperclass());
+                tasks = JsonbBuilder.create().fromJson(filereader, new ArrayList<Task>() {
+                }.getClass().getGenericSuperclass());
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
-        }else
+        } else
             tasks = new ArrayList<Task>();
     }
 
-    public void addTask(Task t) {
-        tasks.add(t);
+    public void addTask(Task newTask) {
+        tasks.add(newTask);
         writeIntoJsonFile();
     }
 
@@ -50,7 +51,7 @@ public class TaskBean {
 
     public boolean removeTask(String title) {
         for (Task t : tasks) {
-            if (t.getTitle().equals(title)){
+            if (t.getTitle().equals(title)) {
                 tasks.remove(t);
                 return true;
             }
@@ -85,8 +86,8 @@ public class TaskBean {
     }
 
 
-    private void writeIntoJsonFile(){
-        Jsonb jsonb =  JsonbBuilder.create(new JsonbConfig().withFormatting(true));
+    private void writeIntoJsonFile() {
+        Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withFormatting(true));
         try {
             jsonb.toJson(tasks, new FileOutputStream(filename));
         } catch (FileNotFoundException e) {
