@@ -58,13 +58,14 @@ public class UserBean {
         return false;
     }
 
-    public boolean updateUser(String username,String email, String firstName, String lastName, String phoneNumber) {
+    public boolean updateUser(String username,String email, String firstName, String lastName, String phoneNumber, String photo) {
         for (User u : users) {
             if (u.getUsername().equals(username)) {
                 u.setEmail(email);
                 u.setFirstName(firstName);
                 u.setLastName(lastName);
                 u.setPhoneNumber(phoneNumber);
+                u.setPhoto(photo);
                 writeIntoJsonFile();
                 return true;
             }

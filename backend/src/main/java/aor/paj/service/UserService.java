@@ -73,9 +73,9 @@ public class UserService {
                 updatedUser.getEmail(),
                 updatedUser.getFirstName(),
                 updatedUser.getLastName(),
-                updatedUser.getPhoneNumber());
+                updatedUser.getPhoneNumber(), updatedUser.getPhoto());
         if (!updated)
-            return Response.status(200).entity("User with this username is not found").build();
+            return Response.status(400).entity("User with this username is not found").build();
         return Response.status(200).entity("User information updated").build();
     }
 
@@ -133,7 +133,6 @@ public class UserService {
             } else if (userBean.phoneExists(phoneNumber, users)) {
                 return Response.status(400).entity("This phone number is already in use.").build();
             }else {
-
                 //Cria o novo utilizador e adiciona à lista
                 User newUser = new User(username,password,email,u.getFirstName(),u.getLastName(),phoneNumber,u.getPhoto());
                 userBean.addUser(newUser);
