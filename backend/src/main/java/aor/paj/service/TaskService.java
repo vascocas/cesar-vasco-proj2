@@ -16,12 +16,14 @@ public class TaskService {
     @Inject
     TaskBean taskBean;
 
+    // Get All Tasks
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Task> getTasks() {
         return taskBean.getTasks();
     }
 
+    // Get Task by Name
     @GET
     @Path("/{title}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -33,6 +35,7 @@ public class TaskService {
             return Response.status(200).entity(task).build();
     }
 
+    // Add Task
     @POST
     @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -46,7 +49,7 @@ public class TaskService {
 
         // Validate that end date is not earlier than start date
         /*
-        if (t.getStartDate() != null && t.getEndDate() != null && t.getEndDate().before(t.getStartDate())) {
+        if (t.getStartDate() != null && t.getEndDate() != null && t.getEndDate().isbefore(t.getStartDate())) {
             return Response.status(400).entity("End date cannot be earlier than start date").build();
         }
          */
@@ -56,7 +59,7 @@ public class TaskService {
         return Response.status(200).entity("A new task is created").build();
     }
 
-
+    // Delete Task by Name
     @DELETE
     @Path("/delete")
     @Produces(MediaType.APPLICATION_JSON)
@@ -65,6 +68,14 @@ public class TaskService {
         if (!deleted)
             return Response.status(400).entity("Task with this title is not found").build();
         return Response.status(200).entity("Task deleted").build();
+    }
+
+    // Delete all Tasks
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+        public Response removeAllTasks() {
+        taskBean.removeAllTasks();
+        return Response.status(200).entity("All Tasks deleted").build();
     }
 
     @PUT

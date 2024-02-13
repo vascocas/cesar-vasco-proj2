@@ -57,6 +57,10 @@ public class TaskBean implements Serializable {
         return false;
     }
 
+    public void removeAllTasks() {
+        tasks.clear();
+    }
+
     public boolean moveTask(String title, String newColumn) {
         for (Task t : tasks) {
             if (t.getTitle().equals(title)) {
