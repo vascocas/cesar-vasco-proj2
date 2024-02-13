@@ -165,7 +165,6 @@ public class UserService {
         if (!isOldPasswordValid) {
             return Response.status(401).entity("Incorrect old password").build();
         }
-
         // Se a password antiga é válida, update a password
         boolean updated = userBean.updatePassword(username, newPassword);
         if (!updated)
