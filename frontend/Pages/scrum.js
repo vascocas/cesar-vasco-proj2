@@ -1,3 +1,24 @@
+function checkAuthentication(){
+  fetch(`http://localhost:8080/backend/rest/getuser`)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    //Se houver usuário logado, mostra a página
+    showScrumPage();
+  })
+  .catch(error => {
+    window.location.href = 'login.html';
+  });
+}
+
+function showScrumPage(){
+  window.location.href = 'scrum.html';
+}
+
 async function getUser(loggedInUsername) {
   try {
       const response = await fetch(`http://localhost:8080/backend/rest/users/${loggedInUsername}`, {
@@ -13,7 +34,7 @@ async function getUser(loggedInUsername) {
   }
 }
 
-//Carreagar toda a informação do user
+//Carrega toda a informação do user
 function fillProfile(user) {
   console.log(user);
 
@@ -38,11 +59,6 @@ userHeader.addEventListener('click', function(){
   window.location.href="profile.html";
 });
 
-
-window.onload = () => {
-  // Call getAllTasks() when the page loads
-  getAllTasks();
-};
 
 // Cria uma variável relativa ao botao "Voltar Login" e adiciona um Event Listener
 const btnLogout = document.getElementById("scrum_btn_logout");
@@ -255,10 +271,13 @@ async function moveTask(inputTitle) {
 
 // Chamar user com o username gravado na localstorage
 window.onload = function() {
+  checkAuthentication();
   const loggedInUsername = localStorage.getItem("username");
   if (loggedInUsername) {
       console.log(loggedInUsername);
       getUser(loggedInUsername);
+      // Call getAllTasks() when the page loads
+      getAllTasks();
   } else {
       console.error("No logged-in username found in local storage.");
   }

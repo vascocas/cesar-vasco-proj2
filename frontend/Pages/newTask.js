@@ -1,3 +1,24 @@
+function checkAuthentication(){
+  fetch(`http://localhost:8080/backend/rest/getuser`)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    //Se houver usuário logado, mostra a página
+    showNewTaskPage();
+  })
+  .catch(error => {
+    window.location.href = 'login.html';
+  });
+}
+
+function showNewTaskPage(){
+  window.location.href = 'newTask.html';
+}
+
 // Obter o nome de utilizador do armazenamento local
 const username = localStorage.getItem("username");
 
@@ -90,4 +111,8 @@ async function addTask() {
     startDateInput.value = "";
     endDateInput.value = "";
   }
+}
+
+window.onload = function() {
+  checkAuthentication();
 }

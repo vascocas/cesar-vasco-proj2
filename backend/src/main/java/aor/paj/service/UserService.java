@@ -40,15 +40,6 @@ public class UserService {
         return userBean.getUsers();
     }
 
-    @POST
-    @Path("/add")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response addUser(User u) {
-
-        userBean.addUser(u);
-        return Response.status(200).entity("A new user is created").build();
-    }
-
     @GET
     @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)

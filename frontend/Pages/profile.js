@@ -1,3 +1,25 @@
+function checkAuthentication(){
+    fetch(`http://localhost:8080/backend/rest/getuser`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      //Se houver usuário logado, mostra a página
+      showProfilePage();
+    })
+    .catch(error => {
+      window.location.href = 'login.html';
+    });
+}
+  
+function showProfilePage(){
+window.location.href = 'profile.html';
+}
+
+
 async function getUser(loggedInUsername) {
     try {
         const response = await fetch(`http://localhost:8080/backend/rest/users/${loggedInUsername}`, {
@@ -13,16 +35,19 @@ async function getUser(loggedInUsername) {
     }
 }
 
+
+// Preenche os campos do formulário
 function fillProfile(user) {
     console.log(user);
 
     document.getElementById("logged-in-username").innerHTML=user.username;
 
-    document.getElementById("profile_username").value = user.username;
-    document.getElementById("profile_email").value = user.email;
-    document.getElementById("profile_firstName").value = user.firstName;
-    document.getElementById("profile_lastName").value = user.lastName;
-    document.getElementById("profile_phone").value = user.phoneNumber;
+    document.getElementById("profile_username").placeholder = user.username;
+    document.getElementById("profile_email").placeholder = user.email;
+    document.getElementById("profile_firstName").placeholder = user.firstName;
+    document.getElementById("profile_lastName").placeholder = user.lastName;
+    document.getElementById("profile_phone").placeholder = user.phoneNumber;
+    document.getElementById("profile_photo").placeholder = user.photo;
 
     //Caso exista foto de perfil lê, se não conseguir ler aparece imagem default
     const profilePic = document.querySelector('.profile-pic');
@@ -100,6 +125,7 @@ document.getElementById('profile_save').addEventListener('click', async function
 
 // Chamar user com o username gravado na localstorage
 window.onload = function() {
+    checkAuthentication();
     const loggedInUsername = localStorage.getItem("username");
     if (loggedInUsername) {
         console.log(loggedInUsername);
