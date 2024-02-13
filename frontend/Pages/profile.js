@@ -1,3 +1,25 @@
+function checkAuthentication(){
+    fetch(`http://localhost:8080/backend/rest/getuser`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      //Se houver usuário logado, mostra a página
+      showProfilePage();
+    })
+    .catch(error => {
+      window.location.href = 'login.html';
+    });
+}
+  
+function showProfilePage(){
+window.location.href = 'profile.html';
+}
+
+
 async function getUser(loggedInUsername) {
     try {
         const response = await fetch(`http://localhost:8080/backend/rest/users/${loggedInUsername}`, {
@@ -111,7 +133,7 @@ document.getElementById('profile_save').addEventListener('click', async function
                 body: JSON.stringify(updatedUser)
             });
 
-            if (response.status === 200) { 
+            if (response.status === 201) { 
                 alert('User profile updated successfully.');
                 // Relê dos dados na página
                 getUser(loggedInUsername);
@@ -171,7 +193,7 @@ btnEditPhoto.addEventListener('click', async function(e){
                 body: JSON.stringify(updatedUser)
             });
 
-            if (response.status === 200) { 
+            if (response.status === 200) {
                 alert('Photo profile updated successfully.');
                 // Relê dos dados na página
                 getUser(loggedInUsername);
@@ -188,7 +210,7 @@ btnEditPhoto.addEventListener('click', async function(e){
         } else {
             console.error("No logged-in username found in local storage.");
         }
-    
+
 });
 
 //Ao clicar no (x), fechar Modal
@@ -274,7 +296,7 @@ document.getElementById('changePasswordForm').addEventListener('submit', async f
     body: JSON.stringify({ oldPassword, newPassword })
   });
 
-  if (response.status === 200) { 
+  if (response.status === 200) {
     alert('Password changed successfully.');
     passwordModal.style.display = "none";
   } else {

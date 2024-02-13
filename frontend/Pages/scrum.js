@@ -256,7 +256,7 @@ btn_logout.onclick= async function(){
     console.log('Response status:', response.status);
     console.log('Response status text:', response.statusText);
 
-    if (response.status === 200) { 
+    if (response.status === 200) {
       alert('Logout successful.');
         // Limpa a localstorage
         localStorage.clear();
@@ -297,4 +297,4 @@ window.onload = async function() {
     console.error("Error checking authentication:", error);
     window.location.href = "login.html"; // Redireciona para a página de login se houver um erro ao verificar a autenticação
   }
-};
+}
