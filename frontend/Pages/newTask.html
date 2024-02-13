@@ -18,38 +18,38 @@
       <input type="button" class="btn-nav" value="Voltar" onclick="location.href = 'scrum.html'"/>
     </nav>
     <div class="container">
-      <form>
+      <form id="newTask_form">
         <div class="task-form">
           <h1 id="taskH1">TAREFA</h1>
           <div class="textfield">
             <label for="newTask_title" class="label">Título</label>
             <!--Campo para receber o título-->
-            <textarea type="text" class="newTask_textarea" id="newTask_title" placeholder="Insira o titulo da tarefa"></textarea>
+            <textarea class="newTask_textarea" id="newTask_title" placeholder="Insira o titulo da tarefa"></textarea>
           </div>
           <div class="textfield">
             <label for="newTask_description" class="label">Descrição</label>
             <!--Campo para receber a descrição-->
-            <textarea type="text" class="newTask_textarea" id="newTask_description" placeholder="Insira a descrição da tarefa"></textarea>
+            <textarea class="newTask_textarea" id="newTask_description" placeholder="Insira a descrição da tarefa"></textarea>
           </div>
           <div class="textfield">
             <label for="newTask_priority" class="label">Prioridade</label>
             <!--Campo para receber a prioridade-->
             <select id="newTask_priority" class="newTask_textarea">
               <option value="" disabled selected>Defina a prioridade</option>
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
+              <option value="100">Baixa</option>
+              <option value="300">Média</option>
+              <option value="500">Alta</option>
           </select>
           </div>
           <div class="textfield">
             <label for="newTask_startDate" class="label">Data de início</label>
             <!--Campo para receber a data inicial-->
-            <textarea type="text" class="newTask_textarea" id="newTask_startDate" placeholder="Insira a data de início"></textarea>
+            <input type="date" class="newTask_textarea" id="newTask_startDate" placeholder="Insira a data de início" required></textarea>
           </div>
           <div class="textfield">
             <label for="newTask_endDate" class="label">Data de fim</label>
             <!--Campo para receber a data de conclusão-->
-            <textarea type="text" class="newTask_textarea" id="newTask_endDate" placeholder="Insira a data de conclusão"></textarea>
+            <input type="date" class="newTask_textarea" id="newTask_endDate" placeholder="Insira a data de conclusão"></textarea>
           </div>
           <div>
             <!--Botão gravar-->

@@ -14,7 +14,6 @@ public class User {
     @XmlElement
     private int id;
 
-    @XmlElement
     protected static int ultimoId = 0;
 
     @XmlElement
