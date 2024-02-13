@@ -7,20 +7,53 @@ document.getElementById("userHeader").innerHTML = "Bem vindo, " + username;
 // Cria array para armazenar as tarefas
 let tasks = [];
 
-// Call getAllTasks to fetch tasks from the backend
+
+// Função para obter todas as tarefas
 async function getAllTasks() {
-  await fetch("http://localhost:8080/backend/rest/tasks", {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-    },
-  })
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      tasks = data;
-    });
+  try {
+      const response = await fetch("http://localhost:8080/backend/rest/tasks", {
+          method: "GET",
+          headers: {
+              Accept: "application/json",
+          },
+      });
+      const data = await response.json();
+      const preTasks = data;
+      tasks = sortTasks(preTasks);
+  } catch (error) {
+      console.error("Error fetching tasks:", error);
+  }
+}
+
+
+// Define a comparison function for sorting tasks
+function compareTasks(taskA, taskB) {
+  // First, compare by priority
+  if (taskA.priority !== taskB.priority) {
+    return taskB.priority - taskA.priority;
+  }
+
+  // If priorities are equal, compare by start date
+  if (taskA.startDate !== taskB.startDate) {
+    return new Date(taskA.startDate) - new Date(taskB.startDate);
+  }
+
+  // If start dates are equal, compare by end date
+  // If endDate is empty ("") for taskA but not for taskB, taskA should come after taskB
+  if (taskA.endDate === "" && taskB.endDate !== "") {
+    return 1;
+  }
+  // If endDate is empty ("") for taskB but not for taskA, taskB should come after taskA
+  else if (taskB.endDate === "" && taskA.endDate !== "") {
+    return -1;
+  }
+  // If both endDate are empty ("") or both are not empty, sort by end date as usual
+  return new Date(taskA.endDate) - new Date(taskB.endDate);
+}
+
+// Function to sort tasks by multiple parameters
+function sortTasks(tasks) {
+  return tasks.sort(compareTasks);
 }
 
 (async function () {

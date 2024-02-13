@@ -11,15 +11,6 @@ let tasks = [];
 const submitButton = document.getElementById("newTask_btn_submit");
 submitButton.onclick = addTask;
 
-// Function to format date to YYYY-MM-DD
-function formatDate(date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
-
 // Criar uma nova tarefa
 async function addTask() {
   // Declara e atribui variáveis para guardaar os elementos: título e descrição da tarefa
@@ -49,6 +40,12 @@ async function addTask() {
     priorityInput.value = 100;
   }
 
+// Check if the start date is not empty
+if (startDateInput.value.trim() === '') {
+  alert('Por favor, preencha a data de início.');
+  return;
+}
+
   // Função para verificar end Date sempre posterior à start Date
   const startDate = new Date(startDateInput.value);
   const endDate = new Date(endDateInput.value);
@@ -59,17 +56,13 @@ async function addTask() {
     return;
   }
 
-  // Usage example
-const formattedStartDate = formatDate(startDate);
-const formattedEndDate = formatDate(endDate);
-
   // Cria uma nova tarefa com os atributos "title" e "description". Todas as tarefas começam na coluna TODO
   const newTask = {
     title: titleInput.value,
     description: descriptionInput.value,
     priority: parseInt(priorityInput.value),
-    startDate: formattedStartDate,
-    endDate: formattedEndDate,
+    startDate: startDateInput.value,
+    endDate: endDateInput.value,
   };
 
   const requestBody = JSON.stringify(newTask);

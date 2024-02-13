@@ -1,15 +1,18 @@
 async function getUser(loggedInUsername) {
   try {
-      const response = await fetch(`http://localhost:8080/backend/rest/users/${loggedInUsername}`, {
-          method: 'GET',
-          headers: {
-              'Accept': 'application/json'
-          },
-      });
-      const data = await response.json();
-      fillProfile(data);
+    const response = await fetch(
+      `http://localhost:8080/backend/rest/users/${loggedInUsername}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+    fillProfile(data);
   } catch (error) {
-      console.error('Error fetching user:', error);
+    console.error("Error fetching user:", error);
   }
 }
 
@@ -18,14 +21,15 @@ function fillProfile(user) {
   console.log(user);
 
   // Atualizar a mensagem de boas vindas com o nome de utilizador
-  document.getElementById("logged-in-username").innerHTML="Bem vindo, " + user.username;
+  document.getElementById("logged-in-username").innerHTML =
+    "Bem vindo, " + user.username;
 
   //Imagem de perfil
-  const profilePic = document.querySelector('.profile-pic');
+  const profilePic = document.querySelector(".profile-pic");
   if (user.photo) {
     profilePic.src = user.photo;
   } else {
-    profilePic.src = '../Resources/profile_pic_default.png';
+    profilePic.src = "../Resources/profile_pic_default.png";
   }
 }
 
@@ -34,8 +38,8 @@ const username = localStorage.getItem("username");
 
 // Atualizar a mensagem de boas vindas com o nome de utilizador
 let userHeader = document.getElementById("logged-in-username");
-userHeader.addEventListener('click', function(){
-  window.location.href="profile.html";
+userHeader.addEventListener("click", function () {
+  window.location.href = "profile.html";
 });
 
 // Cria uma variável relativa ao botao "Voltar Login" e adiciona um Event Listener
@@ -51,9 +55,9 @@ function homeMenu() {
 // Cria array para armazenar as tarefas
 let tasks = [];
 
-
 // Função para obter todas as tarefas
 async function getAllTasks() {
+  try {
     const response = await fetch("http://localhost:8080/backend/rest/tasks", {
       method: "GET",
       headers: {
@@ -61,8 +65,42 @@ async function getAllTasks() {
       },
     });
     const data = await response.json();
-    tasks = data;
+    const preTasks = data;
+    tasks = sortTasks(preTasks);
     showTasks(); // Call showTasks after tasks have been fetched
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+  }
+}
+
+// Define a comparison function for sorting tasks
+function compareTasks(taskA, taskB) {
+  // First, compare by priority
+  if (taskA.priority !== taskB.priority) {
+    return taskB.priority - taskA.priority;
+  }
+
+  // If priorities are equal, compare by start date
+  if (taskA.startDate !== taskB.startDate) {
+    return new Date(taskA.startDate) - new Date(taskB.startDate);
+  }
+
+  // If start dates are equal, compare by end date
+  // If endDate is empty ("") for taskA but not for taskB, taskA should come after taskB
+  if (taskA.endDate === "" && taskB.endDate !== "") {
+    return 1;
+  }
+  // If endDate is empty ("") for taskB but not for taskA, taskB should come after taskA
+  else if (taskB.endDate === "" && taskA.endDate !== "") {
+    return -1;
+  }
+  // If both endDate are empty ("") or both are not empty, sort by end date as usual
+  return new Date(taskA.endDate) - new Date(taskB.endDate);
+}
+
+// Function to sort tasks by multiple parameters
+function sortTasks(tasks) {
+  return tasks.sort(compareTasks);
 }
 
 // Função para listar as tarefas nos quadros
@@ -72,14 +110,13 @@ function showTasks() {
   document.getElementById("doing-cards").innerHTML = "";
   document.getElementById("done-cards").innerHTML = "";
 
- // Iterar sobre as tarefas e adicioná-las aos quadros apropriados
- for (const t of tasks) {
-   const cardElement = createCardElement(t.title, t.priority);
-   const columnElement = document.getElementById(t.column);
-   columnElement.appendChild(cardElement);
- }
+  // Iterar sobre as tarefas e adicioná-las aos quadros apropriados
+  for (const t of tasks) {
+    const cardElement = createCardElement(t.title, t.priority);
+    const columnElement = document.getElementById(t.column);
+    columnElement.appendChild(cardElement);
+  }
 }
-
 
 // Função para criar um elemento de cartão HTML para uma tarefa
 function createCardElement(title, priority) {
@@ -93,11 +130,11 @@ function createCardElement(title, priority) {
 
   // Definir classes com base na prioridade
   if (priority == 100) {
-      cardHeaderElement.classList.add("low-priority");
-  } else if(priority == 300){
-      cardHeaderElement.classList.add("medium-priority");
-  }else if(priority == 500){
-      cardHeaderElement.classList.add("high-priority");
+    cardHeaderElement.classList.add("low-priority");
+  } else if (priority == 300) {
+    cardHeaderElement.classList.add("medium-priority");
+  } else if (priority == 500) {
+    cardHeaderElement.classList.add("high-priority");
   }
 
   // Altera o textContent para o título da tarefa
@@ -111,7 +148,6 @@ function createCardElement(title, priority) {
   cardElement.appendChild(cardHeaderElement);
   return cardElement;
 }
-
 
 // Mostra os botões de opções de cada tarefa
 function showOptions(cardElement) {
@@ -242,14 +278,14 @@ async function moveTask(inputTitle) {
 }
 
 // Chamar user com o username gravado na localstorage
-window.onload = function() {
+window.onload = function () {
   const loggedInUsername = localStorage.getItem("username");
   if (loggedInUsername) {
-      console.log(loggedInUsername);
-      getUser(loggedInUsername);
+    console.log(loggedInUsername);
+    getUser(loggedInUsername);
   } else {
-      console.error("No logged-in username found in local storage.");
+    console.error("No logged-in username found in local storage.");
   }
   // Call getAllTasks() when the page loads
   getAllTasks();
-}
+};
