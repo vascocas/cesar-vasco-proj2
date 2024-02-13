@@ -18,7 +18,7 @@ async function login() {
     const response = await fetch('http://localhost:8080/backend/rest/users/login', {
         method: 'POST',
         headers: {
-            'Accept' : '*/*',
+            Accept : '*/*',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(user_credentials)
