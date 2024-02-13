@@ -1,25 +1,3 @@
-function checkAuthentication(){
-    fetch(`http://localhost:8080/backend/rest/getuser`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      //Se houver usuário logado, mostra a página
-      showProfilePage();
-    })
-    .catch(error => {
-      window.location.href = 'login.html';
-    });
-}
-  
-function showProfilePage(){
-window.location.href = 'profile.html';
-}
-
-
 async function getUser(loggedInUsername) {
     try {
         const response = await fetch(`http://localhost:8080/backend/rest/users/${loggedInUsername}`, {
@@ -42,7 +20,7 @@ function fillProfile(user) {
 
     document.getElementById("logged-in-username").innerHTML=user.username;
 
-    document.getElementById("profile_username").placeholder = user.username;
+    document.getElementById("profile_username").value = user.username;
     document.getElementById("profile_email").placeholder = user.email;
     document.getElementById("profile_firstName").placeholder = user.firstName;
     document.getElementById("profile_lastName").placeholder = user.lastName;
@@ -124,13 +102,28 @@ document.getElementById('profile_save').addEventListener('click', async function
 });
 
 // Chamar user com o username gravado na localstorage
-window.onload = function() {
-    checkAuthentication();
+window.onload = async function() {
     const loggedInUsername = localStorage.getItem("username");
-    if (loggedInUsername) {
-        console.log(loggedInUsername);
-        getUser(loggedInUsername);
-    } else {
-        console.error("No logged-in username found in local storage.");
+
+  if (!loggedInUsername) {
+    console.error("No logged-in username found in local storage.");
+    window.location.href = "login.html"; // Redireciona para a página de login se não houver usuário autenticado
+    return;
+  }
+
+  // Verifica se o usuário está autenticado antes de prosseguir
+  try {
+    const response = await fetch(`http://localhost:8080/backend/rest/users/getuser`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
+    const data = await response.json();
+    console.log("User authenticated:", data);
+        // Se o usuário estiver autenticado, continue com o carregamento da página Scrum
+        console.log(loggedInUsername);
+      getUser(loggedInUsername);
+  } catch (error) {
+    console.error("Error checking authentication:", error);
+    window.location.href = "login.html"; // Redireciona para a página de login se houver um erro ao verificar a autenticação
+  }
 };
