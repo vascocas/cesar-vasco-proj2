@@ -39,10 +39,6 @@ userHeader.addEventListener('click', function(){
 });
 
 
-// Cria uma variável relativa ao botao "Voltar Login" e adiciona um Event Listener
-const btnLogout = document.getElementById("scrum_btn_logout");
-btnLogout.onclick = homeMenu;
-
 // Função para voltar ao menu inicial
 function homeMenu() {
   localStorage.removeItem("username");
@@ -248,6 +244,31 @@ async function moveTask(inputTitle) {
   });
 }
 
+//Logout
+const btn_logout=document.getElementById('scrum_btn_logout');
+
+btn_logout.onclick= async function(){
+
+    const response = await fetch('http://localhost:8080/backend/rest/users/logout', {
+        method: 'POST',
+    });
+
+    console.log('Response status:', response.status);
+    console.log('Response status text:', response.statusText);
+
+    if (response.status === 200) { 
+      alert('Logout successful.');
+        // Limpa a localstorage
+        localStorage.clear();
+        // Guarda o username no armazenamento local
+        window.location.href='../index.html';
+    } else{
+        //Mostra mensagem de alerta do backend
+        alert('Logout failed.');
+    }
+
+};
+
 // Chamar user com o username gravado na localstorage
 window.onload = async function() {
 
@@ -267,11 +288,11 @@ window.onload = async function() {
     }
     const data = await response.json();
     console.log("User authenticated:", data);
-    // Se o usuário estiver autenticado, continue com o carregamento da página Scrum
+    // Se o usuário estiver autenticado, continuar com o carregamento da página Scrum
     console.log(loggedInUsername);
-      getUser(loggedInUsername);
-      // Call getAllTasks() when the page loads
-      getAllTasks();
+    getUser(loggedInUsername);
+    // Call getAllTasks() when the page loads
+    getAllTasks();
   } catch (error) {
     console.error("Error checking authentication:", error);
     window.location.href = "login.html"; // Redireciona para a página de login se houver um erro ao verificar a autenticação

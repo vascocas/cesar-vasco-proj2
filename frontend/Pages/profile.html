@@ -10,13 +10,13 @@
 <body>
     <header>
         <!--Cabeçalho-->
-        <h1>SCRUM BOARD</h1>
+        <h1 id="profile_titlePage">SCRUM BOARD</h1>
         <div class="profile-info">
             <div id="pic-container">
                 <img class="profile-pic">
-              </div>
+            </div>
             <span id="logged-in-username">username</span>
-            <button class="profile_btn" id="signout">Sign Out</button>
+            <button class="profile_btn" id="signout">Logout</button>
         </div>
     </header>
     <div class="container">
@@ -24,9 +24,6 @@
             <form>
                 <label for="profile_username">Username:</label>
                 <input type="text" id="profile_username" name="profile_username" placeholder="Username" disabled>
-
-                <label for="profile_password">Password:</label>
-                <input type="password" id="profile_password" name="profile_password" placeholder="Password">
 
                 <label for="profile_email">Email:</label>
                 <input type="email" id="profile_email" name="profile_email" placeholder="Email">
@@ -40,12 +37,60 @@
                 <label for="profile_phone">Número de Telefone:</label>
                 <input type="tel" id="profile_phone" name="profile_phone" placeholder="Número de Telefone">
 
-                <label for="profile_photo">Fotografia de Perfil (URL):</label>
-                <input type="url" id="profile_photo" name="profile_photo" placeholder="URL da Fotografia">
-
-                <button class="profile_btn" id="profile_save" type="submit">Atualizar Perfil</button>
+                <div id="profile_changeBtns">
+                    <input type="button" id="profile_changePhoto" name="profile_changePhoto" value="Alterar fotografia">
+                    <input type="button" id="profile_btnPassword" name="profile_btnPassword" value="Alterar Password">
+                </div>
+                
+                <div id="container_profile_btn">
+                    <button class="profile_btn" id="profile_save" type="submit">Atualizar Perfil</button>
+                </div>
+                
             </form>
     </div>
+
+    <!-- Modal para Fotografia -->
+    <div id="myModal">
+        <div class="modalContent">
+           <div class="modal-header">
+              <!-- símbolo 'x'-->
+              <span class="close">&times;</span>
+           </div>
+
+           <!-- pic container -->
+            <div id="pic-containerModal">
+                <img id="profile-picModal">
+            </div>
+
+           <!-- Categorias dos comentários-->
+           <input type="url" id="profile_url" name="profile_url" placeholder="Coloque o URL aqui">
+
+           <!-- Save photo -->
+           <button id="profile_savePhoto" type="button">Guardar</button>
+        </div>
+     </div>
+
+     <!-- Password Modal -->
+    <div id="passwordModal" class="modal">
+        <div class="modalContent">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+        </div>
+        <form id="changePasswordForm">
+            <label for="oldPassword">Old Password:</label>
+            <input type="password" id="oldPassword" name="oldPassword" placeholder="Coloque a sua password atual" required>
+    
+            <label for="newPassword">New Password:</label>
+            <input type="password" id="newPassword" name="newPassword" placeholder="Coloque a sua nova password" required>
+    
+            <label for="confirmPassword">Confirm New Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirme a sua nova password" required>
+    
+            <input type="submit" value="Change Password">
+        </form>
+        </div>
+    </div>
+
     <footer>
         <p>2024 AoR. Todos os direitos reservados.</p>
     </footer>

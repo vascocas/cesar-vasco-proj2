@@ -152,4 +152,24 @@ public class UserService {
         else
             return Response.status(400).entity("There is no user logged in at the moment!").build();
     }
+
+    @PUT
+    @Path("/updatePassword")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updatePassword(@HeaderParam("username") String username,
+                                   @HeaderParam("oldpassword") String oldPassword,
+                                   @HeaderParam("newpassword") String newPassword) {
+
+        // Verificar password antiga
+        boolean isOldPasswordValid = userBean.verifyPassword(username, oldPassword);
+        if (!isOldPasswordValid) {
+            return Response.status(401).entity("Incorrect old password").build();
+        }
+
+        // Se a password antiga é válida, update a password
+        boolean updated = userBean.updatePassword(username, newPassword);
+        if (!updated)
+            return Response.status(400).entity("User with this username is not found").build();
+        return Response.status(200).entity("User password updated").build();
+    }
 }

@@ -152,4 +152,26 @@ public class UserBean implements Serializable {
             return false;
     }
 
+    public boolean verifyPassword(String username, String oldPassword){
+
+        User user=getUser(username);
+
+        if (user!=null){
+            String password = user.getPassword();
+            return password.equals(oldPassword);
+        }
+        return false;
+    }
+
+    public boolean updatePassword(String username, String newPassword) {
+
+        User user = getUser(username);
+        if (user != null) {
+            user.setPassword(newPassword);
+            writeIntoJsonFile();
+            return true;
+        }
+        return false;
+    }
+
 }
