@@ -38,12 +38,6 @@ userHeader.addEventListener('click', function(){
   window.location.href="profile.html";
 });
 
-
-window.onload = () => {
-  // Call getAllTasks() when the page loads
-  getAllTasks();
-};
-
 // Cria uma variável relativa ao botao "Voltar Login" e adiciona um Event Listener
 const btnLogout = document.getElementById("scrum_btn_logout");
 btnLogout.onclick = homeMenu;
@@ -57,37 +51,35 @@ function homeMenu() {
 // Cria array para armazenar as tarefas
 let tasks = [];
 
+
 // Função para obter todas as tarefas
 async function getAllTasks() {
-  await fetch("http://localhost:8080/backend/rest/tasks", {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-    },
-  })
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      tasks = data;
-      showTasks();
+    const response = await fetch("http://localhost:8080/backend/rest/tasks", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
     });
+    const data = await response.json();
+    tasks = data;
+    showTasks(); // Call showTasks after tasks have been fetched
 }
 
 // Função para listar as tarefas nos quadros
 function showTasks() {
-   // Limpar os quadros antes de listar novamente
-   document.getElementById("todo-cards").innerHTML = "";
-   document.getElementById("doing-cards").innerHTML = "";
-   document.getElementById("done-cards").innerHTML = "";
+  // Limpar os quadros antes de listar novamente
+  document.getElementById("todo-cards").innerHTML = "";
+  document.getElementById("doing-cards").innerHTML = "";
+  document.getElementById("done-cards").innerHTML = "";
 
-  // Iterar sobre as tarefas e adicioná-las aos quadros apropriados
-  for (const t of tasks) {
-    const cardElement = createCardElement(t.title, t.priority);
-    const columnElement = document.getElementById(t.column);
-    columnElement.appendChild(cardElement);
-  }
+ // Iterar sobre as tarefas e adicioná-las aos quadros apropriados
+ for (const t of tasks) {
+   const cardElement = createCardElement(t.title, t.priority);
+   const columnElement = document.getElementById(t.column);
+   columnElement.appendChild(cardElement);
+ }
 }
+
 
 // Função para criar um elemento de cartão HTML para uma tarefa
 function createCardElement(title, priority) {
@@ -100,16 +92,12 @@ function createCardElement(title, priority) {
   cardHeaderElement.className = "card-header";
 
   // Definir classes com base na prioridade
-  switch (priority) {
-    case "500":
-      cardHeaderElement.classList.add("high-priority");
-      break;
-    case "300":
-      cardHeaderElement.classList.add("medium-priority");
-      break;
-    case "100":
+  if (priority == 100) {
       cardHeaderElement.classList.add("low-priority");
-      break;
+  } else if(priority == 300){
+      cardHeaderElement.classList.add("medium-priority");
+  }else if(priority == 500){
+      cardHeaderElement.classList.add("high-priority");
   }
 
   // Altera o textContent para o título da tarefa
@@ -119,11 +107,11 @@ function createCardElement(title, priority) {
   cardHeaderElement.addEventListener("click", function () {
     showOptions(cardElement);
   });
-
   // Adiciona a Div cardHeaderElement dentro da cardElement
   cardElement.appendChild(cardHeaderElement);
   return cardElement;
 }
+
 
 // Mostra os botões de opções de cada tarefa
 function showOptions(cardElement) {
@@ -262,4 +250,6 @@ window.onload = function() {
   } else {
       console.error("No logged-in username found in local storage.");
   }
+  // Call getAllTasks() when the page loads
+  getAllTasks();
 }
