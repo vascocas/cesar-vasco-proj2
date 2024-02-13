@@ -12,9 +12,9 @@ public class Task {
     @XmlElement
     private String description;
     @XmlElement
-    private LocalDate startDate;
+    private String startDate;
     @XmlElement
-    private LocalDate endDate;
+    private String endDate;
     @XmlElement
     private int priority;
 
@@ -23,7 +23,7 @@ public class Task {
     }
 
     // Constructor to set column based on state identifier
-    public Task(String title, String description, int priority, LocalDate startDate, LocalDate endDate) {
+    public Task(String title, String description, int priority, String startDate, String endDate) {
         this.column = "todo-cards";
         this.title = title;
         this.description = description;
@@ -64,19 +64,19 @@ public class Task {
         this.priority = priority;
     }
 
-    public LocalDate getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 }

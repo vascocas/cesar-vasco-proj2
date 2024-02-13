@@ -68,7 +68,7 @@ public class TaskBean implements Serializable {
         return false;
     }
 
-    public boolean updateTask(String title, String newTitle, String newDescription, int newPriority, LocalDate newStartDate, LocalDate newEndDate) {
+    public boolean updateTask(String title, String newTitle, String newDescription, int newPriority, String newStartDate, String newEndDate) {
         for (Task t : tasks) {
             if (t.getTitle().equals(title)) {
                 t.setTitle(newTitle);
