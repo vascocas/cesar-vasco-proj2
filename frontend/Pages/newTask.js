@@ -1,19 +1,19 @@
-// Obter o nome de utilizador do armazenamento local
+// Get the username from local storage
 const username = localStorage.getItem("username");
 
-// Atualizar a mensagem de boas vindas com o nome de utilizador
-document.getElementById("userHeader").innerHTML = "Bem vindo, " + username;
+// Update the welcome message with the username
+document.getElementById("userHeader").innerHTML = "Welcome, " + username;
 
-// Cria array para armazenar as tarefas
+// Create an array to store tasks
 let tasks = [];
 
-// Adiciona um Event Listener ao botao Adicionar Tarefa
+// Add an event listener to the Add Task button
 const submitButton = document.getElementById("newTask_btn_submit");
 submitButton.onclick = addTask;
 
-// Criar uma nova tarefa
+// Function to create a new task
 async function addTask() {
-  // Declara e atribui variáveis para guardaar os elementos: título e descrição da tarefa
+  // Declare and assign variables to store task title and description elements
   let titleInput = document.getElementById("newTask_title");
   let descriptionInput = document.getElementById("newTask_description");
   let priorityInput = document.getElementById("newTask_priority");
@@ -22,41 +22,39 @@ async function addTask() {
 
   const maxLength = 50;
 
-  // Verifica tamanho máximo de caracteres do título
+  // Check maximum length of title
   if (titleInput.value.length > maxLength) {
-    alert(
-      "Ultrapassou o máximo de caracteres para o Título = " + maxLength + "!"
-    );
+    alert("Ultrapassou o máximo de caracteres para o título= " + maxLength + "!");
     return;
   }
-  // Protege criação de tarefas com o título vazio
+  // Prevent creating tasks with empty title
   else if (titleInput.value === "") {
     alert("Por favor preencha o título.");
     return;
   }
 
-  // Protege criação de tarefas sem definir prioridade
+  // Prevent creating tasks without defining priority
   if (priorityInput.value === "") {
     priorityInput.value = 100;
   }
 
-// Check if the start date is not empty
-if (startDateInput.value.trim() === '') {
-  alert('Por favor, preencha a data de início.');
-  return;
-}
+  // Check if the start date is not empty
+  if (startDateInput.value.trim() === '') {
+    alert("Por favor preencha a data inicial.");
+    return;
+  }
 
-  // Função para verificar end Date sempre posterior à start Date
+  // Function to ensure end date is always after start date
   const startDate = new Date(startDateInput.value);
   const endDate = new Date(endDateInput.value);
 
   if (endDate < startDate) {
-    alert("Data de conclusão não pode ser anterior à data de início.");
+    alert("A data de conclusão não pode ser anterior à data inicial.");
     endDateInput.value = ""; // Clear the end date field
     return;
   }
 
-  // Cria uma nova tarefa com os atributos "title" e "description". Todas as tarefas começam na coluna TODO
+  // Create a new task with title, description, priority, start date, and end date attributes. All tasks start in the TODO column.
   const newTask = {
     title: titleInput.value,
     description: descriptionInput.value,
@@ -68,6 +66,7 @@ if (startDateInput.value.trim() === '') {
   const requestBody = JSON.stringify(newTask);
   console.log(requestBody);
 
+  // Send a POST request to add a new task to the backend server
   await fetch("http://localhost:8080/backend/rest/tasks/add", {
     method: "POST",
     headers: {
@@ -88,6 +87,6 @@ if (startDateInput.value.trim() === '') {
     }
   });
 
-  // Limpar os campos após adicionar uma nova tarefa
+  // Clear the input fields after adding a new task
   document.getElementById("newTask_form").reset();
 }

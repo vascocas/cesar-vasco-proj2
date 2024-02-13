@@ -1,30 +1,28 @@
-// Obter o nome de utilizador do armazenamento local
+// Get the username from local storage
 const username = localStorage.getItem("username");
 
-// Atualizar a mensagem de boas vindas com o nome de utilizador
-document.getElementById("userHeader").innerHTML = "Bem vindo, " + username;
+// Update the welcome message with the username
+document.getElementById("userHeader").innerHTML = "Welcome, " + username;
 
-// Cria array para armazenar as tarefas
+// Create an array to store tasks
 let tasks = [];
 
-
-// Função para obter todas as tarefas
+// Function to fetch all tasks
 async function getAllTasks() {
   try {
-      const response = await fetch("http://localhost:8080/backend/rest/tasks", {
-          method: "GET",
-          headers: {
-              Accept: "application/json",
-          },
-      });
-      const data = await response.json();
-      const preTasks = data;
-      tasks = sortTasks(preTasks);
+    const response = await fetch("http://localhost:8080/backend/rest/tasks", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    });
+    const data = await response.json();
+    const preTasks = data;
+    tasks = sortTasks(preTasks);
   } catch (error) {
-      console.error("Error fetching tasks:", error);
+    console.error("Error fetching tasks:", error);
   }
 }
-
 
 // Define a comparison function for sorting tasks
 function compareTasks(taskA, taskB) {
@@ -42,9 +40,8 @@ function compareTasks(taskA, taskB) {
   // If endDate is empty ("") for taskA but not for taskB, taskA should come after taskB
   if (taskA.endDate === "" && taskB.endDate !== "") {
     return 1;
-  }
-  // If endDate is empty ("") for taskB but not for taskA, taskB should come after taskA
-  else if (taskB.endDate === "" && taskA.endDate !== "") {
+  } else if (taskB.endDate === "" && taskA.endDate !== "") {
+    // If endDate is empty ("") for taskB but not for taskA, taskB should come after taskA
     return -1;
   }
   // If both endDate are empty ("") or both are not empty, sort by end date as usual
@@ -68,7 +65,7 @@ function sortTasks(tasks) {
     let priorityText = document.getElementById("editTask_priority");
     let startDateText = document.getElementById("editTask_startDate");
     let endDateText = document.getElementById("editTask_endDate");
-  
+
     // Assign values to the attributes of the selected task
     titleText.value = tasks[index].title;
     descriptionText.value = tasks[index].description;
@@ -76,7 +73,7 @@ function sortTasks(tasks) {
     startDateText.value = tasks[index].startDate;
     endDateText.value = tasks[index].endDate;
 
-    //Create this variable to store the value for the PUT html request
+    // Create this variable to store the value for the PUT html request
     let queryText = tasks[index].title;
 
     // Add an Event Listener to the Edit Task button
@@ -86,30 +83,25 @@ function sortTasks(tasks) {
     // On click and the button is labeled "Edit"
     async function editTask() {
       // Edit task logic
-      if (editButton.value === "Editar") {
-        // Transforma em editável os campos de texto
+      if (editButton.value === "Edit") {
+        // Make the text fields editable
         titleText.disabled = false;
         descriptionText.disabled = false;
         priorityText.disabled = false;
         startDateText.disabled = false;
         endDateText.disabled = false;
-        // Altera o nome do botão para "Gravar"
-        editButton.value = "Gravar";
+        // Change the button name to "Save"
+        editButton.value = "Save";
       }
       // Save task logic
-      else if (editButton.value === "Gravar") {
-        // Verifica tamanho máximo de caracteres do Título e grava os valores atuais do título e descrição da tarefa
+      else if (editButton.value === "Save") {
+        // Check maximum length of Title and save current values of the task title and description
         const maxLength = 50;
         if (titleText.value.length > maxLength) {
-          alert(
-            "Ultrapassou o máximo de caracteres para o Título = " +
-              maxLength +
-              "!"
-          );
+          alert("Ultrapassou o máximo de caracteres para o título= " + maxLength + "!");
           return;
         } else {
           // Update the task on the server
-
           const requestBody = JSON.stringify({
             title: titleText.value,
             description: descriptionText.value,
