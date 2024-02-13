@@ -4,12 +4,16 @@ import java.io.*;
 import java.util.ArrayList;
 import jakarta.enterprise.context.ApplicationScoped;
 import aor.paj.dto.User;
+import jakarta.inject.Inject;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 
 @ApplicationScoped
 public class UserBean implements Serializable {
+
+    @Inject
+    LoginBean loginBean;
 
     final String filename = "users.json";
     private ArrayList<User> users;
@@ -58,11 +62,16 @@ public class UserBean implements Serializable {
     public boolean updateUser(String username,String email, String firstName, String lastName, String phoneNumber, String photo) {
         for (User u : users) {
             if (u.getUsername().equals(username)) {
-                u.setEmail(email);
-                u.setFirstName(firstName);
-                u.setLastName(lastName);
-                u.setPhoneNumber(phoneNumber);
-                u.setPhoto(photo);
+                if (email!=u.getEmail()){u.setEmail(email);}
+
+                if (firstName != u.getFirstName()){u.setFirstName(firstName);}
+
+                if (lastName!= u.getLastName()){u.setLastName(lastName);}
+
+                if (phoneNumber!=u.getPhoneNumber()){u.setPhoneNumber(phoneNumber);}
+
+                if (photo != u.getPhoto()){u.setPhoto(photo);}
+                
                 writeIntoJsonFile();
                 return true;
             }
@@ -124,6 +133,23 @@ public class UserBean implements Serializable {
         }
         //Retorn true se a senha contiver pelo menos uma letra e um número.
         return temLetra && temNumero;
+    }
+
+    public User getLoggeduser(){
+        User u = loginBean.getCurrentUser();
+        if(u!= null)
+            return u;
+        else return null;
+    }
+
+    public boolean login(String username){
+        User u = getUser(username);
+        if(u!= null){
+            loginBean.setCurrentUser(u);
+            return true;
+        }
+        else
+            return false;
     }
 
 }

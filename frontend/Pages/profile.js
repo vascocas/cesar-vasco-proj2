@@ -18,11 +18,11 @@ function fillProfile(user) {
 
     document.getElementById("logged-in-username").innerHTML=user.username;
 
-    document.getElementById("username").value = user.username;
-    document.getElementById("email").value = user.email;
-    document.getElementById("firstName").value = user.firstName;
-    document.getElementById("lastName").value = user.lastName;
-    document.getElementById("phone").value = user.phoneNumber;
+    document.getElementById("profile_username").value = user.username;
+    document.getElementById("profile_email").value = user.email;
+    document.getElementById("profile_firstName").value = user.firstName;
+    document.getElementById("profile_lastName").value = user.lastName;
+    document.getElementById("profile_phone").value = user.phoneNumber;
 
     //Caso exista foto de perfil lê, se não conseguir ler aparece imagem default
     const profilePic = document.querySelector('.profile-pic');
@@ -36,11 +36,26 @@ function fillProfile(user) {
 //Logout
 const btn_logout=document.getElementById('signout');
 
-btn_logout.onclick=function(){
-    //limpa a localstorage
-    localStorage.clear();
-    
-    window.location.href='../index.html';
+btn_logout.onclick= async function(){
+
+    const response = await fetch('http://localhost:8080/backend/rest/users/logout', {
+        method: 'POST',
+    });
+
+    console.log('Response status:', response.status);
+    console.log('Response status text:', response.statusText);
+
+    if (response.status === 200) { 
+      alert('Logout successful.');
+        // Limpa a localstorage
+        localStorage.clear();
+        // Guarda o username no armazenamento local
+        window.location.href='../index.html';
+    } else{
+        //Mostra mensagem de alerta do backend
+        alert('Logout failed. ');
+    }
+
 };
 
 //Edição dos atributos
@@ -49,11 +64,11 @@ document.getElementById('profile_save').addEventListener('click', async function
     e.preventDefault;
 
     const updatedUser = {
-        email: document.getElementById("email").value,
-        firstName: document.getElementById("firstName").value,
-        lastName: document.getElementById("lastName").value,
-        phoneNumber: document.getElementById("phone").value,
-        photo: document.getElementById("photo").value,
+        email: document.getElementById("profile_email").value,
+        firstName: document.getElementById("profile_firstName").value,
+        lastName: document.getElementById("profile_lastName").value,
+        phoneNumber: document.getElementById("profile_phone").value,
+        photo: document.getElementById("profile_photo").value,
     };
 
         const loggedInUsername = localStorage.getItem("username");
@@ -69,7 +84,7 @@ document.getElementById('profile_save').addEventListener('click', async function
                 body: JSON.stringify(updatedUser)
             });
 
-            if (response.status === 200) { 
+            if (response.status === 201) { 
                 alert('User profile updated successfully.');
                 // Relê dos dados na página
                 getUser(loggedInUsername);

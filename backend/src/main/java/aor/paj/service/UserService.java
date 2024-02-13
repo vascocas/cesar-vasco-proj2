@@ -88,6 +88,7 @@ public class UserService {
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response loginUser(User u) {
 
         String username = u.getUsername();
@@ -103,6 +104,7 @@ public class UserService {
         } else if (!user.getPassword().equals(password)) {
             return Response.status(401).entity("Invalid password").build();
         } else {
+            userBean.login(username);
             return Response.status(200).entity("User logged in successfully").build();
         }
     }
@@ -110,10 +112,9 @@ public class UserService {
     @POST
     @Path("/logout")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response logoutUser() {
+    public Response logout() {
         HttpSession session = request.getSession();
         session.invalidate();
-
         return Response.status(200).entity("User logged out successfully").build();
     }
 
@@ -150,14 +151,14 @@ public class UserService {
     }
 
 
-    /*@GET
+    @GET
     @Path("/getuser")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUser(){
-        User u = userBean.getLoggedUser();
+        User u = userBean.getLoggeduser();
         if(u!= null)
-            return Response.status(200).entity(userBean.getLoggedUser()).build();
+            return Response.status(200).entity(userBean.getLoggeduser()).build();
         else
-            return Response.status(400).entity("there is no user logged in at the moment!").build();
-    }*/
+            return Response.status(400).entity("There is no user logged in at the moment!").build();
+    }
 }

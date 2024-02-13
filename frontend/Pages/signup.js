@@ -1,5 +1,3 @@
-let lastId=0;
-
 //submit formulário
 document.getElementById('signup_btn_signup').addEventListener('click', async function(e) {
     e.preventDefault();
@@ -7,18 +5,18 @@ document.getElementById('signup_btn_signup').addEventListener('click', async fun
     let user = {
         'username' : document.getElementById("signup_usertext").value, 
         'password' : document.getElementById("signup_password").value, 
-        'email': document.getElementById("email").value,
-        'firstName' : document.getElementById("firstName").value,
-        'lastName' : document.getElementById("lastName").value,
-        'phoneNumber' : document.getElementById("phone").value,
-        'photo' : document.getElementById("photoURL").value
+        'email': document.getElementById("signup_email").value,
+        'firstName' : document.getElementById("signup_firstName").value,
+        'lastName' : document.getElementById("signup_lastName").value,
+        'phoneNumber' : document.getElementById("signup_phone").value,
+        'photo' : document.getElementById("signup_photoURL").value
     }; 
     console.log(user); 
   
     const response = await fetch('http://localhost:8080/backend/rest/users/register', { 
         method: 'POST', 
         headers: { 
-            'Accept': '*/*', 
+            Accept: '*/*', 
             'Content-Type': 'application/json' 
         }, 
         body: JSON.stringify(user)
