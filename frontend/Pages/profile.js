@@ -133,11 +133,13 @@ document.getElementById('profile_save').addEventListener('click', async function
                 body: JSON.stringify(updatedUser)
             });
 
-            if (response.status === 201) { 
+            if (response.status === 200) { 
                 alert('User profile updated successfully.');
                 // Relê dos dados na página
                 getUser(loggedInUsername);
                 console.log(response.status);
+                //Reler a informação toda e mostrar
+                location.reload()=loadPage;
               } else{
                   //Mostra mensagem de alerta do backend
                   alert('Erro. ' + await response.text());
@@ -188,14 +190,15 @@ btnEditPhoto.addEventListener('click', async function(e){
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'username': loggedInUsername
+                    'username': loggedInUsername,
+                    'password': user.password,
                 },
                 body: JSON.stringify(updatedUser)
             });
 
             if (response.status === 200) {
                 alert('Photo profile updated successfully.');
-                // Relê dos dados na página
+                // Relê os dados na página
                 getUser(loggedInUsername);
                 console.log(response.status);
                 //Fecha Modal e reseta
@@ -285,7 +288,7 @@ document.getElementById('changePasswordForm').addEventListener('submit', async f
   // Send a request to change the password
   const loggedInUsername = localStorage.getItem("username");
 
-  const response = await fetch('http://localhost:8080/backend/rest/users/updatePassword', {
+  const response = await fetch('http://localhost:8080/backend/rest/users/update/password', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -304,8 +307,21 @@ document.getElementById('changePasswordForm').addEventListener('submit', async f
   }
 });
 
-// Chamar user com o username gravado na localstorage
-window.onload = async function() {
+
+document.getElementById('profile_url').addEventListener('change',function(){
+
+    let photoInst = document.getElementById('profile-picModal');
+    let url = document.getElementById('profile_url').value;
+
+    if (url !== '') {
+        photoInst.src = url;
+    } else {
+        photoInst.src = document.getElementById('profile_url').placeholder;
+    }
+
+})
+
+async function loadPage(){
     const loggedInUsername = localStorage.getItem("username");
 
   if (!loggedInUsername) {
@@ -330,24 +346,4 @@ window.onload = async function() {
   }
 };
 
-
-document.getElementById('profile_url').addEventListener('change',function(){
-
-    let photoInst = document.getElementById('profile-picModal');
-    let url = document.getElementById('profile_url').value;
-
-    if (url.trim() !== '') {
-        photoInst.src = url;
-    } else {
-        photoInst.src = document.getElementById('profile_url').placeholder;
-    }
-
-    /*let photoInst = document.getElementById('profile-picModal');
-
-    if(photoInst.value){
-        photoInst.src = photoInst.value;
-    }else{
-        photoInst.src = document.getElementById('profile_url').placeholder;
-    }*/
-
-})
+window.onload = loadPage;

@@ -18,7 +18,6 @@ async function getUser(loggedInUsername) {
 
 //Carrega toda a informação do user
 function fillProfile(user) {
-  console.log(user);
 
   // Atualizar a mensagem de boas vindas com o nome de utilizador
   document.getElementById("logged-in-username").innerHTML =

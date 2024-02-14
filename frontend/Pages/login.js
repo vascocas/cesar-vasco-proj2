@@ -7,21 +7,17 @@ async function login() {
 
     //Defini constante fora para guardar no localStorage
     const username_value = document.getElementById("login_usertext").value;
-
-    let user_credentials = {
-        'username' : username_value, 
-        'password' : document.getElementById("login_password").value
-    }; 
-
-    console.log(user_credentials);
+    const password_value = document.getElementById("login_password").value;
   
     const response = await fetch('http://localhost:8080/backend/rest/users/login', {
         method: 'POST',
         headers: {
             Accept : '*/*',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'username' : username_value,
+            'password' : password_value
         },
-        body: JSON.stringify(user_credentials)
+        body: JSON.stringify({username_value, password_value})
     });
 
     console.log('Response status:', response.status);

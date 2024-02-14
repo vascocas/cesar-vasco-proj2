@@ -65,7 +65,9 @@ public class UserService {
     @PUT
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateUser(User updatedUser, @HeaderParam("username") String username) {
+    public Response updateUser(User updatedUser,
+                               @HeaderParam("username") String username,
+                               @HeaderParam("password") String password) {
         boolean updated = userBean.updateUser(username,
                 updatedUser.getEmail(),
                 updatedUser.getFirstName(),
@@ -77,13 +79,36 @@ public class UserService {
     }
 
     @POST
+    @Path("/{username}/")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response update(@PathParam("username") String usernamePath,
+                           @HeaderParam("username") String username,
+                           @HeaderParam("password") String password,
+                           @HeaderParam("email") String email,
+                           @HeaderParam("firstName") String firstName,
+                           @HeaderParam("lastName") String lastName,
+                           @HeaderParam("phoneNumber") String phoneNumber,
+                           @HeaderParam("photo") String photo) {
+        {
+            boolean updated = userBean.updateUser(username,
+                    email,
+                    firstName,
+                    lastName,
+                    phoneNumber,
+                    photo);
+            if (!updated)
+                return Response.status(400).entity("User with this username is not found").build();
+            return Response.status(200).entity("User information updated").build();
+        }
+    }
+
+
+    @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response loginUser(User u) {
-
-        String username = u.getUsername();
-        String password = u.getPassword();
+    public Response loginUser(@HeaderParam("username") String username,
+                              @HeaderParam("password") String password) {
 
         System.out.println(username + " , " + password);
 
@@ -112,12 +137,13 @@ public class UserService {
     @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response signUp(User u) {
-
-        String username = u.getUsername();
-        String password = u.getPassword();
-        String email = u.getEmail();
-        String phoneNumber = u.getPhoneNumber();
+    public Response register(@HeaderParam("username") String username,
+                             @HeaderParam("password") String password,
+                             @HeaderParam("email") String email,
+                             @HeaderParam("firstName") String firstName,
+                             @HeaderParam("lastName") String lastName,
+                             @HeaderParam("phoneNumber") String phoneNumber,
+                             @HeaderParam("photo") String photo) {
 
         ArrayList users = userBean.getUsers();
 
@@ -134,7 +160,7 @@ public class UserService {
                 return Response.status(400).entity("This phone number is already in use.").build();
             }else {
                 //Cria o novo utilizador e adiciona à lista
-                User newUser = new User(username,password,email,u.getFirstName(),u.getLastName(),phoneNumber,u.getPhoto());
+                User newUser = new User(username,password,email,firstName,lastName,phoneNumber,photo);
                 userBean.addUser(newUser);
                 return Response.status(201).entity("Thanks for being awesome! Your account has been successfully created.").build();
             }
@@ -154,7 +180,7 @@ public class UserService {
     }
 
     @PUT
-    @Path("/updatePassword")
+    @Path("/update/password")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updatePassword(@HeaderParam("username") String username,
                                    @HeaderParam("oldpassword") String oldPassword,
