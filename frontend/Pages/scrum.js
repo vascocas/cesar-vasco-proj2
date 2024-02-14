@@ -33,21 +33,11 @@ function fillProfile(user) {
   }
 }
 
-// Obter o nome de utilizador do armazenamento local
-const username = localStorage.getItem("username");
-
 // Atualizar a mensagem de boas vindas com o nome de utilizador
 let userHeader = document.getElementById("logged-in-username");
-userHeader.addEventListener("click", function () {
+userHeader.addEventListener('click', function(){
   window.location.href = "profile.html";
-});
-
-
-// Função para voltar ao menu inicial
-function homeMenu() {
-  localStorage.removeItem("username");
-  document.location.href = "../index.html";
-}
+})
 
 // Cria array para armazenar as tarefas
 let tasks = [];
