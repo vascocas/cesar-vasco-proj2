@@ -66,7 +66,7 @@ function fillProfile(user) {
 
         let img = document.getElementById('profile-picModal');
 
-        if(document.getElementById('profile_url').value.trim !== ""){
+        if(document.getElementById('profile_url').value !== ""){
             img.src = document.getElementById('profile_url').placeholder;
         }else{
             img.src=photoUser;
@@ -329,3 +329,25 @@ window.onload = async function() {
         window.location.href = "login.html"; // Redireciona para a página de login se houver um erro ao verificar a autenticação
   }
 };
+
+
+document.getElementById('profile_url').addEventListener('change',function(){
+
+    let photoInst = document.getElementById('profile-picModal');
+    let url = document.getElementById('profile_url').value;
+
+    if (url.trim() !== '') {
+        photoInst.src = url;
+    } else {
+        photoInst.src = document.getElementById('profile_url').placeholder;
+    }
+
+    /*let photoInst = document.getElementById('profile-picModal');
+
+    if(photoInst.value){
+        photoInst.src = photoInst.value;
+    }else{
+        photoInst.src = document.getElementById('profile_url').placeholder;
+    }*/
+
+})
