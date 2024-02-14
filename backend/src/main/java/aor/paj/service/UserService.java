@@ -23,8 +23,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.Path;
 
-import javax.lang.model.util.AbstractElementVisitor14;
-
 
 @Path("/users")
 public class UserService {
@@ -47,9 +45,9 @@ public class UserService {
     @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUser(@PathParam("username") String username) {
-        User user =  userBean.getUser(username);
+        User user = userBean.getUser(username);
 
-        if (user==null) {
+        if (user == null) {
             return Response.status(400).entity("User with this username is not found").build();
         }
         return Response.status(200).entity(user).build();
@@ -59,7 +57,7 @@ public class UserService {
     @Path("/delete")
     @Produces(MediaType.APPLICATION_JSON)
     public Response removeUser(@QueryParam("username") String username) {
-        boolean deleted =  userBean.removeUser(username);
+        boolean deleted = userBean.removeUser(username);
         if (!deleted)
             return Response.status(200).entity("User with this username is not found").build();
         return Response.status(200).entity("User deleted").build();
@@ -126,7 +124,7 @@ public class UserService {
 
         if (username == null || username.isEmpty() || password == null || password.isEmpty() || email == null || email.isEmpty()) {
             return Response.status(400).entity("Username, password, and email are required.").build();
-        }else{
+        } else {
             if (userBean.usernameExists(username, users)) {
                 return Response.status(400).entity("Username already taken.").build();
             } else if (!userBean.validatePassword(password)) {
@@ -135,9 +133,9 @@ public class UserService {
                 return Response.status(400).entity("Email already in use.").build();
             } else if (userBean.phoneExists(phoneNumber, users)) {
                 return Response.status(400).entity("This phone number is already in use.").build();
-            }else {
+            } else {
                 //Cria o novo utilizador e adiciona à lista
-                User newUser = new User(username,password,email,u.getFirstName(),u.getLastName(),phoneNumber,u.getPhoto());
+                User newUser = new User(username, password, email, u.getFirstName(), u.getLastName(), phoneNumber, u.getPhoto());
                 userBean.addUser(newUser);
                 return Response.status(201).entity("Thanks for being awesome! Your account has been successfully created.").build();
             }
@@ -148,9 +146,9 @@ public class UserService {
     @GET
     @Path("/getuser")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUser(){
+    public Response getUser() {
         User u = userBean.getLoggeduser();
-        if(u!= null)
+        if (u != null)
             return Response.status(200).entity(userBean.getLoggeduser()).build();
         else
             return Response.status(400).entity("There is no user logged in at the moment!").build();
@@ -175,33 +173,21 @@ public class UserService {
         return Response.status(200).entity("User password updated").build();
     }
 
-
     // Add Task
     @POST
     @Path("{username}/tasks")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addTask(Task t, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username")String userPath) {
-        // Check if a task with the same title already exists
-        //for (Task existingTask : taskBean.getTasks()) {
-          //  if (existingTask.getTitle().equals(t.getTitle())) {
-            //    return Response.status(400).entity("Task with this title already exists").build();
-            //}
-        //}
-
-        // Validate that end date is not earlier than start date
-        /*
-        if (t.getStartDate() != null && t.getEndDate() != null && t.getEndDate().isbefore(t.getStartDate())) {
-            return Response.status(400).entity("End date cannot be earlier than start date").build();
+    public Response addTask(Task t, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
+        if (!userBean.verifyUsername(user, userPath)) {
+            return Response.status(400).entity("Unauthorized user").build();
         }
-         */
-
-        // Proceed with adding the task if validation passes
-        // taskBean.addTask(t);
-        // userBean.addUserTask(t, u);
+        if (!userBean.verifyPassword(userPath, pass)) {
+            return Response.status(400).entity("Unauthorized user").build();
+        }
+        if (userBean.verifyTaskTitle(userPath, t.getTitle())) {
+            return Response.status(400).entity("Task with this title already exists").build();
+        }
+        userBean.addTaskUser(userPath, t);
         return Response.status(200).entity("A new task is created").build();
     }
-
-
-
-
 }

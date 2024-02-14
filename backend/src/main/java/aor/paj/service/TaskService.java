@@ -38,31 +38,6 @@ public class TaskService {
             return Response.status(200).entity(task).build();
     }
 
-    // Add Task
-    @POST
-    @Path("/add")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response addTask(Task t,@HeaderParam("id") int id) {
-        // Check if a task with the same title already exists
-        for (Task existingTask : taskBean.getTasks()) {
-            if (existingTask.getTitle().equals(t.getTitle())) {
-                return Response.status(400).entity("Task with this title already exists").build();
-            }
-        }
-
-        // Validate that end date is not earlier than start date
-        /*
-        if (t.getStartDate() != null && t.getEndDate() != null && t.getEndDate().isbefore(t.getStartDate())) {
-            return Response.status(400).entity("End date cannot be earlier than start date").build();
-        }
-         */
-
-        // Proceed with adding the task if validation passes
-        taskBean.addTask(t);
-       // userBean.addUserTask(t, u);
-        return Response.status(200).entity("A new task is created").build();
-    }
-
     // Delete Task by Name
     @DELETE
     @Path("/delete")
