@@ -2,6 +2,8 @@ package aor.paj.bean;
 
 import java.io.*;
 import java.util.ArrayList;
+
+import aor.paj.dto.Task;
 import jakarta.enterprise.context.ApplicationScoped;
 import aor.paj.dto.User;
 import jakarta.inject.Inject;
@@ -172,6 +174,34 @@ public class UserBean implements Serializable {
             return true;
         }
         return false;
+    }
+
+    public boolean verifyUsername(String user, String userPath) {
+        if (user.equals(userPath)) {
+            return true;
+        }
+        else return false;
+    }
+
+    public boolean verifyTaskTitle(String userPath, String title) {
+        boolean exist = false;
+        for (Task existingTask : getUser(userPath).getUserTasks()) {
+            if (existingTask.getTitle().equals(title)) {
+                exist = true;
+            }
+        }
+        return exist;
+    }
+
+    public void addTaskUser(String username, Task t) {
+        User u = getUser(username);
+        u.getUserTasks().add(t);
+        writeIntoJsonFile();
+    }
+
+    public ArrayList<Task> getTasks(String username) {
+
+        return getUser(username).getUserTasks();
     }
 
 }

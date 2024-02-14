@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import aor.paj.bean.UserBean;
+import aor.paj.dto.Task;
 import aor.paj.dto.User;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
@@ -44,9 +45,9 @@ public class UserService {
     @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUser(@PathParam("username") String username) {
-        User user =  userBean.getUser(username);
+        User user = userBean.getUser(username);
 
-        if (user==null) {
+        if (user == null) {
             return Response.status(400).entity("User with this username is not found").build();
         }
         return Response.status(200).entity(user).build();
@@ -56,7 +57,7 @@ public class UserService {
     @Path("/delete")
     @Produces(MediaType.APPLICATION_JSON)
     public Response removeUser(@QueryParam("username") String username) {
-        boolean deleted =  userBean.removeUser(username);
+        boolean deleted = userBean.removeUser(username);
         if (!deleted)
             return Response.status(200).entity("User with this username is not found").build();
         return Response.status(200).entity("User deleted").build();
@@ -149,7 +150,7 @@ public class UserService {
 
         if (username == null || username.isEmpty() || password == null || password.isEmpty() || email == null || email.isEmpty()) {
             return Response.status(400).entity("Username, password, and email are required.").build();
-        }else{
+        } else {
             if (userBean.usernameExists(username, users)) {
                 return Response.status(400).entity("Username already taken.").build();
             } else if (!userBean.validatePassword(password)) {
@@ -158,7 +159,7 @@ public class UserService {
                 return Response.status(400).entity("Email already in use.").build();
             } else if (userBean.phoneExists(phoneNumber, users)) {
                 return Response.status(400).entity("This phone number is already in use.").build();
-            }else {
+            } else {
                 //Cria o novo utilizador e adiciona à lista
                 User newUser = new User(username,password,email,firstName,lastName,phoneNumber,photo);
                 userBean.addUser(newUser);
@@ -171,9 +172,9 @@ public class UserService {
     @GET
     @Path("/getuser")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUser(){
+    public Response getUser() {
         User u = userBean.getLoggeduser();
-        if(u!= null)
+        if (u != null)
             return Response.status(200).entity(userBean.getLoggeduser()).build();
         else
             return Response.status(400).entity("There is no user logged in at the moment!").build();
@@ -196,5 +197,23 @@ public class UserService {
         if (!updated)
             return Response.status(400).entity("User with this username is not found").build();
         return Response.status(200).entity("User password updated").build();
+    }
+
+    // Add Task
+    @POST
+    @Path("{username}/tasks")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addTask(Task t, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
+        if (!userBean.verifyUsername(user, userPath)) {
+            return Response.status(400).entity("Unauthorized user").build();
+        }
+        if (!userBean.verifyPassword(userPath, pass)) {
+            return Response.status(400).entity("Unauthorized user").build();
+        }
+        if (userBean.verifyTaskTitle(userPath, t.getTitle())) {
+            return Response.status(400).entity("Task with this title already exists").build();
+        }
+        userBean.addTaskUser(userPath, t);
+        return Response.status(200).entity("A new task is created").build();
     }
 }
