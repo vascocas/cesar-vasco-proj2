@@ -48,7 +48,7 @@ let tasks = [];
 // Function to fetch all tasks
 async function getAllTasks() {
   try {
-    const response = await fetch("http://localhost:8080/backend/rest/tasks", {
+    const response = await fetch(`http://localhost:8080/backend/rest/users/${localStorage.getItem("username")}/tasks`, {
       method: "GET",
       headers: {
         Accept: "application/json",

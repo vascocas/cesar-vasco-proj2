@@ -204,4 +204,14 @@ public class UserBean implements Serializable {
         return getUser(username).getUserTasks();
     }
 
+    public boolean removeTask(String userPath, String title) {
+        for (Task t : getUser(userPath).getUserTasks()) {
+            if (t.getTitle().equals(title)) {
+                getUser(userPath).getUserTasks().remove(t);
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

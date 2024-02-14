@@ -190,4 +190,29 @@ public class UserService {
         userBean.addTaskUser(userPath, t);
         return Response.status(200).entity("A new task is created").build();
     }
+
+    // Get All Tasks
+    @GET
+    @Path("{username}/tasks")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Task> getTasks(@PathParam("username") String userPath) {
+        return userBean.getTasks(userPath);
+    }
+
+    // Delete Task
+    @DELETE
+    @Path("{username}/delete")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response removeTask(@QueryParam("title") String title, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
+        if (!userBean.verifyUsername(user, userPath)) {
+            return Response.status(400).entity("Unauthorized user").build();
+        }
+        if (!userBean.verifyPassword(userPath, pass)) {
+            return Response.status(400).entity("Unauthorized user").build();
+        }
+        boolean deleted =  userBean.removeTask(userPath, title);
+        if (!deleted)
+            return Response.status(400).entity("Task with this title is not found").build();
+        return Response.status(200).entity("Task deleted").build();
+    }
 }

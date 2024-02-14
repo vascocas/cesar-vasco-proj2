@@ -45,7 +45,7 @@ let tasks = [];
 // Função para obter todas as tarefas
 async function getAllTasks() {
   try {
-    const response = await fetch("http://localhost:8080/backend/rest/tasks", {
+    const response = await fetch(`http://localhost:8080/backend/rest/users/${localStorage.getItem("username")}/tasks`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -189,7 +189,7 @@ async function deleteTask(title) {
   if (userConfirmed) {
     // Remover a tarefa da lista
     await fetch(
-      "http://localhost:8080/backend/rest/tasks/delete/?title=" +
+      `http://localhost:8080/backend/rest/users/${localStorage.getItem("username")}/delete/?title=` +
         encodeURIComponent(title),
       {
         method: "DELETE",

@@ -8,7 +8,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.util.List;
 
 
 @Path("/tasks")
@@ -16,47 +15,7 @@ public class TaskService {
 
     @Inject
     TaskBean taskBean;
-    @Inject
-    UserBean userBean;
-
-    // Get All Tasks
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Task> getTasks() {
-        return taskBean.getTasks();
-    }
-
-    // Get Task by Name
-    @GET
-    @Path("/{title}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getTask(@PathParam("title") String title) {
-        Task task =  taskBean.getTask(title);
-        if (task==null)
-            return Response.status(200).entity("Task with this title is not found").build();
-        else
-            return Response.status(200).entity(task).build();
-    }
-
-    // Delete Task by Name
-    @DELETE
-    @Path("/delete")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response removeTask(@QueryParam("title") String title) {
-        boolean deleted =  taskBean.removeTask(title);
-        if (!deleted)
-            return Response.status(400).entity("Task with this title is not found").build();
-        return Response.status(200).entity("Task deleted").build();
-    }
-
-    // Delete all Tasks
-    @DELETE
-    @Produces(MediaType.APPLICATION_JSON)
-        public Response removeAllTasks() {
-        taskBean.removeAllTasks();
-        return Response.status(200).entity("All Tasks deleted").build();
-    }
-
+    
     @PUT
     @Path("/moveTask")
     @Consumes(MediaType.APPLICATION_JSON)
