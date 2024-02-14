@@ -105,6 +105,8 @@ async function addTask() {
       tasks.push(newTask);
       response.text().then(function (successMessage) {
         alert(successMessage);
+        // Clear the input fields after adding a new task
+        document.getElementById("newTask_form").reset();
       });
     } else {
       response.text().then(function (errorMessage) {
@@ -113,7 +115,6 @@ async function addTask() {
     }
   });
 
-  // Clear the input fields after adding a new task
-  document.getElementById("newTask_form").reset();
+  
 }
 
