@@ -1,6 +1,7 @@
 package aor.paj.service;
 
 import aor.paj.bean.TaskBean;
+import aor.paj.bean.UserBean;
 import aor.paj.dto.Task;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -15,6 +16,8 @@ public class TaskService {
 
     @Inject
     TaskBean taskBean;
+    @Inject
+    UserBean userBean;
 
     // Get All Tasks
     @GET
@@ -56,6 +59,7 @@ public class TaskService {
 
         // Proceed with adding the task if validation passes
         taskBean.addTask(t);
+       // userBean.addUserTask(t, u);
         return Response.status(200).entity("A new task is created").build();
     }
 

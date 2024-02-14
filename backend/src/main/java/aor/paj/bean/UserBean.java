@@ -2,6 +2,8 @@ package aor.paj.bean;
 
 import java.io.*;
 import java.util.ArrayList;
+
+import aor.paj.dto.Task;
 import jakarta.enterprise.context.ApplicationScoped;
 import aor.paj.dto.User;
 import jakarta.inject.Inject;
@@ -34,6 +36,11 @@ public class UserBean implements Serializable {
 
     public void addUser(User u) {
         users.add(u);
+        writeIntoJsonFile();
+    }
+
+    public void addUserTask(Task t, User u) {
+        u.getUserTasks().add(t);
         writeIntoJsonFile();
     }
 
