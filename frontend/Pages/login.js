@@ -7,10 +7,11 @@ async function login() {
 
     //Defini constante fora para guardar no localStorage
     const username_value = document.getElementById("login_usertext").value;
+    const password_value = document.getElementById("login_password").value;
 
     let user_credentials = {
         'username' : username_value, 
-        'password' : document.getElementById("login_password").value
+        'password' : password_value
     }; 
 
     console.log(user_credentials);
@@ -29,8 +30,9 @@ async function login() {
 
     if (response.status === 200) { 
       alert('Login successful. Redirecting...');
-      // Guarda o username no armazenamento local
+      // Guarda o username e password no armazenamento local
       localStorage.setItem("username", username_value);
+      localStorage.setItem("password", password_value);
       // Limpa form
       document.getElementById('loginForm').reset();
       // Avança para a página Scrum Board

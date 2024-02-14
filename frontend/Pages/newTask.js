@@ -1,4 +1,4 @@
-window.onload = async function() {
+window.onload = async function () {
   const loggedInUsername = localStorage.getItem("username");
 
   if (!loggedInUsername) {
@@ -9,11 +9,14 @@ window.onload = async function() {
 
   // Verifica se o usuário está autenticado antes de prosseguir
   try {
-    const response = await fetch(`http://localhost:8080/backend/rest/users/getuser`);
+    const response = await fetch(
+      `http://localhost:8080/backend/rest/users/getuser`
+    );
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error("Network response was not ok");
     }
     const data = await response.json();
+    fillProfile(data);
     console.log("User authenticated:", data);
     // Se o usuário estiver autenticado, continue com o carregamento da página
     console.log(loggedInUsername);
@@ -24,11 +27,22 @@ window.onload = async function() {
   }
 };
 
-// Obter o nome de utilizador do armazenamento local
-const username = localStorage.getItem("username");
+//Carrega toda a informação do user
+function fillProfile(user) {
+  console.log(user);
 
-// Update the welcome message with the username
-document.getElementById("userHeader").innerHTML = "Welcome, " + username;
+  // Atualizar a mensagem de boas vindas com o nome de utilizador
+  document.getElementById("logged-in-username").innerHTML =
+    "Bem vindo, " + user.username;
+
+  //Imagem de perfil
+  const profilePic = document.querySelector(".profile-pic");
+  if (user.photo) {
+    profilePic.src = user.photo;
+  } else {
+    profilePic.src = "../Resources/profile_pic_default.png";
+  }
+}
 
 // Create an array to store tasks
 let tasks = [];
@@ -50,7 +64,9 @@ async function addTask() {
 
   // Check maximum length of title
   if (titleInput.value.length > maxLength) {
-    alert("Ultrapassou o máximo de caracteres para o título= " + maxLength + "!");
+    alert(
+      "Ultrapassou o máximo de caracteres para o título= " + maxLength + "!"
+    );
     return;
   }
   // Prevent creating tasks with empty title
@@ -65,7 +81,7 @@ async function addTask() {
   }
 
   // Check if the start date is not empty
-  if (startDateInput.value.trim() === '') {
+  if (startDateInput.value.trim() === "") {
     alert("Por favor preencha a data inicial.");
     return;
   }
@@ -93,11 +109,13 @@ async function addTask() {
   console.log(requestBody);
 
   // Send a POST request to add a new task to the backend server
-  await fetch("http://localhost:8080/backend/rest/tasks/add", {
+  await fetch(`http://localhost:8080/backend/rest/users/${localStorage.getItem("username")}/tasks`, {
     method: "POST",
     headers: {
-      Accept: "*/*",
+      Accept: "application/json",
       "Content-Type": "application/json",
+      "username": localStorage.getItem("username"),
+      "password": localStorage.getItem("password"),
     },
     body: requestBody,
   }).then(function (response) {
@@ -114,7 +132,4 @@ async function addTask() {
       });
     }
   });
-
-  
 }
-
