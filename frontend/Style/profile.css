@@ -6,12 +6,15 @@ body {
 }
 
 .container {
+    display: flex;
     max-width: 600px;
     margin: 50px auto;
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    flex-direction: column;
 }
 
 input {
@@ -49,6 +52,10 @@ input:disabled {
     font-size: medium;
 }
 
+#container_profile_btn{
+    text-align: center;
+}
+
 .profile_btn {
     padding: 10px 10px;
     margin: 5px;
@@ -62,8 +69,124 @@ input:disabled {
     cursor: pointer;
     box-shadow: 5px 5px 20px -12px;
     font-size: medium;
-  }
-  
-  .profile_btn:hover {
+}
+
+.profile_btn:hover {
     background-color: var(--color_dark);
-  }
+}
+
+#profile_titlePage:hover {
+    cursor: pointer;
+}
+
+/*Botões que abrem Modals*/
+#profile_changeBtns {
+    display: flex;
+}
+
+#profile_changeBtns input[type="button"] {
+    padding: 10px 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: var(--white);
+    background: var(--color_regular);
+    cursor: pointer;
+    box-shadow: 5px 5px 20px -12px;
+    font-size: medium;
+}
+
+#profile_changeBtns input[type="button"]:hover {
+    background-color: var(--color_dark);
+}
+
+  /*Modal*/
+  #myModal {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+ }
+
+ .modalContent {
+    display: flex;
+    margin: auto;
+    padding: 20px;
+    width: 40%;
+    background-color: white;
+    border-radius: 8px;
+    flex-direction: column;
+    align-items: center;
+    background: #ccc;
+ }
+
+ .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    border-radius: 3px;
+    padding: 5px 10px;
+    width: 100%;
+ }
+ 
+ .close {
+    color: #000000;
+    cursor: pointer;
+    margin-left: auto;
+ }
+ 
+ .close:hover,
+ .close:focus {
+    color: #242424;
+ }
+
+ #pic-containerModal {
+    width: 170px;
+    height: 170px;
+    overflow: hidden;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+    background: currentColor;
+}
+
+#profile-picModal {
+    max-height: 100%; 
+    display: block;
+}
+
+#profile_url{
+    width: 90%;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#profile_savePhoto{
+    width: 120px;
+    padding: 10px 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: var(--white);
+    background: var(--color_regular);
+    cursor: pointer;
+    box-shadow: 5px 5px 20px -12px;
+    font-size: medium;
+}

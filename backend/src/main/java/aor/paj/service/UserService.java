@@ -6,6 +6,8 @@ import java.util.List;
 import aor.paj.bean.UserBean;
 import aor.paj.dto.User;
 import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -15,6 +17,7 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.Path;
@@ -26,21 +29,15 @@ public class UserService {
     @Inject
     UserBean userBean;
 
+    @Context
+    private HttpServletRequest request;
+
 
     @GET
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
     public List<User> getUsers() {
         return userBean.getUsers();
-    }
-
-    @POST
-    @Path("/add")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response addUser(User u) {
-
-        userBean.addUser(u);
-        return Response.status(200).entity("A new user is created").build();
     }
 
     @GET
@@ -82,6 +79,7 @@ public class UserService {
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response loginUser(User u) {
 
         String username = u.getUsername();
@@ -97,6 +95,7 @@ public class UserService {
         } else if (!user.getPassword().equals(password)) {
             return Response.status(401).entity("Invalid password").build();
         } else {
+            userBean.login(username);
             return Response.status(200).entity("User logged in successfully").build();
         }
     }
@@ -104,8 +103,9 @@ public class UserService {
     @POST
     @Path("/logout")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response logoutUser() {
-
+    public Response logout() {
+        HttpSession session = request.getSession();
+        session.invalidate();
         return Response.status(200).entity("User logged out successfully").build();
     }
 
@@ -139,9 +139,36 @@ public class UserService {
                 return Response.status(201).entity("Thanks for being awesome! Your account has been successfully created.").build();
             }
         }
+    }
 
 
+    @GET
+    @Path("/getuser")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUser(){
+        User u = userBean.getLoggeduser();
+        if(u!= null)
+            return Response.status(200).entity(userBean.getLoggeduser()).build();
+        else
+            return Response.status(400).entity("There is no user logged in at the moment!").build();
+    }
 
+    @PUT
+    @Path("/updatePassword")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updatePassword(@HeaderParam("username") String username,
+                                   @HeaderParam("oldpassword") String oldPassword,
+                                   @HeaderParam("newpassword") String newPassword) {
 
+        // Verificar password antiga
+        boolean isOldPasswordValid = userBean.verifyPassword(username, oldPassword);
+        if (!isOldPasswordValid) {
+            return Response.status(401).entity("Incorrect old password").build();
+        }
+        // Se a password antiga é válida, update a password
+        boolean updated = userBean.updatePassword(username, newPassword);
+        if (!updated)
+            return Response.status(400).entity("User with this username is not found").build();
+        return Response.status(200).entity("User password updated").build();
     }
 }

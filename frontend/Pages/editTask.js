@@ -117,3 +117,30 @@ async function getAllTasks() {
     console.error("Error fetching tasks:", error);
   }
 })();
+
+
+window.onload = async function() {
+  const loggedInUsername = localStorage.getItem("username");
+
+  if (!loggedInUsername) {
+    console.error("No logged-in username found in local storage.");
+    window.location.href = "login.html"; // Redireciona para a página de login se não houver usuário autenticado
+    return;
+  }
+
+  // Verifica se o usuário está autenticado antes de prosseguir
+  try {
+    const response = await fetch(`http://localhost:8080/backend/rest/users/getuser`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    console.log("User authenticated:", data);
+    // Se o usuário estiver autenticado, continue com o carregamento da página
+    console.log(loggedInUsername);
+    await getAllTasks();
+  } catch (error) {
+    console.error("Error checking authentication:", error);
+    window.location.href = "login.html"; // Redireciona para a página de login se houver um erro ao verificar a autenticação
+  }
+};

@@ -13,7 +13,7 @@ async function getUser(loggedInUsername) {
   }
 }
 
-//Carreagar toda a informação do user
+//Carrega toda a informação do user
 function fillProfile(user) {
   console.log(user);
 
@@ -38,15 +38,6 @@ userHeader.addEventListener('click', function(){
   window.location.href="profile.html";
 });
 
-
-window.onload = () => {
-  // Call getAllTasks() when the page loads
-  getAllTasks();
-};
-
-// Cria uma variável relativa ao botao "Voltar Login" e adiciona um Event Listener
-const btnLogout = document.getElementById("scrum_btn_logout");
-btnLogout.onclick = homeMenu;
 
 // Função para voltar ao menu inicial
 function homeMenu() {
@@ -253,13 +244,57 @@ async function moveTask(inputTitle) {
   });
 }
 
+//Logout
+const btn_logout=document.getElementById('scrum_btn_logout');
+
+btn_logout.onclick= async function(){
+
+    const response = await fetch('http://localhost:8080/backend/rest/users/logout', {
+        method: 'POST',
+    });
+
+    console.log('Response status:', response.status);
+    console.log('Response status text:', response.statusText);
+
+    if (response.status === 200) {
+      alert('Logout successful.');
+        // Limpa a localstorage
+        localStorage.clear();
+        // Guarda o username no armazenamento local
+        window.location.href='../index.html';
+    } else{
+        //Mostra mensagem de alerta do backend
+        alert('Logout failed.');
+    }
+
+};
+
 // Chamar user com o username gravado na localstorage
-window.onload = function() {
+window.onload = async function() {
+
   const loggedInUsername = localStorage.getItem("username");
-  if (loggedInUsername) {
-      console.log(loggedInUsername);
-      getUser(loggedInUsername);
-  } else {
-      console.error("No logged-in username found in local storage.");
+
+  if (!loggedInUsername) {
+    console.error("No logged-in username found in local storage.");
+    window.location.href = "login.html"; // Redireciona para a página de login se não houver usuário autenticado
+    return;
+  }
+
+  // Verifica se o usuário está autenticado antes de prosseguir
+  try {
+    const response = await fetch(`http://localhost:8080/backend/rest/users/getuser`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    console.log("User authenticated:", data);
+    // Se o usuário estiver autenticado, continuar com o carregamento da página Scrum
+    console.log(loggedInUsername);
+    getUser(loggedInUsername);
+    // Call getAllTasks() when the page loads
+    getAllTasks();
+  } catch (error) {
+    console.error("Error checking authentication:", error);
+    window.location.href = "login.html"; // Redireciona para a página de login se houver um erro ao verificar a autenticação
   }
 }
