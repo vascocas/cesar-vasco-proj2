@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import aor.paj.bean.UserBean;
+import aor.paj.dto.Task;
 import aor.paj.dto.User;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +22,8 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.Path;
+
+import javax.lang.model.util.AbstractElementVisitor14;
 
 
 @Path("/users")
@@ -171,4 +174,34 @@ public class UserService {
             return Response.status(400).entity("User with this username is not found").build();
         return Response.status(200).entity("User password updated").build();
     }
+
+
+    // Add Task
+    @POST
+    @Path("{username}/tasks")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addTask(Task t, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username")String userPath) {
+        // Check if a task with the same title already exists
+        //for (Task existingTask : taskBean.getTasks()) {
+          //  if (existingTask.getTitle().equals(t.getTitle())) {
+            //    return Response.status(400).entity("Task with this title already exists").build();
+            //}
+        //}
+
+        // Validate that end date is not earlier than start date
+        /*
+        if (t.getStartDate() != null && t.getEndDate() != null && t.getEndDate().isbefore(t.getStartDate())) {
+            return Response.status(400).entity("End date cannot be earlier than start date").build();
+        }
+         */
+
+        // Proceed with adding the task if validation passes
+        // taskBean.addTask(t);
+        // userBean.addUserTask(t, u);
+        return Response.status(200).entity("A new task is created").build();
+    }
+
+
+
+
 }

@@ -42,7 +42,7 @@ public class TaskService {
     @POST
     @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addTask(Task t) {
+    public Response addTask(Task t,@HeaderParam("id") int id) {
         // Check if a task with the same title already exists
         for (Task existingTask : taskBean.getTasks()) {
             if (existingTask.getTitle().equals(t.getTitle())) {

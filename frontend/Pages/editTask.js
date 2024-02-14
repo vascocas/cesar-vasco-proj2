@@ -1,8 +1,46 @@
-// Get the username from local storage
-const username = localStorage.getItem("username");
+window.onload = async function() {
+  const loggedInUsername = localStorage.getItem("username");
 
-// Update the welcome message with the username
-document.getElementById("userHeader").innerHTML = "Welcome, " + username;
+  if (!loggedInUsername) {
+    console.error("No logged-in username found in local storage.");
+    window.location.href = "login.html"; // Redireciona para a página de login se não houver usuário autenticado
+    return;
+  }
+
+  // Verifica se o usuário está autenticado antes de prosseguir
+  try {
+    const response = await fetch(`http://localhost:8080/backend/rest/users/getuser`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    fillProfile(data);
+    console.log("User authenticated:", data);
+    // Se o usuário estiver autenticado, continue com o carregamento da página
+    console.log(loggedInUsername);
+  } catch (error) {
+    console.log(error);
+    console.error("Error checking authentication:", error);
+    window.location.href = "login.html"; // Redireciona para a página de login se houver um erro ao verificar a autenticação
+  }
+};
+
+//Carrega toda a informação do user
+function fillProfile(user) {
+  console.log(user);
+
+  // Atualizar a mensagem de boas vindas com o nome de utilizador
+  document.getElementById("logged-in-username").innerHTML =
+    "Bem vindo, " + user.username;
+
+  //Imagem de perfil
+  const profilePic = document.querySelector(".profile-pic");
+  if (user.photo) {
+    profilePic.src = user.photo;
+  } else {
+    profilePic.src = "../Resources/profile_pic_default.png";
+  }
+}
 
 // Create an array to store tasks
 let tasks = [];
