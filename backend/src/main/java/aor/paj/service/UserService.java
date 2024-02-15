@@ -73,34 +73,11 @@ public class UserService {
                 updatedUser.getEmail(),
                 updatedUser.getFirstName(),
                 updatedUser.getLastName(),
-                updatedUser.getPhoneNumber(), updatedUser.getPhoto());
+                updatedUser.getPhoneNumber(),
+                updatedUser.getPhoto());
         if (!updated)
             return Response.status(400).entity("User with this username is not found").build();
         return Response.status(200).entity("User information updated").build();
-    }
-
-    @POST
-    @Path("/{username}/")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("username") String usernamePath,
-                           @HeaderParam("username") String username,
-                           @HeaderParam("password") String password,
-                           @HeaderParam("email") String email,
-                           @HeaderParam("firstName") String firstName,
-                           @HeaderParam("lastName") String lastName,
-                           @HeaderParam("phoneNumber") String phoneNumber,
-                           @HeaderParam("photo") String photo) {
-        {
-            boolean updated = userBean.updateUser(username,
-                    email,
-                    firstName,
-                    lastName,
-                    phoneNumber,
-                    photo);
-            if (!updated)
-                return Response.status(400).entity("User with this username is not found").build();
-            return Response.status(200).entity("User information updated").build();
-        }
     }
 
 

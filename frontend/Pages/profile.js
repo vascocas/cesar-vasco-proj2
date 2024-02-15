@@ -60,7 +60,7 @@ function fillProfile(user) {
     }
 
     //Ao clicar no botão de alterar fotografia, abrir Modal
-    btnOpenModal.onclick = function () {
+    btnOpenModalPhoto.onclick = function () {
 
         document.getElementsByClassName("container")[0].style.filter = "blur(5px)";
 
@@ -72,7 +72,7 @@ function fillProfile(user) {
             img.src=photoUser;
         }
 
-        modal.style.display = "block";
+        modalPhoto.style.display = "block";
     };
 }
 
@@ -151,13 +151,13 @@ document.getElementById('profile_save').addEventListener('click', async function
     
 });
 
-//Obter o Modal
-let modal = document.getElementById("myModal");
+//Obter o Modal Photo
+let modalPhoto = document.getElementById("myModalPhoto");
 
-//Botão que abre o Modal
-let btnOpenModal = document.getElementById("profile_changePhoto");
+//Botão que abre o Modal Photo
+let btnOpenModalPhoto = document.getElementById("profile_changePhoto");
 
-//Obter o <span> que fecha o Modal
+//Obter o <span> que fecha o Modal Photo
 let spanCloseModal = document.getElementsByClassName("close")[0];
 
 //Botão que guarda o edit da foto
@@ -202,7 +202,7 @@ btnEditPhoto.addEventListener('click', async function(e){
                 getUser(loggedInUsername);
                 console.log(response.status);
                 //Fecha Modal e reseta
-                modal.style.display = "none";
+                modalPhoto.style.display = "none";
                 document.getElementsByClassName("container")[0].style.filter = "none";
                 document.getElementById("profile_url").value = "";
               } else{
@@ -216,9 +216,9 @@ btnEditPhoto.addEventListener('click', async function(e){
 
 });
 
-//Ao clicar no (x), fechar Modal
+//Ao clicar no (x), fechar Modal Photo
 spanCloseModal.onclick = function () {
-    modal.style.display = "none";
+    modalPhoto.style.display = "none";
     document.getElementsByClassName("container")[0].style.filter = "none";
     document.getElementById("profile_url").value = "";
 };
@@ -260,14 +260,22 @@ const passwordModal = document.getElementById("passwordModal");
 // Obter o  <span> que fecha a Modal
 const spanClosePasswordModal = document.getElementsByClassName("close")[1];
 
-// Abrir Modal no clique
+// Abrir Modal Password no clique
 btnOpenPasswordModal.onclick = function() {
-  passwordModal.style.display = "block";
+
+    //Desfoca o background do modal
+    document.getElementsByClassName("container")[0].style.filter = "blur(5px)";
+
+    //Torna modal visivel
+    passwordModal.style.display = "block";
 }
 
-// Fechar Modal no clique
+// Fechar Modal Password no clique
 spanClosePasswordModal.onclick = function() {
-  passwordModal.style.display = "none";
+    document.getElementsByClassName("container")[0].style.filter = "none";
+    passwordModal.style.display = "none";
+    document.getElementById('changePasswordForm').reset();
+  
 }
 
 
@@ -275,9 +283,9 @@ spanClosePasswordModal.onclick = function() {
 document.getElementById('changePasswordForm').addEventListener('submit', async function(e) {
   e.preventDefault();
 
-  const oldPassword = document.getElementById("oldPassword").value;
-  const newPassword = document.getElementById("newPassword").value;
-  const confirmPassword = document.getElementById("confirmPassword").value;
+  const oldPassword = document.getElementById("profile_oldPassword").value;
+  const newPassword = document.getElementById("profile_newPassword").value;
+  const confirmPassword = document.getElementById("profile_confirmPassword").value;
 
   // Valida nova password com confirmação
   if (newPassword !== confirmPassword) {
