@@ -3,7 +3,6 @@ window.onload = async function () {
   const loggedInUsername = localStorage.getItem("username");
 
   if (!loggedInUsername) {
-    console.error("No logged-in username found in local storage.");
     window.location.href = "login.html"; // Redireciona para a página de login se não houver usuário autenticado
     return;
   }
@@ -19,7 +18,6 @@ window.onload = async function () {
     const data = await response.json();
     console.log("User authenticated:", data);
     // Se o usuário estiver autenticado, continuar com o carregamento da página Scrum
-    console.log(loggedInUsername);
     getUser(loggedInUsername);
     // Call getAllTasks() when the page loads
     getAllTasks();
@@ -49,8 +47,6 @@ async function getUser(loggedInUsername) {
 
 //Carrega toda a informação do user
 function fillProfile(user) {
-  console.log(user);
-
   // Atualizar a mensagem de boas vindas com o nome de utilizador
   document.getElementById("logged-in-username").innerHTML =
     "Bem vindo, " + user.username;
@@ -80,10 +76,6 @@ btn_logout.onclick = async function () {
       method: "POST",
     }
   );
-
-  console.log("Response status:", response.status);
-  console.log("Response status text:", response.statusText);
-
   if (response.status === 200) {
     alert("Logout successful.");
     // Limpa a localstorage

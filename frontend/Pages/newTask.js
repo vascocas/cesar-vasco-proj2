@@ -2,7 +2,6 @@ window.onload = async function () {
   const loggedInUsername = localStorage.getItem("username");
 
   if (!loggedInUsername) {
-    console.error("No logged-in username found in local storage.");
     window.location.href = "login.html"; // Redireciona para a página de login se não houver usuário autenticado
     return;
   }
@@ -17,11 +16,7 @@ window.onload = async function () {
     }
     const data = await response.json();
     fillProfile(data);
-    console.log("User authenticated:", data);
-    // Se o usuário estiver autenticado, continue com o carregamento da página
-    console.log(loggedInUsername);
   } catch (error) {
-    console.log(error);
     console.error("Error checking authentication:", error);
     window.location.href = "login.html"; // Redireciona para a página de login se houver um erro ao verificar a autenticação
   }
@@ -29,8 +24,6 @@ window.onload = async function () {
 
 //Carrega toda a informação do user
 function fillProfile(user) {
-  console.log(user);
-
   // Atualizar a mensagem de boas vindas com o nome de utilizador
   document.getElementById("logged-in-username").innerHTML =
     "Bem vindo, " + user.username;
@@ -104,9 +97,7 @@ async function addTask() {
     startDate: startDateInput.value,
     endDate: endDateInput.value,
   };
-
   const requestBody = JSON.stringify(newTask);
-  console.log(requestBody);
 
   // Send a POST request to add a new task to the backend server
   await fetch(
