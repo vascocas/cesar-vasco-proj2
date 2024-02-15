@@ -107,12 +107,12 @@ function sortTasks(tasks) {
     await getAllTasks();
 
     // Access task here
-    const title = sessionStorage.getItem("title");
+    const selectedId = sessionStorage.getItem("taskId");
     let selectedTask = null;
     for (const task of tasks) {
-      if (task.title === title) {
+      if (task.taskId === selectedId) {
        selectedTask = task;
-       break; // Stop the loop once the task with the matching title is found
+       break;
       }
     }
 
@@ -129,9 +129,6 @@ function sortTasks(tasks) {
     priorityText.value = selectedTask.priority;
     startDateText.value = selectedTask.startDate;
     endDateText.value = selectedTask.endDate;
-
-    // Create this variable to store the value for the PUT html request
-    let queryText = selectedTask.taskId;
 
     // Add an Event Listener to the Edit Task button
     const editButton = document.getElementById("editTask_btn_submit");
@@ -199,7 +196,7 @@ function sortTasks(tasks) {
         const response = await fetch(
           `http://localhost:8080/backend/rest/users/${localStorage.getItem(
             "username"
-          )}/updateTask/?iD=` + encodeURIComponent(queryText),
+          )}/updateTask/?iD=` + encodeURIComponent(selectedId),
           {
             method: "PUT",
             headers: {
