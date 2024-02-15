@@ -161,17 +161,20 @@ function showTasks() {
 
   // Iterar sobre as tarefas e adicioná-las aos quadros apropriados
   for (const t of tasks) {
-    const cardElement = createCardElement(t.title, t.priority);
+    const cardElement = createCardElement(t.taskId, t.title, t.priority);
     const columnElement = document.getElementById(t.column);
     columnElement.appendChild(cardElement);
   }
 }
 
 // Função para criar um elemento de cartão HTML para uma tarefa
-function createCardElement(title, priority) {
+function createCardElement(taskId, title, priority) {
   // Cria uma Div e atribui a className "card"
   const cardElement = document.createElement("div");
   cardElement.className = "card";
+
+   // Set the task ID as a data attribute
+   cardElement.setAttribute("task_Id", taskId);
 
   // Cria uma Div e atribui a className "card-header"
   const cardHeaderElement = document.createElement("div");
@@ -209,16 +212,14 @@ function showOptions(cardElement) {
   // Criar Div para guardar as várias opções da tarefa
   const optionsContainer = document.createElement("div");
   optionsContainer.className = "task-options";
-  // Cria botões, adicionar Event Listener e chama função correspondente com o parâmetro de entrada o título da tarefa
-  optionsContainer.innerHTML = `<button onclick="consultTask('${
-    cardElement.querySelector(".card-header").textContent
-  }')">Consultar</button>
-    <button onclick="deleteTask('${
-      cardElement.querySelector(".card-header").textContent
-    }')">Apagar</button>
-    <button onclick="moveTask('${
-      cardElement.querySelector(".card-header").textContent
-    }')">Mover</button>`;
+
+  // Get the task ID from the data attribute of the card element
+  const taskId = cardElement.getAttribute("task_Id");
+
+// Cria botões, adicionar Event Listener e chama função correspondente com o parâmetro de entrada o ID da tarefa
+  optionsContainer.innerHTML = `<button onclick="consultTask('${taskId}')">Consultar</button>
+  <button onclick="deleteTask('${taskId}')">Apagar</button>
+  <button onclick="moveTask('${taskId}')">Mover</button>`;
 
   // Adicionar opções de tarefa ao cardElement
   cardElement.appendChild(optionsContainer);
@@ -233,17 +234,15 @@ function showOptions(cardElement) {
 }
 
 // Função consultar tarefa (Primeira das opções da tarefa)
-function consultTask(title) {
-  // Pesquisa pelo título, o índice da tarefa dentro do array, através do método findIndex()
-  const taskIndex = tasks.findIndex((task) => task.title === title);
-  // Grava o index no armazenamento da sessão para ser utilizado na página de Consultar/Editar
-  sessionStorage.setItem("index", taskIndex);
+function consultTask(taskId) {
+  // Grava o titulo da tarefa no armazenamento da sessão para ser utilizado na página de Consultar/Editar
+  sessionStorage.setItem("taskId", taskId);
   // Avança para a página de Consultar/Editar
   window.location.href = "editTask.html";
 }
 
 // Função apagar tarefa (Segunda das opções da tarefa)
-async function deleteTask(title) {
+async function deleteTask(taskId) {
   //Confirmação do utilizador de apagar tarefa
   const userConfirmed = confirm(
     "Tem a certeza que pretende remover esta tarefa?"
@@ -253,7 +252,7 @@ async function deleteTask(title) {
     await fetch(
       `http://localhost:8080/backend/rest/users/${localStorage.getItem(
         "username"
-      )}/delete/?title=` + encodeURIComponent(title),
+      )}/delete/?iD=` + encodeURIComponent(taskId),
       {
         method: "DELETE",
         headers: {
@@ -275,7 +274,7 @@ async function deleteTask(title) {
       }
     });
     // Remove a tarefa da lista local
-    tasks = tasks.filter((task) => task.title !== title);
+    tasks = tasks.filter((task) => task.taskId !== taskId);
 
     // Atualiza a UI para refletir a remoção da tarefa
     showTasks();
@@ -283,7 +282,7 @@ async function deleteTask(title) {
 }
 
 // Função mover tarefa (Terceira das opções da tarefa)
-async function moveTask(inputTitle) {
+async function moveTask(taskId) {
   // Cria uma caixa de diálogo com botões das colunas
   Swal.fire({
     title: "Selecione a coluna de destino",
@@ -297,15 +296,21 @@ async function moveTask(inputTitle) {
     showCancelButton: true,
     inputValidator: async (value) => {
       const destinationColumn = value;
-      // Pesquisa pelo título, o índice da tarefa dentro do array, através do método findIndex()
-      const taskIndex = tasks.findIndex((task) => task.title === inputTitle);
+      // Pesquisa pelo título a tarefa dentro do array
+      let selectedTask = null;
+      for (const task of tasks) {
+        if (task.taskId === taskId) {
+          selectedTask = task.taskId;
+         break; // Stop the loop once the task with the matching iD is found
+        }
+      }
       // Verifica se se está a tentar mover para própria coluna e previne essa ação
-      if (tasks[taskIndex].column === destinationColumn) {
+      if (selectedTask.column === destinationColumn) {
         alert("A tarefa já se encontra nesta coluna!");
       } else {
         // Constroi variável com formato JSON para guardar elementos necessários para mudar de coluna (nome e coluna destino)
         let requestBody = JSON.stringify({
-          title: inputTitle,
+          iD: taskId,
           column: destinationColumn,
         });
 
