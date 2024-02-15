@@ -12,11 +12,6 @@ import java.util.ArrayList;
 public class User {
 
     @XmlElement
-    private int id;
-
-    protected static int ultimoId = 0;
-
-    @XmlElement
     @NotBlank(message = "Username is required")
     @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
     private String username;
@@ -52,7 +47,6 @@ public class User {
     }
 
     public User(String username, String password, String email, String firstName, String lastName, String phoneNumber, String photo) {
-        this.id = getNextId();
         this.username = username;
         this.password = password;
         this.email = email;
@@ -62,15 +56,6 @@ public class User {
         this.photo = photo;
         this.userTasks = new ArrayList<>();
     }
-
-    //Incrementa o último id identificado
-    public synchronized int getNextId() {
-        return ++ultimoId;
-    }
-
-    public int getId() { return id; }
-
-    public void setId(int id) { this.id = id; }
 
     public String getUsername() {
         return username;

@@ -11,7 +11,6 @@ public class LoginBean implements Serializable {
     User currentUser;
 
     public LoginBean(){
-
     }
 
     public LoginBean (User currentUser){this.currentUser = currentUser;}

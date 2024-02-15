@@ -66,25 +66,27 @@ public class UserService {
     @PUT
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateUser(User updatedUser, @HeaderParam("username") String username) {
+    public Response updateUser(User updatedUser,
+                               @HeaderParam("username") String username,
+                               @HeaderParam("password") String password) {
         boolean updated = userBean.updateUser(username,
                 updatedUser.getEmail(),
                 updatedUser.getFirstName(),
                 updatedUser.getLastName(),
-                updatedUser.getPhoneNumber(), updatedUser.getPhoto());
+                updatedUser.getPhoneNumber(),
+                updatedUser.getPhoto());
         if (!updated)
             return Response.status(400).entity("User with this username is not found").build();
         return Response.status(200).entity("User information updated").build();
     }
 
+
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response loginUser(User u) {
-
-        String username = u.getUsername();
-        String password = u.getPassword();
+    public Response loginUser(@HeaderParam("username") String username,
+                              @HeaderParam("password") String password) {
 
         System.out.println(username + " , " + password);
 
@@ -113,12 +115,13 @@ public class UserService {
     @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response signUp(User u) {
-
-        String username = u.getUsername();
-        String password = u.getPassword();
-        String email = u.getEmail();
-        String phoneNumber = u.getPhoneNumber();
+    public Response register(@HeaderParam("username") String username,
+                             @HeaderParam("password") String password,
+                             @HeaderParam("email") String email,
+                             @HeaderParam("firstName") String firstName,
+                             @HeaderParam("lastName") String lastName,
+                             @HeaderParam("phoneNumber") String phoneNumber,
+                             @HeaderParam("photo") String photo) {
 
         ArrayList users = userBean.getUsers();
 
@@ -135,7 +138,7 @@ public class UserService {
                 return Response.status(400).entity("This phone number is already in use.").build();
             } else {
                 //Cria o novo utilizador e adiciona à lista
-                User newUser = new User(username, password, email, u.getFirstName(), u.getLastName(), phoneNumber, u.getPhoto());
+                User newUser = new User(username,password,email,firstName,lastName,phoneNumber,photo);
                 userBean.addUser(newUser);
                 return Response.status(201).entity("Thanks for being awesome! Your account has been successfully created.").build();
             }
@@ -155,7 +158,7 @@ public class UserService {
     }
 
     @PUT
-    @Path("/updatePassword")
+    @Path("/update/password")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updatePassword(@HeaderParam("username") String username,
                                    @HeaderParam("oldpassword") String oldPassword,
@@ -177,8 +180,10 @@ public class UserService {
     @POST
     @Path("{username}/tasks")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addTask(Task t, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
-        if (!userBean.verifyUsername(user, userPath)) {
+    public Response addTask(Task t, @HeaderParam("username") String user,
+                            @HeaderParam("password") String pass,
+                            @PathParam("username") String userPath) {
+        if (!userBean.verifyUsername(userPath, user)) {
             return Response.status(400).entity("Unauthorized user").build();
         }
         if (!userBean.verifyPassword(userPath, pass)) {
@@ -189,5 +194,64 @@ public class UserService {
         }
         userBean.addTaskUser(userPath, t);
         return Response.status(200).entity("A new task is created").build();
+    }
+
+    // Get All Tasks
+    @GET
+    @Path("{username}/tasks")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Task> getTasks(@PathParam("username") String userPath) {
+        return userBean.getTasks(userPath);
+    }
+
+    // Delete Task
+    @DELETE
+    @Path("{username}/delete")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response removeTask(@QueryParam("title") String title, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
+        if (!userBean.verifyUsername(user, userPath)) {
+            return Response.status(400).entity("Unauthorized user").build();
+        }
+        if (!userBean.verifyPassword(userPath, pass)) {
+            return Response.status(400).entity("Unauthorized user").build();
+        }
+        boolean deleted =  userBean.removeTask(userPath, title);
+        if (!deleted)
+            return Response.status(400).entity("Task with this title is not found").build();
+        return Response.status(200).entity("Task deleted").build();
+    }
+
+
+    @PUT
+    @Path("{username}/moveTask")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response moveTask(Task t, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
+        if (!userBean.verifyUsername(user, userPath)) {
+            return Response.status(400).entity("Unauthorized user").build();
+        }
+        if (!userBean.verifyPassword(userPath, pass)) {
+            return Response.status(400).entity("Unauthorized user").build();
+        }
+        boolean updated = userBean.moveTask(userPath, t.getTitle(), t.getColumn());
+        if (!updated)
+            return Response.status(400).entity("Task with this title is not found").build();
+        return Response.status(200).entity("Task moved to the new column").build();
+    }
+
+
+    @PUT
+    @Path("{username}/updateTask")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateDescription(Task t, @QueryParam("taskTitle") String taskTitle, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
+        if (!userBean.verifyUsername(user, userPath)) {
+            return Response.status(400).entity("Unauthorized user").build();
+        }
+        if (!userBean.verifyPassword(userPath, pass)) {
+            return Response.status(400).entity("Unauthorized user").build();
+        }
+        boolean updated = userBean.updateTask(userPath, taskTitle, t.getTitle(), t.getDescription(), t.getPriority(), t.getStartDate(), t.getEndDate());
+        if (!updated)
+            return Response.status(400).entity("Task with this title is not found").build();
+        return Response.status(200).entity("Task content updated").build();
     }
 }

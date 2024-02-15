@@ -50,7 +50,7 @@
     </div>
 
     <!-- Modal para Fotografia -->
-    <div id="myModal">
+    <div id="myModalPhoto">
         <div class="modalContent">
            <div class="modal-header">
               <!-- símbolo 'x'-->
@@ -71,23 +71,24 @@
      </div>
 
      <!-- Password Modal -->
-    <div id="passwordModal" class="modal">
+    <div id="passwordModal">
         <div class="modalContent">
-        <div class="modal-header">
-            <span class="close">&times;</span>
-        </div>
-        <form id="changePasswordForm">
-            <label for="oldPassword">Old Password:</label>
-            <input type="password" id="oldPassword" name="oldPassword" placeholder="Coloque a sua password atual" required>
-    
-            <label for="newPassword">New Password:</label>
-            <input type="password" id="newPassword" name="newPassword" placeholder="Coloque a sua nova password" required>
-    
-            <label for="confirmPassword">Confirm New Password:</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirme a sua nova password" required>
-    
-            <input type="submit" value="Change Password">
-        </form>
+            <div class="modal-header">
+                <span class="close">&times;</span>
+            </div>
+            <!-- Form de alteração da password -->
+            <form id="changePasswordForm">
+                <label for="profile_oldPassword">Password atual:</label>
+                <input type="password" id="profile_oldPassword" name="profile_oldPassword" placeholder="Coloque a sua password atual" required>
+        
+                <label for="profile_newPassword">Nova Password:</label>
+                <input type="password" id="profile_newPassword" name="profile_newPassword" placeholder="Coloque a sua nova password" required>
+        
+                <label for="profile_confirmPassword">Confirme a nova password:</label>
+                <input type="password" id="profile_confirmPassword" name="profile_confirmPassword" placeholder="Confirme a sua nova password" required>
+        
+                <input type="submit" id="profile_savePass" value="Guardar alterações">
+            </form>
         </div>
     </div>
 
