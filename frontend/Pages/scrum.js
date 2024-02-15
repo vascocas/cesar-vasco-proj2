@@ -234,10 +234,8 @@ function showOptions(cardElement) {
 
 // Função consultar tarefa (Primeira das opções da tarefa)
 function consultTask(title) {
-  // Pesquisa pelo título, o índice da tarefa dentro do array, através do método findIndex()
-  const taskIndex = tasks.findIndex((task) => task.title === title);
-  // Grava o index no armazenamento da sessão para ser utilizado na página de Consultar/Editar
-  sessionStorage.setItem("index", taskIndex);
+  // Grava o titulo da tarefa no armazenamento da sessão para ser utilizado na página de Consultar/Editar
+  sessionStorage.setItem("title", title);
   // Avança para a página de Consultar/Editar
   window.location.href = "editTask.html";
 }
@@ -249,11 +247,21 @@ async function deleteTask(title) {
     "Tem a certeza que pretende remover esta tarefa?"
   );
   if (userConfirmed) {
+       // Access task here
+       let selectedId = null;
+       for (const task of tasks) {
+         if (task.title === title) {
+          selectedId = task.taskId;
+          break; // Stop the loop once the task with the matching title is found
+         }
+       }
+
+
     // Remover a tarefa da lista
     await fetch(
       `http://localhost:8080/backend/rest/users/${localStorage.getItem(
         "username"
-      )}/delete/?title=` + encodeURIComponent(title),
+      )}/delete/?iD=` + encodeURIComponent(selectedId),
       {
         method: "DELETE",
         headers: {
@@ -275,7 +283,7 @@ async function deleteTask(title) {
       }
     });
     // Remove a tarefa da lista local
-    tasks = tasks.filter((task) => task.title !== title);
+    tasks = tasks.filter((task) => task.taskId !== selectedId);
 
     // Atualiza a UI para refletir a remoção da tarefa
     showTasks();
@@ -297,15 +305,21 @@ async function moveTask(inputTitle) {
     showCancelButton: true,
     inputValidator: async (value) => {
       const destinationColumn = value;
-      // Pesquisa pelo título, o índice da tarefa dentro do array, através do método findIndex()
-      const taskIndex = tasks.findIndex((task) => task.title === inputTitle);
+      // Pesquisa pelo título a tarefa dentro do array
+      let selectedTask = null;
+      for (const task of tasks) {
+        if (task.title === title) {
+          selectedTask = task.taskId;
+         break; // Stop the loop once the task with the matching title is found
+        }
+      }
       // Verifica se se está a tentar mover para própria coluna e previne essa ação
-      if (tasks[taskIndex].column === destinationColumn) {
+      if (selectedTask.column === destinationColumn) {
         alert("A tarefa já se encontra nesta coluna!");
       } else {
         // Constroi variável com formato JSON para guardar elementos necessários para mudar de coluna (nome e coluna destino)
         let requestBody = JSON.stringify({
-          title: inputTitle,
+          iD: selectedTask.taskId,
           column: destinationColumn,
         });
 

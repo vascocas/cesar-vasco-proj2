@@ -1,8 +1,8 @@
 package aor.paj.dto;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
-
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @XmlRootElement
 public class Task {
@@ -18,19 +18,36 @@ public class Task {
     private LocalDate endDate;
     @XmlElement
     private int priority;
+    @XmlElement
+    private long taskId;
 
     public Task() {
         this.column = "todo-cards";
     }
 
     // Constructor to set column based on state identifier
-    public Task(String title, String description, int priority, LocalDate startDate, LocalDate endDate) {
+    public Task(String title, String description, int priority, LocalDate startDate, LocalDate endDate, long taskId) {
         this.column = "todo-cards";
         this.title = title;
         this.description = description;
         this.priority = priority;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.taskId = createId();
+    }
+
+    private long createId() {
+        // Generate unique task ID based on current date and time
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        return currentDateTime.toEpochSecond(java.time.ZoneOffset.UTC) * 1000;
+    }
+
+    public long getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(long taskId) {
+        this.taskId = taskId;
     }
 
     public String getColumn() {

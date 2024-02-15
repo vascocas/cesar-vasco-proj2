@@ -74,15 +74,9 @@ async function addTask() {
     priorityInput.value = 100;
   }
 
-  // Check if the start date is not empty
-  if (startDateInput.value.trim() === "") {
-    alert("Por favor preencha a data inicial.");
-    return;
-  }
-
-  // Check if the end date is not empty.
-  if (endDateInput.value.trim() === "") {
-    alert("Por favor preencha a data de conclusão.");
+  // Check if the start date and end date are not empty
+  if (startDateInput.value.trim() === "" || endDateInput.value.trim() === "") {
+    alert("Por favor preencha as datas.");
     return;
   }
 

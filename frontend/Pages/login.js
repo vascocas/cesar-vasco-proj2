@@ -17,7 +17,7 @@ async function login() {
             'username' : username_value,
             'password' : password_value
         },
-        body: JSON.stringify({username_value, password_value})
+       body: JSON.stringify({username_value, password_value})
     });
 
     console.log('Response status:', response.status);
