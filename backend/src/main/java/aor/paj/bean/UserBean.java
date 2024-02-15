@@ -1,6 +1,7 @@
 package aor.paj.bean;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import aor.paj.dto.Task;
@@ -225,7 +226,7 @@ public class UserBean implements Serializable {
         return false;
     }
 
-    public boolean updateTask(String userPath, String title, String newTitle, String newDescription, int newPriority, String newStartDate, String newEndDate) {
+    public boolean updateTask(String userPath, String title, String newTitle, String newDescription, int newPriority, LocalDate newStartDate, LocalDate newEndDate) {
         for (Task t : getUser(userPath).getUserTasks()) {
             if (t.getTitle().equals(title)) {
                 t.setTitle(newTitle);
