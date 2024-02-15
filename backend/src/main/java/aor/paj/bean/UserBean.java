@@ -176,7 +176,7 @@ public class UserBean implements Serializable {
         return false;
     }
 
-    public boolean verifyUsername(String user, String userPath) {
+    public boolean verifyUsername(String userPath, String user) {
         if (user.equals(userPath)) {
             return true;
         }
@@ -214,4 +214,29 @@ public class UserBean implements Serializable {
         return false;
     }
 
+    public boolean moveTask(String userPath, String title, String newColumn) {
+        for (Task t : getUser(userPath).getUserTasks()) {
+            if (t.getTitle().equals(title)) {
+                t.setColumn(newColumn);
+                writeIntoJsonFile();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean updateTask(String userPath, String title, String newTitle, String newDescription, int newPriority, String newStartDate, String newEndDate) {
+        for (Task t : getUser(userPath).getUserTasks()) {
+            if (t.getTitle().equals(title)) {
+                t.setTitle(newTitle);
+                t.setDescription(newDescription);
+                t.setPriority(newPriority);
+                t.setStartDate(newStartDate);
+                t.setEndDate(newEndDate);
+                writeIntoJsonFile();
+                return true;
+            }
+        }
+        return false;
+    }
 }

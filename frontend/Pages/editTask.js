@@ -1,4 +1,4 @@
-window.onload = async function() {
+window.onload = async function () {
   const loggedInUsername = localStorage.getItem("username");
 
   if (!loggedInUsername) {
@@ -9,9 +9,11 @@ window.onload = async function() {
 
   // Verifica se o usuário está autenticado antes de prosseguir
   try {
-    const response = await fetch(`http://localhost:8080/backend/rest/users/getuser`);
+    const response = await fetch(
+      `http://localhost:8080/backend/rest/users/getuser`
+    );
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error("Network response was not ok");
     }
     const data = await response.json();
     fillProfile(data);
@@ -48,12 +50,17 @@ let tasks = [];
 // Function to fetch all tasks
 async function getAllTasks() {
   try {
-    const response = await fetch(`http://localhost:8080/backend/rest/users/${localStorage.getItem("username")}/tasks`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-      },
-    });
+    const response = await fetch(
+      `http://localhost:8080/backend/rest/users/${localStorage.getItem(
+        "username"
+      )}/tasks`,
+      {
+        method: "GET",
+        headers: {
+          "Accept": "application/json",
+        },
+      }
+    );
     const data = await response.json();
     const preTasks = data;
     tasks = sortTasks(preTasks);
@@ -136,7 +143,11 @@ function sortTasks(tasks) {
         // Check maximum length of Title and save current values of the task title and description
         const maxLength = 50;
         if (titleText.value.length > maxLength) {
-          alert("Ultrapassou o máximo de caracteres para o título= " + maxLength + "!");
+          alert(
+            "Ultrapassou o máximo de caracteres para o título= " +
+              maxLength +
+              "!"
+          );
           return;
         } else {
           // Update the task on the server
@@ -149,13 +160,16 @@ function sortTasks(tasks) {
           });
 
           const response = await fetch(
-            "http://localhost:8080/backend/rest/tasks/updateTask/?taskTitle=" +
-              encodeURIComponent(queryText),
+            `http://localhost:8080/backend/rest/users/${localStorage.getItem(
+              "username"
+            )}/updateTask` + encodeURIComponent(queryText),
             {
               method: "PUT",
               headers: {
-                Accept: "application/json",
+                "Accept": "application/json",
                 "Content-Type": "application/json",
+                username: localStorage.getItem("username"),
+                password: localStorage.getItem("password"),
               },
               body: requestBody,
             }
@@ -180,30 +194,3 @@ function sortTasks(tasks) {
     console.error("Error fetching tasks:", error);
   }
 })();
-
-
-window.onload = async function() {
-  const loggedInUsername = localStorage.getItem("username");
-
-  if (!loggedInUsername) {
-    console.error("No logged-in username found in local storage.");
-    window.location.href = "login.html"; // Redireciona para a página de login se não houver usuário autenticado
-    return;
-  }
-
-  // Verifica se o usuário está autenticado antes de prosseguir
-  try {
-    const response = await fetch(`http://localhost:8080/backend/rest/users/getuser`);
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    const data = await response.json();
-    console.log("User authenticated:", data);
-    // Se o usuário estiver autenticado, continue com o carregamento da página
-    console.log(loggedInUsername);
-    await getAllTasks();
-  } catch (error) {
-    console.error("Error checking authentication:", error);
-    window.location.href = "login.html"; // Redireciona para a página de login se houver um erro ao verificar a autenticação
-  }
-};

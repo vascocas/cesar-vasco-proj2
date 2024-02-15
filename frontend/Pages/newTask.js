@@ -109,16 +109,21 @@ async function addTask() {
   console.log(requestBody);
 
   // Send a POST request to add a new task to the backend server
-  await fetch(`http://localhost:8080/backend/rest/users/${localStorage.getItem("username")}/tasks`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      "username": localStorage.getItem("username"),
-      "password": localStorage.getItem("password"),
-    },
-    body: requestBody,
-  }).then(function (response) {
+  await fetch(
+    `http://localhost:8080/backend/rest/users/${localStorage.getItem(
+      "username"
+    )}/tasks`,
+    {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "username": localStorage.getItem("username"),
+        "password": localStorage.getItem("password")
+      },
+      body: requestBody,
+    }
+  ).then(function (response) {
     if (response.status === 200) {
       tasks.push(newTask);
       response.text().then(function (successMessage) {
