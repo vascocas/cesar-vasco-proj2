@@ -1,3 +1,32 @@
+// Chamar user com o username gravado na localstorage
+window.onload = async function () {
+  const loggedInUsername = localStorage.getItem("username");
+
+  if (!loggedInUsername) {
+    window.location.href = "login.html"; // Redireciona para a página de login se não houver usuário autenticado
+    return;
+  }
+
+  // Verifica se o usuário está autenticado antes de prosseguir
+  try {
+    const response = await fetch(
+      `http://localhost:8080/backend/rest/users/getuser`
+    );
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    console.log("User authenticated:", data);
+    // Se o usuário estiver autenticado, continuar com o carregamento da página Scrum
+    getUser(loggedInUsername);
+    // Call getAllTasks() when the page loads
+    getAllTasks();
+  } catch (error) {
+    console.error("Error checking authentication:", error);
+    window.location.href = "login.html"; // Redireciona para a página de login se houver um erro ao verificar a autenticação
+  }
+};
+
 async function getUser(loggedInUsername) {
   try {
     const response = await fetch(
@@ -5,7 +34,7 @@ async function getUser(loggedInUsername) {
       {
         method: "GET",
         headers: {
-          Accept: "application/json",
+          "Accept": "application/json",
         },
       }
     );
@@ -18,7 +47,6 @@ async function getUser(loggedInUsername) {
 
 //Carrega toda a informação do user
 function fillProfile(user) {
-
   // Atualizar a mensagem de boas vindas com o nome de utilizador
   document.getElementById("logged-in-username").innerHTML =
     "Bem vindo, " + user.username;
@@ -32,11 +60,33 @@ function fillProfile(user) {
   }
 }
 
-// Atualizar a mensagem de boas vindas com o nome de utilizador
+// Define função para entrar na página de edição de perfil ao clicar no nume de utilizador
 let userHeader = document.getElementById("logged-in-username");
-userHeader.addEventListener('click', function(){
+userHeader.addEventListener("click", function () {
   window.location.href = "profile.html";
-})
+});
+
+//Logout
+const btn_logout = document.getElementById("scrum_btn_logout");
+
+btn_logout.onclick = async function () {
+  const response = await fetch(
+    "http://localhost:8080/backend/rest/users/logout",
+    {
+      method: "POST",
+    }
+  );
+  if (response.status === 200) {
+    alert("Logout successful.");
+    // Limpa a localstorage
+    localStorage.clear();
+    // Guarda o username no armazenamento local
+    window.location.href = "../index.html";
+  } else {
+    //Mostra mensagem de alerta do backend
+    alert("Logout failed.");
+  }
+};
 
 // Cria array para armazenar as tarefas
 let tasks = [];
@@ -44,12 +94,17 @@ let tasks = [];
 // Função para obter todas as tarefas
 async function getAllTasks() {
   try {
-    const response = await fetch("http://localhost:8080/backend/rest/tasks", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-      },
-    });
+    const response = await fetch(
+      `http://localhost:8080/backend/rest/users/${localStorage.getItem(
+        "username"
+      )}/tasks`,
+      {
+        method: "GET",
+        headers: {
+          "Accept": "application/json",
+        },
+      }
+    );
     const data = await response.json();
     const preTasks = data;
     tasks = sortTasks(preTasks);
@@ -188,13 +243,16 @@ async function deleteTask(title) {
   if (userConfirmed) {
     // Remover a tarefa da lista
     await fetch(
-      "http://localhost:8080/backend/rest/tasks/delete/?title=" +
-        encodeURIComponent(title),
+      `http://localhost:8080/backend/rest/users/${localStorage.getItem(
+        "username"
+      )}/delete/?title=` + encodeURIComponent(title),
       {
         method: "DELETE",
         headers: {
-          Accept: "*/*",
+          "Accept": "application/json",
           "Content-Type": "application/json",
+          username: localStorage.getItem("username"),
+          password: localStorage.getItem("password"),
         },
       }
     ).then(function (response) {
@@ -244,14 +302,20 @@ async function moveTask(inputTitle) {
         });
 
         try {
-          await fetch("http://localhost:8080/backend/rest/tasks/moveTask", {
-            method: "PUT",
-            headers: {
-              Accept: "*/*",
-              "Content-Type": "application/json",
-            },
-            body: requestBody,
-          });
+          await fetch(
+            `http://localhost:8080/backend/rest/users/${localStorage.getItem(
+              "username")}/moveTask`,
+            {
+              method: "PUT",
+              headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                username: localStorage.getItem("username"),
+                password: localStorage.getItem("password"),
+              },
+              body: requestBody,
+            }
+          );
 
           await getAllTasks(); // Fetch all tasks again
           showTasks(); // Update UI
@@ -263,57 +327,4 @@ async function moveTask(inputTitle) {
   });
 }
 
-//Logout
-const btn_logout=document.getElementById('scrum_btn_logout');
 
-btn_logout.onclick= async function(){
-
-    const response = await fetch('http://localhost:8080/backend/rest/users/logout', {
-        method: 'POST',
-    });
-
-    console.log('Response status:', response.status);
-    console.log('Response status text:', response.statusText);
-
-    if (response.status === 200) {
-      alert('Logout successful.');
-        // Limpa a localstorage
-        localStorage.clear();
-        // Guarda o username no armazenamento local
-        window.location.href='../index.html';
-    } else{
-        //Mostra mensagem de alerta do backend
-        alert('Logout failed.');
-    }
-
-};
-
-// Chamar user com o username gravado na localstorage
-window.onload = async function() {
-
-  const loggedInUsername = localStorage.getItem("username");
-
-  if (!loggedInUsername) {
-    console.error("No logged-in username found in local storage.");
-    window.location.href = "login.html"; // Redireciona para a página de login se não houver usuário autenticado
-    return;
-  }
-
-  // Verifica se o usuário está autenticado antes de prosseguir
-  try {
-    const response = await fetch(`http://localhost:8080/backend/rest/users/getuser`);
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    const data = await response.json();
-    console.log("User authenticated:", data);
-    // Se o usuário estiver autenticado, continuar com o carregamento da página Scrum
-    console.log(loggedInUsername);
-    getUser(loggedInUsername);
-    // Call getAllTasks() when the page loads
-    getAllTasks();
-  } catch (error) {
-    console.error("Error checking authentication:", error);
-    window.location.href = "login.html"; // Redireciona para a página de login se houver um erro ao verificar a autenticação
-  }
-}
