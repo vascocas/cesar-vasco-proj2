@@ -129,11 +129,13 @@ public class UserService {
             return Response.status(400).entity("Username, password, and email are required.").build();
         } else {
             if (userBean.usernameExists(username, users)) {
-                return Response.status(400).entity("Username already taken.").build();
+                //409 Indica que a solicitação não pode ser concluída devido a um conflito com o estado atual do pedido.
+                return Response.status(409).entity("Username already taken.").build();
             } else if (!userBean.validatePassword(password)) {
                 return Response.status(400).entity("Invalid password").build();
             } else if (userBean.emailExists(email, users)) {
-                return Response.status(400).entity("Email already in use.").build();
+                //403 Indica que o servidor entendeu a solicitação, mas recusa-se a autorizá-la.
+                return Response.status(403).entity("Email already in use.").build();
             } else if (userBean.phoneExists(phoneNumber, users)) {
                 return Response.status(400).entity("This phone number is already in use.").build();
             } else {
