@@ -62,6 +62,7 @@ async function addTask() {
     );
     return;
   }
+
   // Prevent creating tasks with empty title
   else if (titleInput.value === "") {
     alert("Por favor preencha o título.");
@@ -79,14 +80,18 @@ async function addTask() {
     return;
   }
 
+  // Check if the end date is not empty. If empty then end date = null
   // Function to ensure end date is always after start date
-  const startDate = new Date(startDateInput.value);
-  const endDate = new Date(endDateInput.value);
-
-  if (endDate < startDate) {
-    alert("A data de conclusão não pode ser anterior à data inicial.");
-    endDateInput.value = ""; // Clear the end date field
-    return;
+  if (endDateInput.value.trim() !== "") {
+    const startDate = new Date(startDateInput.value);
+    const endDate = new Date(endDateInput.value);
+    if (endDate < startDate) {
+      alert("A data de conclusão não pode ser anterior à data inicial.");
+      endDateInput.value = ""; // Clear the end date field
+      return;
+    } else {
+      endDateInput.value = null;
+    }
   }
 
   // Create a new task with title, description, priority, start date, and end date attributes. All tasks start in the TODO column.
@@ -107,10 +112,10 @@ async function addTask() {
     {
       method: "POST",
       headers: {
-        "Accept": "application/json",
+        Accept: "application/json",
         "Content-Type": "application/json",
-        "username": localStorage.getItem("username"),
-        "password": localStorage.getItem("password")
+        username: localStorage.getItem("username"),
+        password: localStorage.getItem("password"),
       },
       body: requestBody,
     }
