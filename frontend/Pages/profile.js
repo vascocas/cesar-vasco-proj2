@@ -1,17 +1,138 @@
+const loggedInUsername = localStorage.getItem("username");
+
+const email = document.getElementById("profile_email");
+const firstName = document.getElementById("profile_firstName");
+const lastName = document.getElementById("profile_lastName");
+const phoneNumber = document.getElementById("profile_phone");
+const photo = document.getElementById("profile_url");
+
+//Logout
+const btn_logout=document.getElementById('signout');
+btn_logout.onclick = logout;
+
+//Obter o Modal Photo
+let modalPhoto = document.getElementById("myModalPhoto");
+
+//Botão que abre o Modal Photo
+let btnOpenModalPhoto = document.getElementById("profile_changePhoto");
+
+//Obter o <span> que fecha o Modal Photo e ação
+let spanCloseModal = document.getElementsByClassName("close")[0];
+spanCloseModal.onclick = closeModal;
+
+//Botão que sai do Modal da foto e mantém input
+let btnEditPhoto = document.getElementById("profile_savePhoto");
+btnEditPhoto.addEventListener('click', function(){
+    modalPhoto.style.display = "none";
+    document.getElementsByClassName("container")[0].style.filter = "none";
+})
+
+//Atualiza foto instantaneamente
+document.getElementById('profile_url').addEventListener('change',function(){
+    readPhoto;
+})
+
+//Clicar no título reencaminha para scrum.html
+let btn_title = document.getElementById('profile_titlePage');
+btn_title.addEventListener('click', function(){
+    goToScrum();
+});
+
+// Botão para abrir a Modal da password
+const btnOpenPasswordModal = document.getElementById('profile_btnPassword');
+
+// Abrir Modal Password no clique
+btnOpenPasswordModal.onclick = openPassModal;
+
+// Obter a Modal da password
+const passwordModal = document.getElementById("passwordModal");
+
+// Obter o  <span> que fecha a Modal
+const spanClosePasswordModal = document.getElementsByClassName("close")[1];
+
+// Fechar Modal Password no clique
+spanClosePasswordModal.onclick = closePassModal;
+
+
+//Ação para guardar a edição dos atributos do user
+document.getElementById('profile_save').addEventListener('click', async function(e){
+
+    e.preventDefault();
+
+    const updatedUser = {
+        email: nullBlankInput(email),
+        firstName: nullBlankInput(firstName),
+        lastName: nullBlankInput(lastName),
+        phoneNumber: phonenumberValid(phoneNumber),
+        photo: nullBlankInput(photo)
+    };
+
+        if (loggedInUsername) {
+            // Envia dados para o servidor
+            const response = await fetch('http://localhost:8080/backend/rest/users/update', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'username': loggedInUsername
+                },
+                body: JSON.stringify(updatedUser)
+            });
+
+            if (response.status === 200) { 
+                alert('User profile updated successfully.');
+                // Relê dos dados na página
+                getUser(loggedInUsername);
+                //Reler a informação toda e mostrar
+                location.reload()=loadPage;
+            } else {
+                 //Mostra mensagem de alerta do backend
+                alert('Erro.');
+            }
+        } else {
+            console.error("No logged-in username found in local storage.");
+        }
+    
+});
+
+document.getElementById('changePasswordForm').addEventListener('submit', async function(e) {
+
+    e.preventDefault();
+
+    const oldPassword = document.getElementById("profile_oldPassword").value;
+    const newPassword = document.getElementById("profile_newPassword").value;
+    const confirmPassword = document.getElementById("profile_confirmPassword").value;
+
+    // Valida nova password com confirmação
+    if (newPassword !== confirmPassword) {
+        alert("Nova password e confirmação não são iguais.");
+        return;
+    }
+
+    const save_editPass=save_editPass(oldPassword, newPassword);
+
+    if (save_editPass === 200) {
+        alert('Password changed successfully.');
+        passwordModal.style.display = "none";
+        } else {
+        alert('Failed to change password.');
+        }
+});
+
+
 function checkAuthentication(){
     fetch(`http://localhost:8080/backend/rest/getuser`)
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      return response.json();
+        return response.json();
     })
     .then(data => {
-      //Se houver usuário logado, mostra a página
-      showProfilePage();
+        //Se houver usuário logado, mostra a página
+        showProfilePage();
     })
     .catch(error => {
-      window.location.href = 'login.html';
+        window.location.href = 'login.html';
     });
 }
   
@@ -34,7 +155,6 @@ async function getUser(loggedInUsername) {
         console.error('Error fetching user:', error);
     }
 }
-
 
 // Preenche os campos do formulário
 function fillProfile(user) {
@@ -76,10 +196,8 @@ function fillProfile(user) {
     };
 }
 
-//Logout
-const btn_logout=document.getElementById('signout');
 
-btn_logout.onclick= async function(){
+async function logout(){
 
     const response = await fetch('http://localhost:8080/backend/rest/users/logout', {
         method: 'POST',
@@ -101,123 +219,8 @@ btn_logout.onclick= async function(){
 
 };
 
-//Edição dos atributos
-document.getElementById('profile_save').addEventListener('click', async function(e){
-
-    e.preventDefault();
-
-    let email = document.getElementById("profile_email");
-    let firstName = document.getElementById("profile_firstName");
-    let lastName = document.getElementById("profile_lastName");
-    let phoneNumber = document.getElementById("profile_phone");
-    let photo = document.getElementById("profile_url");
-
-    const updatedUser = {
-        email: nullBlankInput(email),
-        firstName: nullBlankInput(firstName),
-        lastName: nullBlankInput(lastName),
-        phoneNumber: phonenumberValid(phoneNumber),
-        photo: nullBlankInput(photo)
-    };
-
-        const loggedInUsername = localStorage.getItem("username");
-
-        if (loggedInUsername) {
-            // Envia dados para o servidor
-            const response = await fetch('http://localhost:8080/backend/rest/users/update', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'username': loggedInUsername
-                },
-                body: JSON.stringify(updatedUser)
-            });
-
-            if (response.status === 200) { 
-                alert('User profile updated successfully.');
-                // Relê dos dados na página
-                getUser(loggedInUsername);
-                console.log(response.status);
-                //Reler a informação toda e mostrar
-                location.reload()=loadPage;
-              } else{
-                  //Mostra mensagem de alerta do backend
-                  alert('Erro. ' + await response.text());
-                  console.log(response.status);
-              }
-        } else {
-            console.error("No logged-in username found in local storage.");
-        }
-    
-});
-
-//Obter o Modal Photo
-let modalPhoto = document.getElementById("myModalPhoto");
-
-//Botão que abre o Modal Photo
-let btnOpenModalPhoto = document.getElementById("profile_changePhoto");
-
-//Obter o <span> que fecha o Modal Photo
-let spanCloseModal = document.getElementsByClassName("close")[0];
-
-//Botão que guarda o edit da foto
-let btnEditPhoto = document.getElementById("profile_savePhoto");
-
-//Guardar foto
-btnEditPhoto.addEventListener('click', async function(e){
-
-    e.preventDefault();
-
-    let email = document.getElementById("profile_email");
-    let firstName = document.getElementById("profile_firstName");
-    let lastName = document.getElementById("profile_lastName");
-    let phoneNumber = document.getElementById("profile_phone");
-    let photo = document.getElementById("profile_url");
-
-    const updatedUser = {
-        email: nullBlankInput(email),
-        firstName: nullBlankInput(firstName),
-        lastName: nullBlankInput(lastName),
-        phoneNumber: nullBlankInput(phoneNumber),
-        photo: nullBlankInput(photo)
-    };
-
-        const loggedInUsername = localStorage.getItem("username");
-
-        if (loggedInUsername) {
-            // Envia dados para o servidor
-            const response = await fetch('http://localhost:8080/backend/rest/users/update', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'username': loggedInUsername,
-                    'password': user.password,
-                },
-                body: JSON.stringify(updatedUser)
-            });
-
-            if (response.status === 200) {
-                alert('Photo profile updated successfully.');
-                // Relê os dados na página
-                getUser(loggedInUsername);
-                console.log(response.status);
-                //Fecha Modal e reseta
-                modalPhoto.style.display = "none";
-                document.getElementsByClassName("container")[0].style.filter = "none";
-                document.getElementById("profile_url").value = "";
-              } else{
-                  //Mostra mensagem de alerta do backend
-                  alert('Erro. ' + await response.text());
-                  console.log(response.status);
-              }
-        } else {
-            console.error("No logged-in username found in local storage.");
-        }
-
-});
-
-//Ao clicar no (x), fechar Modal Photo
-spanCloseModal.onclick = function () {
+//Fechar Modal Photo
+function closeModal() {
     modalPhoto.style.display = "none";
     document.getElementsByClassName("container")[0].style.filter = "none";
     document.getElementById("profile_url").value = "";
@@ -244,57 +247,25 @@ function nullBlankInput(input){
     }
 }
 
-//Clicar no título reencaminha para scrum.html
-let btn_title = document.getElementById('profile_titlePage');
-
-btn_title.addEventListener('click', function(){
+function goToScrum(){
     window.location.href = 'scrum.html';
-});
+}
 
-// Botão para abrir a Modal da password
-const btnOpenPasswordModal = document.getElementById('profile_btnPassword');
-
-// Obter a Modal da password
-const passwordModal = document.getElementById("passwordModal");
-
-// Obter o  <span> que fecha a Modal
-const spanClosePasswordModal = document.getElementsByClassName("close")[1];
-
-// Abrir Modal Password no clique
-btnOpenPasswordModal.onclick = function() {
-
+function openPassModal(){
     //Desfoca o background do modal
     document.getElementsByClassName("container")[0].style.filter = "blur(5px)";
-
     //Torna modal visivel
     passwordModal.style.display = "block";
 }
 
-// Fechar Modal Password no clique
-spanClosePasswordModal.onclick = function() {
+function closePassModal(){
     document.getElementsByClassName("container")[0].style.filter = "none";
     passwordModal.style.display = "none";
     document.getElementById('changePasswordForm').reset();
-  
-}
-
+};
 
 // Alteração da password
-document.getElementById('changePasswordForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-
-  const oldPassword = document.getElementById("profile_oldPassword").value;
-  const newPassword = document.getElementById("profile_newPassword").value;
-  const confirmPassword = document.getElementById("profile_confirmPassword").value;
-
-  // Valida nova password com confirmação
-  if (newPassword !== confirmPassword) {
-    alert("Nova password e confirmação não são iguais.");
-    return;
-  }
-
-  // Send a request to change the password
-  const loggedInUsername = localStorage.getItem("username");
+async function save_editPass(oldPassword, newPassword) {
 
   const response = await fetch('http://localhost:8080/backend/rest/users/update/password', {
     method: 'PUT',
@@ -307,17 +278,11 @@ document.getElementById('changePasswordForm').addEventListener('submit', async f
     body: JSON.stringify({ oldPassword, newPassword })
   });
 
-  if (response.status === 200) {
-    alert('Password changed successfully.');
-    passwordModal.style.display = "none";
-  } else {
-    alert('Failed to change password. ' + await response.text());
-  }
-});
+  return response.status;
+};
 
 
-document.getElementById('profile_url').addEventListener('change',function(){
-
+function readPhoto(){
     let photoInst = document.getElementById('profile-picModal');
     let url = document.getElementById('profile_url').value;
 
@@ -326,11 +291,9 @@ document.getElementById('profile_url').addEventListener('change',function(){
     } else {
         photoInst.src = document.getElementById('profile_url').placeholder;
     }
-
-})
+}
 
 async function loadPage(){
-    const loggedInUsername = localStorage.getItem("username");
 
   if (!loggedInUsername) {
     console.error("No logged-in username found in local storage.");

@@ -1,39 +1,58 @@
-// Cria uma variável relativa ao botao "Login" e adiciona um Event Listener
-const btnLogin = document.getElementById("login_btn_login");
-btnLogin.onclick = login;
+if(typeof window !== 'undefined') {
+
+    window.addEventListener('load', function(){
+
+        // Cria uma variável relativa ao botao "Login" e adiciona um Event Listener
+        const btnLogin = document.getElementById("login_btn_login");
+
+        btnLogin.addEventListener('click', async function(){
+
+            //Defini constantes para guardar no localStorage
+            const username_value = document.getElementById("login_usertext").value;
+            const password_value = document.getElementById("login_password").value;
+
+            const loggedIn = await login(username_value, password_value);
+        
+            if(loggedIn) {
+                alert('Login successful. Redirecting...');
+                localStorage.setItem("username", username_value); // Corrigido de 'username' para 'username_value'
+                localStorage.setItem("password", password_value); // Corrigido de 'password' para 'password_value'
+                document.getElementById('loginForm').reset();
+                window.location.href = "scrum.html";
+            } else {
+                alert('Login failed.');
+            }
+        });
+
+    });
+}
+
+
 
 // Faz login e grava o nome de utilizador
-async function login() {
-
-    //Defini constante fora para guardar no localStorage
-    const username_value = document.getElementById("login_usertext").value;
-    const password_value = document.getElementById("login_password").value;
+async function login(username, password) {
   
     const response = await fetch('http://localhost:8080/backend/rest/users/login', {
         method: 'POST',
         headers: {
             Accept : '*/*',
             'Content-Type': 'application/json',
-            'username' : username_value,
-            'password' : password_value
+            'username' : username,
+            'password' : password
         },
-       body: JSON.stringify({username_value, password_value})
+        body: JSON.stringify({username, password})
     });
 
     console.log('Response status:', response.status);
     console.log('Response status text:', response.statusText);
 
     if (response.status === 200) { 
-      alert('Login successful. Redirecting...');
-      // Guarda o username e password no armazenamento local
-      localStorage.setItem("username", username_value);
-      localStorage.setItem("password", password_value);
-      // Limpa form
-      document.getElementById('loginForm').reset();
-      // Avança para a página Scrum Board
-      window.location.href = "scrum.html";
+        return true;
     } else{
-        //Mostra mensagem de alerta do backend
-        alert('Login failed. ' + await response.text());
+        return false;
     }
 }
+
+module.exports = {
+    login,
+};
