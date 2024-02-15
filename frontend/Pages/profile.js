@@ -94,30 +94,6 @@ document.getElementById('profile_save').addEventListener('click', async function
     
 });
 
-document.getElementById('changePasswordForm').addEventListener('submit', async function(e) {
-
-    e.preventDefault();
-
-    const oldPassword = document.getElementById("profile_oldPassword").value;
-    const newPassword = document.getElementById("profile_newPassword").value;
-    const confirmPassword = document.getElementById("profile_confirmPassword").value;
-
-    // Valida nova password com confirmação
-    if (newPassword !== confirmPassword) {
-        alert("Nova password e confirmação não são iguais.");
-        return;
-    }
-
-    const save_editPass=save_editPass(oldPassword, newPassword);
-
-    if (save_editPass === 200) {
-        alert('Password changed successfully.');
-        passwordModal.style.display = "none";
-        } else {
-        alert('Failed to change password.');
-        }
-});
-
 
 function checkAuthentication(){
     fetch(`http://localhost:8080/backend/rest/getuser`)
@@ -280,6 +256,33 @@ async function save_editPass(oldPassword, newPassword) {
 
   return response.status;
 };
+
+document.getElementById('changePasswordForm').addEventListener('submit', async function(e) {
+
+    e.preventDefault();
+
+    const oldPassword = document.getElementById("profile_oldPassword").value;
+    const newPassword = document.getElementById("profile_newPassword").value;
+    const confirmPassword = document.getElementById("profile_confirmPassword").value;
+
+    // Valida nova password com confirmação
+    if (newPassword !== confirmPassword) {
+        alert("Nova password e confirmação não são iguais.");
+        return;
+    }
+
+    const save_newPass = await save_editPass(oldPassword, newPassword);
+
+    if (save_newPass === 200) {
+        alert('Password changed successfully.');
+        passwordModal.style.display = "none";
+        document.getElementsByClassName("container")[0].style.filter = "none";
+        localStorage.setItem("password", newPassword);
+
+    } else {
+        alert('Failed to change password.');
+        }
+});
 
 
 function readPhoto(){
