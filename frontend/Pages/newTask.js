@@ -80,18 +80,19 @@ async function addTask() {
     return;
   }
 
-  // Check if the end date is not empty. If empty then end date = null
+  // Check if the end date is not empty.
+  if (endDateInput.value.trim() === "") {
+    alert("Por favor preencha a data de conclusão.");
+    return;
+  }
+
   // Function to ensure end date is always after start date
-  if (endDateInput.value.trim() !== "") {
-    const startDate = new Date(startDateInput.value);
-    const endDate = new Date(endDateInput.value);
-    if (endDate < startDate) {
-      alert("A data de conclusão não pode ser anterior à data inicial.");
-      endDateInput.value = ""; // Clear the end date field
-      return;
-    } else {
-      endDateInput.value = null;
-    }
+  const startDate = new Date(startDateInput.value);
+  const endDate = new Date(endDateInput.value);
+  if (endDate < startDate) {
+    alert("A data de conclusão não pode ser anterior à data inicial.");
+    endDateInput.value = ""; // Clear the end date field
+    return;
   }
 
   // Create a new task with title, description, priority, start date, and end date attributes. All tasks start in the TODO column.

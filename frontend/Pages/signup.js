@@ -25,7 +25,6 @@ document.getElementById('signup_btn_signup').addEventListener('click', async fun
             'phoneNumber' : phoneNumber,
             'photo' : photo,
         }, 
-        body: JSON.stringify(user)
     });
 
     console.log(response.status);
