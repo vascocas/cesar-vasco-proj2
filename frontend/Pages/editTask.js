@@ -1,12 +1,14 @@
+// Call user with username stored in localstorage
 window.onload = async function () {
   const loggedInUsername = localStorage.getItem("username");
 
   if (!loggedInUsername) {
-    window.location.href = "login.html"; // Redireciona para a página de login se não houver usuário autenticado
+    // Redirects to the login page if there is no authenticated user
+    window.location.href = "login.html";
     return;
   }
 
-  // Verifica se o usuário está autenticado antes de prosseguir
+  // Checks if the user is authenticated before proceeding
   try {
     const response = await fetch(
       `http://localhost:8080/backend/rest/users/getuser`
@@ -16,20 +18,21 @@ window.onload = async function () {
     }
     const data = await response.json();
     fillProfile(data);
-    // Se o usuário estiver autenticado, continue com o carregamento da página
+    // If the user is authenticated, continue loading the page
   } catch (error) {
     console.error("Error checking authentication:", error);
-    window.location.href = "login.html"; // Redireciona para a página de login se houver um erro ao verificar a autenticação
+    // Redirects to the login page if there is an error verifying authentication
+    window.location.href = "login.html";
   }
 };
 
-//Carrega toda a informação do user
+// Load all user information
 function fillProfile(user) {
-  // Atualizar a mensagem de boas vindas com o nome de utilizador
+  // Update the welcome message with the username
   document.getElementById("logged-in-username").innerHTML =
     "Bem vindo, " + user.username;
 
-  //Imagem de perfil
+  //Profile image
   const profilePic = document.querySelector(".profile-pic");
   if (user.photo) {
     profilePic.src = user.photo;
@@ -94,7 +97,7 @@ async function getAllTasks() {
     const editButton = document.getElementById("editTask_btn_submit");
     editButton.onclick = editTask;
 
-    // On click and the button is labeled "Edit"
+    // On click and the button is with edit sign
     async function editTask() {
       // Edit task logic
       if (editButton.value === "✎") {
@@ -104,7 +107,7 @@ async function getAllTasks() {
         priorityText.disabled = false;
         startDateText.disabled = false;
         endDateText.disabled = false;
-        // Change the button name to "Save"
+        // Change the button name to "Gravar"
         editButton.value = "Gravar";
       }
       // Save task logic

@@ -9,7 +9,7 @@
   </head>
   <body class="scrum">
     <header>
-      <!--Cabeçalho-->
+      <!--Header-->
       <h1>SCRUM BOARD</h1>
       <div class="profile-info">
         <div id="pic-container">
@@ -19,25 +19,25 @@
     </div>
     </header>
     <nav>
-      <!--Menu navegação com os botões Voltar ao Login e Criar tarefa-->
+      <!--Navigation menu with Back to Login and Create task buttons-->
       <input type="button" id="scrum_btn_logout" class="btn-nav" value="Logout"/>
       <input type="button" class="btn-nav" value="Criar tarefa" onclick="location.href='newTask.html'"/>
     </nav>
-    <!--Div global que contêm os Div com as três colunas do Scrum Board-->
+    <!--Div containing the three columns of the Scrum Board-->
     <div class="container">
       <div class="left-menu" id="todo-column">
         <h2>TO DO</h2>
-        <!--Div para receber as tarefas TODO criadas dinamicamente-->
+        <!--Div to receive dynamically created TO DO tasks-->
         <div class="cards" id="todo-cards"></div>
       </div>
       <div class="center-menu" id="doing-column">
         <h2>DOING</h2>
-        <!--Div para receber as tarefas DOING criadas dinamicamente-->
+        <!--Div to receive dynamically created DOING tasks-->
         <div class="cards" id="doing-cards"></div>
       </div>
       <div class="right-menu" id="done-column">
         <h2>DONE</h2>
-        <!--Div para receber as tarefas DONE criadas dinamicamente-->
+        <!--Div to receive dynamically created DONE tasks-->
         <div class="cards" id="done-cards"></div>
       </div>
     </div>
@@ -45,8 +45,8 @@
       <p>2024 AoR. Todos os direitos reservados.</p>
     </footer>
   </body>
-  <!--Script para criar o sweet alert utilizado, importando a bilbioteca-->
+  <!--Script para importar a bilbioteca sweet alert-->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-  <!--Ficheiro javascript associado-->
+  <!--Associated javascript file-->
   <script src="scrum.js"></script>
 </html>

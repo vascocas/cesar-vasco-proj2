@@ -1,20 +1,18 @@
-/* Formatação de todo o documento html*/
+/* Formatting relative to index.html --> */
 html,
 body {
   height: 100%;
-  font-family: var(--type_font); /* Tipo de font de letra de todo o documento*/
+  font-family: var(--type_font);
   margin: 0;
 }
 
-/*  Formatação do container que contém o left-login eo right login*/
 .container {
-  display: grid; /* Colocação dos dois lado a lado*/
-  grid-template-columns: 1fr 1fr; /* Divide o container ao meio*/
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
   height: 97%;
   width: 100%;
 }
 
-/* Atribui características iguais aos dois paineís*/
 .left-login,
 .right-login {
   display: flex;
@@ -24,7 +22,6 @@ body {
   background-color: aliceblue;
 }
 
-/* Características da imagem*/
 .left-login-image {
   width: 600px;
   max-width: 400px;
@@ -33,24 +30,22 @@ body {
 
 .right-login {
   align-items: center;
-  background-color: var(--color_light); /* Atribuição da cor do background do painel direito*/
+  background-color: var(--color_light);
 }
 
-/* Características do painel de login*/
 .card-login {
   width: 450px;
   padding: 30px;
   background: var(--color_regular);
-  border-radius: 20px; /* Arredondamento dos vértices do painel*/
-  box-shadow: 10px 10px 20px -12px; /* Adiciona uma sombra ao painel*/
-  color: var(--white); /* Atribui cor ao titulo do painel*/
-  box-sizing: border-box; /* Determina as dimensões do painel*/
+  border-radius: 20px;
+  box-shadow: 10px 10px 20px -12px;
+  color: var(--white);
+  box-sizing: border-box;
 }
 
-/* Características do titulo do painel (Scrum Board)*/
 .card-login h1 {
-  padding-bottom: 10px; /* Atribui uma margema o elemento */
-  text-transform: uppercase; /* transforma todas as letras em maiúsculas*/
+  padding-bottom: 10px;
+  text-transform: uppercase;
   font-size: var(--font_size_medium_high);
 }
 
@@ -79,7 +74,6 @@ body {
   color: var(--color_light);
 }
 
-/* Características do botão login*/
 .btn-login {
   width: 100%;
   padding: 14px;
@@ -88,16 +82,15 @@ body {
   outline: none;
   text-transform: uppercase;
   font-size: var(--font_size_medium_low);
-  font-weight: 700; /* Coloca o texto a negrito */
+  font-weight: 700;
   letter-spacing: 3px;
   color: var(--white);
   background: var(--color_dark);
-  cursor: pointer; /* Atribui um apontador quando o rato passa pelo elemento*/
+  cursor: pointer;
   box-shadow: 5px 5px 20px -12px;
   margin-top: 30px;
 }
 
-/* Atribui uma cor diferente quando o rato passa pelo elemento*/
 .btn-login:hover {
   background-color: var(--color_light);
 }
