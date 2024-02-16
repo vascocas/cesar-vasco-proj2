@@ -191,8 +191,8 @@ public class UserService {
         if (!userBean.verifyPassword(userPath, pass)) {
             return Response.status(400).entity("Unauthorized user").build();
         }
-        if (userBean.verifyTaskTitle(userPath, t.getTitle())) {
-            return Response.status(400).entity("Task with this title already exists").build();
+        if (userBean.verifyTaskId(userPath, t.getTaskId())) {
+            return Response.status(400).entity("Task with this iD already exists").build();
         }
         userBean.addTaskUser(userPath, t);
         return Response.status(200).entity("A new task is created").build();
@@ -210,16 +210,16 @@ public class UserService {
     @DELETE
     @Path("{username}/delete")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response removeTask(@QueryParam("title") String title, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
+    public Response removeTask(@QueryParam("iD") long iD, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
         if (!userBean.verifyUsername(user, userPath)) {
             return Response.status(400).entity("Unauthorized user").build();
         }
         if (!userBean.verifyPassword(userPath, pass)) {
             return Response.status(400).entity("Unauthorized user").build();
         }
-        boolean deleted =  userBean.removeTask(userPath, title);
+        boolean deleted =  userBean.removeTask(userPath, iD);
         if (!deleted)
-            return Response.status(400).entity("Task with this title is not found").build();
+            return Response.status(400).entity("Task with this iD is not found").build();
         return Response.status(200).entity("Task deleted").build();
     }
 
@@ -228,15 +228,15 @@ public class UserService {
     @Path("{username}/moveTask")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response moveTask(Task t, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
-        if (!userBean.verifyUsername(user, userPath)) {
+        if (!userBean.verifyUsername(userPath, user)) {
             return Response.status(400).entity("Unauthorized user").build();
         }
         if (!userBean.verifyPassword(userPath, pass)) {
             return Response.status(400).entity("Unauthorized user").build();
         }
-        boolean updated = userBean.moveTask(userPath, t.getTitle(), t.getColumn());
+        boolean updated = userBean.moveTask(userPath, t.getTaskId(), t.getColumn());
         if (!updated)
-            return Response.status(400).entity("Task with this title is not found").build();
+            return Response.status(400).entity("Task with this iD is not found").build();
         return Response.status(200).entity("Task moved to the new column").build();
     }
 
@@ -244,16 +244,16 @@ public class UserService {
     @PUT
     @Path("{username}/updateTask")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateDescription(Task t, @QueryParam("taskTitle") String taskTitle, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
+    public Response updateDescription(Task t, @QueryParam("iD") long iD, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
         if (!userBean.verifyUsername(user, userPath)) {
             return Response.status(400).entity("Unauthorized user").build();
         }
         if (!userBean.verifyPassword(userPath, pass)) {
             return Response.status(400).entity("Unauthorized user").build();
         }
-        boolean updated = userBean.updateTask(userPath, taskTitle, t.getTitle(), t.getDescription(), t.getPriority(), t.getStartDate(), t.getEndDate());
+        boolean updated = userBean.updateTask(userPath, iD, t.getTitle(), t.getDescription(), t.getPriority(), t.getStartDate(), t.getEndDate());
         if (!updated)
-            return Response.status(400).entity("Task with this title is not found").build();
+            return Response.status(400).entity("Task with this iD is not found").build();
         return Response.status(200).entity("Task content updated").build();
     }
 }

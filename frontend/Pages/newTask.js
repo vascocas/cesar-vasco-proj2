@@ -62,6 +62,7 @@ async function addTask() {
     );
     return;
   }
+
   // Prevent creating tasks with empty title
   else if (titleInput.value === "") {
     alert("Por favor preencha o título.");
@@ -73,16 +74,15 @@ async function addTask() {
     priorityInput.value = 100;
   }
 
-  // Check if the start date is not empty
-  if (startDateInput.value.trim() === "") {
-    alert("Por favor preencha a data inicial.");
+  // Check if the start date and end date are not empty
+  if (startDateInput.value.trim() === "" || endDateInput.value.trim() === "") {
+    alert("Por favor preencha as datas.");
     return;
   }
 
   // Function to ensure end date is always after start date
   const startDate = new Date(startDateInput.value);
   const endDate = new Date(endDateInput.value);
-
   if (endDate < startDate) {
     alert("A data de conclusão não pode ser anterior à data inicial.");
     endDateInput.value = ""; // Clear the end date field
@@ -97,6 +97,7 @@ async function addTask() {
     startDate: startDateInput.value,
     endDate: endDateInput.value,
   };
+  console.log(newTask);
   const requestBody = JSON.stringify(newTask);
 
   // Send a POST request to add a new task to the backend server
@@ -107,10 +108,10 @@ async function addTask() {
     {
       method: "POST",
       headers: {
-        "Accept": "application/json",
+        Accept: "application/json",
         "Content-Type": "application/json",
-        "username": localStorage.getItem("username"),
-        "password": localStorage.getItem("password")
+        username: localStorage.getItem("username"),
+        password: localStorage.getItem("password"),
       },
       body: requestBody,
     }
