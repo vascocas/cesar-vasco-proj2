@@ -2,7 +2,6 @@ package aor.paj.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import aor.paj.bean.UserBean;
 import aor.paj.dto.Task;
 import aor.paj.dto.User;
@@ -23,7 +22,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.Path;
 
-
 @Path("/users")
 public class UserService {
 
@@ -32,7 +30,6 @@ public class UserService {
 
     @Context
     private HttpServletRequest request;
-
 
     @GET
     @Path("/all")
@@ -186,16 +183,16 @@ public class UserService {
                             @HeaderParam("password") String pass,
                             @PathParam("username") String userPath) {
         if (!userBean.verifyUsername(userPath, user)) {
-            return Response.status(400).entity("Unauthorized user").build();
+            return Response.status(400).entity("Utilizador sem autorização").build();
         }
         if (!userBean.verifyPassword(userPath, pass)) {
-            return Response.status(400).entity("Unauthorized user").build();
+            return Response.status(400).entity("Utilizador sem autorização").build();
         }
         if (userBean.verifyTaskId(userPath, t.getTaskId())) {
-            return Response.status(400).entity("Task with this iD already exists").build();
+            return Response.status(400).entity("Tarefa com este iD já existe").build();
         }
         userBean.addTaskUser(userPath, t);
-        return Response.status(200).entity("A new task is created").build();
+        return Response.status(200).entity("Nova tarefa criada com sucesso").build();
     }
 
     // Get All Tasks
@@ -212,15 +209,15 @@ public class UserService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response removeTask(@QueryParam("iD") long iD, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
         if (!userBean.verifyUsername(user, userPath)) {
-            return Response.status(400).entity("Unauthorized user").build();
+            return Response.status(400).entity("Utilizador sem autorização").build();
         }
         if (!userBean.verifyPassword(userPath, pass)) {
-            return Response.status(400).entity("Unauthorized user").build();
+            return Response.status(400).entity("Utilizador sem autorização").build();
         }
         boolean deleted =  userBean.removeTask(userPath, iD);
         if (!deleted)
-            return Response.status(400).entity("Task with this iD is not found").build();
-        return Response.status(200).entity("Task deleted").build();
+            return Response.status(400).entity("Tarefa com este iD não encontrada").build();
+        return Response.status(200).entity("Tarefa apagada").build();
     }
 
 
@@ -229,15 +226,15 @@ public class UserService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response moveTask(Task t, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
         if (!userBean.verifyUsername(userPath, user)) {
-            return Response.status(400).entity("Unauthorized user").build();
+            return Response.status(400).entity("Utilizador sem autorização").build();
         }
         if (!userBean.verifyPassword(userPath, pass)) {
-            return Response.status(400).entity("Unauthorized user").build();
+            return Response.status(400).entity("Utilizador sem autorização").build();
         }
         boolean updated = userBean.moveTask(userPath, t.getTaskId(), t.getColumn());
         if (!updated)
-            return Response.status(400).entity("Task with this iD is not found").build();
-        return Response.status(200).entity("Task moved to the new column").build();
+            return Response.status(400).entity("Tarefa com este iD não encontrada").build();
+        return Response.status(200).entity("Tarefa movida de coluna").build();
     }
 
 
@@ -246,14 +243,14 @@ public class UserService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateDescription(Task t, @QueryParam("iD") long iD, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
         if (!userBean.verifyUsername(user, userPath)) {
-            return Response.status(400).entity("Unauthorized user").build();
+            return Response.status(400).entity("Utilizador sem autorização").build();
         }
         if (!userBean.verifyPassword(userPath, pass)) {
-            return Response.status(400).entity("Unauthorized user").build();
+            return Response.status(400).entity("Utilizador sem autorização").build();
         }
         boolean updated = userBean.updateTask(userPath, iD, t.getTitle(), t.getDescription(), t.getPriority(), t.getStartDate(), t.getEndDate());
         if (!updated)
-            return Response.status(400).entity("Task with this iD is not found").build();
-        return Response.status(200).entity("Task content updated").build();
+            return Response.status(400).entity("Tarefa com este iD não encontrada").build();
+        return Response.status(200).entity("Conteúdo da tarefa actualizado").build();
     }
 }

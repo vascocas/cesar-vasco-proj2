@@ -14,10 +14,8 @@ public class Task {
     @XmlElement
     private String description;
     @XmlElement
-    //@JsonbDateFormat(value = "yyyy-MM-dd")
     private LocalDate startDate;
     @XmlElement
-    //@JsonbDateFormat(value = "yyyy-MM-dd")
     private LocalDate endDate;
     @XmlElement
     private int priority;
