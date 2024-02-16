@@ -97,6 +97,7 @@ async function addTask() {
     startDate: startDateInput.value,
     endDate: endDateInput.value,
   };
+  console.log(newTask);
   const requestBody = JSON.stringify(newTask);
 
   // Send a POST request to add a new task to the backend server

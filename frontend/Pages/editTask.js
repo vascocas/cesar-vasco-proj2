@@ -16,7 +16,6 @@ window.onload = async function () {
     }
     const data = await response.json();
     fillProfile(data);
-    console.log("User authenticated:", data);
     // Se o usuário estiver autenticado, continue com o carregamento da página
   } catch (error) {
     console.error("Error checking authentication:", error);
@@ -57,49 +56,10 @@ async function getAllTasks() {
       }
     );
     const data = await response.json();
-    const preTasks = data;
-    tasks = sortTasks(preTasks);
+    tasks = data;
   } catch (error) {
     console.error("Error fetching tasks:", error);
   }
-}
-
-// Define a comparison function for sorting tasks
-function compareTasks(taskA, taskB) {
-  // First, compare by priority
-  if (taskA.priority !== taskB.priority) {
-    return taskA.priority - taskB.priority; // Change the order of subtraction
-  }
-
-  // Compare by start date
-  const startDateA = new Date(taskA.startDate);
-  const startDateB = new Date(taskB.startDate);
-  if (startDateA.getTime() !== startDateB.getTime()) {
-    return startDateA.getTime() - startDateB.getTime();
-  }
-
-  // If start dates are equal, compare by end date
-  // If endDate is empty for taskA but not for taskB, taskA should come after taskB
-  if (!taskA.endDate && taskB.endDate) {
-    return 1;
-  }
-  // If endDate is empty for taskB but not for taskA, taskB should come after taskA
-  else if (!taskB.endDate && taskA.endDate) {
-    return -1;
-  }
-  // If both endDate are empty or both are not empty, sort by end date as usual
-  else if (taskA.endDate && taskB.endDate) {
-    const endDateA = new Date(taskA.endDate);
-    const endDateB = new Date(taskB.endDate);
-    return endDateA.getTime() - endDateB.getTime();
-  }
-  // If both endDate are empty, consider them equal
-  return 0;
-}
-
-// Function to sort tasks by multiple parameters
-function sortTasks(tasks) {
-  return tasks.sort(compareTasks);
 }
 
 (async function () {
@@ -109,11 +69,11 @@ function sortTasks(tasks) {
     // Access task here
     const selectedId = sessionStorage.getItem("taskId");
     let selectedTask = null;
-    for (const task of tasks) {
-      if (task.taskId === selectedId) {
-       selectedTask = task;
-       break;
-      }
+    for (const t of tasks) {
+    if (t.taskId == selectedId) {
+    selectedTask = t;
+    break;
+    }
     }
 
     // Declare and assign variables to the title and description elements of the task

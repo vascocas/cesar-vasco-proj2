@@ -118,7 +118,7 @@ async function getAllTasks() {
 function compareTasks(taskA, taskB) {
   // First, compare by priority
   if (taskA.priority !== taskB.priority) {
-    return taskA.priority - taskB.priority; // Change the order of subtraction
+    return taskB.priority - taskA.priority;
   }
 
   // Compare by start date
@@ -217,7 +217,8 @@ function showOptions(cardElement) {
   const taskId = cardElement.getAttribute("task_Id");
 
 // Cria botões, adicionar Event Listener e chama função correspondente com o parâmetro de entrada o ID da tarefa
-  optionsContainer.innerHTML = `<button onclick="consultTask('${taskId}')">Consultar</button>
+  optionsContainer.innerHTML = 
+  `<button onclick="consultTask('${taskId}')">Consultar</button>
   <button onclick="deleteTask('${taskId}')">Apagar</button>
   <button onclick="moveTask('${taskId}')">Mover</button>`;
 
@@ -273,10 +274,8 @@ async function deleteTask(taskId) {
         });
       }
     });
-    // Remove a tarefa da lista local
-    tasks = tasks.filter((task) => task.taskId !== taskId);
-
-    // Atualiza a UI para refletir a remoção da tarefa
+       // Atualiza a UI para refletir a remoção da tarefa
+    getAllTasks();
     showTasks();
   }
 }
@@ -288,21 +287,21 @@ async function moveTask(taskId) {
     title: "Selecione a coluna de destino",
     input: "select",
     inputOptions: {
-      "todo-cards": "ToDo",
-      "doing-cards": "Doing",
-      "done-cards": "Done",
+      "todo-cards": "TO DO",
+      "doing-cards": "DOING",
+      "done-cards": "DONE",
     },
     inputPlaceholder: "Selecione a coluna",
     showCancelButton: true,
     inputValidator: async (value) => {
       const destinationColumn = value;
-      // Pesquisa pelo título a tarefa dentro do array
+      // Pesquisa a tarefa dentro do array através taskId 
       let selectedTask = null;
-      for (const task of tasks) {
-        if (task.taskId === taskId) {
-          selectedTask = task.taskId;
-         break; // Stop the loop once the task with the matching iD is found
-        }
+      for (const t of tasks) {
+      if (t.taskId == taskId) {
+      selectedTask = t;
+      break;
+      }
       }
       // Verifica se se está a tentar mover para própria coluna e previne essa ação
       if (selectedTask.column === destinationColumn) {
@@ -310,10 +309,9 @@ async function moveTask(taskId) {
       } else {
         // Constroi variável com formato JSON para guardar elementos necessários para mudar de coluna (nome e coluna destino)
         let requestBody = JSON.stringify({
-          iD: taskId,
+          taskId: taskId,
           column: destinationColumn,
         });
-
         try {
           await fetch(
             `http://localhost:8080/backend/rest/users/${localStorage.getItem(
@@ -321,7 +319,7 @@ async function moveTask(taskId) {
             {
               method: "PUT",
               headers: {
-                "Accept": "application/json",
+                Accept: "application/json",
                 "Content-Type": "application/json",
                 username: localStorage.getItem("username"),
                 password: localStorage.getItem("password"),
@@ -329,15 +327,12 @@ async function moveTask(taskId) {
               body: requestBody,
             }
           );
-
           await getAllTasks(); // Fetch all tasks again
           showTasks(); // Update UI
         } catch (error) {
           console.error("Error moving task:", error);
         }
       }
-    },
+    }
   });
 }
-
-

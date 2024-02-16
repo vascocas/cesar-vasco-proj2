@@ -192,7 +192,7 @@ public class UserService {
             return Response.status(400).entity("Unauthorized user").build();
         }
         if (userBean.verifyTaskId(userPath, t.getTaskId())) {
-            return Response.status(400).entity("Task with this title already exists").build();
+            return Response.status(400).entity("Task with this iD already exists").build();
         }
         userBean.addTaskUser(userPath, t);
         return Response.status(200).entity("A new task is created").build();
@@ -228,7 +228,7 @@ public class UserService {
     @Path("{username}/moveTask")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response moveTask(Task t, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
-        if (!userBean.verifyUsername(user, userPath)) {
+        if (!userBean.verifyUsername(userPath, user)) {
             return Response.status(400).entity("Unauthorized user").build();
         }
         if (!userBean.verifyPassword(userPath, pass)) {

@@ -23,10 +23,11 @@ public class Task {
 
     public Task() {
         this.column = "todo-cards";
+        this.taskId = createId();
     }
 
     // Constructor to set column based on state identifier
-    public Task(String title, String description, int priority, LocalDate startDate, LocalDate endDate, long taskId) {
+    public Task(String title, String description, int priority, LocalDate startDate, LocalDate endDate) {
         this.column = "todo-cards";
         this.title = title;
         this.description = description;
@@ -39,7 +40,7 @@ public class Task {
     private long createId() {
         // Generate unique task ID based on current date and time
         LocalDateTime currentDateTime = LocalDateTime.now();
-        return currentDateTime.toEpochSecond(java.time.ZoneOffset.UTC) * 1000;
+        return currentDateTime.toEpochSecond(java.time.ZoneOffset.UTC);
     }
 
     public long getTaskId() {

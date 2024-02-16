@@ -187,8 +187,8 @@ public class UserBean implements Serializable {
         if (user == null) {
             return false;
         }
-        for (Task existingTask : user.getUserTasks()) {
-            if (existingTask.getTaskId()==iD) {
+        for (Task t : user.getUserTasks()) {
+            if (t.getTaskId()==iD) {
                 exist = true;
             }
         }
