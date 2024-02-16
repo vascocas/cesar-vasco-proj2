@@ -1,13 +1,14 @@
-// Chamar user com o username gravado na localstorage
+// Call user with username stored in localstorage
 window.onload = async function () {
   const loggedInUsername = localStorage.getItem("username");
 
   if (!loggedInUsername) {
-    window.location.href = "login.html"; // Redireciona para a página de login se não houver usuário autenticado
+    // Redirects to the login page if there is no authenticated user
+    window.location.href = "login.html";
     return;
   }
 
-  // Verifica se o usuário está autenticado antes de prosseguir
+  // Checks if the user is authenticated before proceeding
   try {
     const response = await fetch(
       `http://localhost:8080/backend/rest/users/getuser`
@@ -16,14 +17,13 @@ window.onload = async function () {
       throw new Error("Network response was not ok");
     }
     const data = await response.json();
-    console.log("User authenticated:", data);
-    // Se o usuário estiver autenticado, continuar com o carregamento da página Scrum
     getUser(loggedInUsername);
     // Call getAllTasks() when the page loads
     getAllTasks();
   } catch (error) {
     console.error("Error checking authentication:", error);
-    window.location.href = "login.html"; // Redireciona para a página de login se houver um erro ao verificar a autenticação
+    // Redirects to the login page if there is an error verifying authentication
+    window.location.href = "login.html";
   }
 };
 
@@ -45,13 +45,13 @@ async function getUser(loggedInUsername) {
   }
 }
 
-//Carrega toda a informação do user
+// Load all user information
 function fillProfile(user) {
-  // Atualizar a mensagem de boas vindas com o nome de utilizador
+  // Update the welcome message with the username
   document.getElementById("logged-in-username").innerHTML =
     "Bem vindo, " + user.username;
 
-  //Imagem de perfil
+  //Profile image
   const profilePic = document.querySelector(".profile-pic");
   if (user.photo) {
     profilePic.src = user.photo;
@@ -60,13 +60,13 @@ function fillProfile(user) {
   }
 }
 
-// Define função para entrar na página de edição de perfil ao clicar no nume de utilizador
+// Defines function to enter the profile editing page by clicking on the username
 let userHeader = document.getElementById("logged-in-username");
 userHeader.addEventListener("click", function () {
   window.location.href = "profile.html";
 });
 
-//Logout
+// Logout
 const btn_logout = document.getElementById("scrum_btn_logout");
 
 btn_logout.onclick = async function () {
@@ -78,20 +78,19 @@ btn_logout.onclick = async function () {
   );
   if (response.status === 200) {
     alert("Logout realizado com sucesso.");
-    // Limpa a localstorage
+    // Clears localstorage
     localStorage.clear();
-    // Guarda o username no armazenamento local
+    // Save the username in local storage
     window.location.href = "../index.html";
   } else {
-    //Mostra mensagem de alerta do backend
     alert("Logout falhou.");
   }
 };
 
-// Cria array para armazenar as tarefas
+// Create array to store tasks
 let tasks = [];
 
-// Função para obter todas as tarefas
+// Load all stored tasks
 async function getAllTasks() {
   try {
     const response = await fetch(
@@ -107,8 +106,10 @@ async function getAllTasks() {
     );
     const data = await response.json();
     const preTasks = data;
-    tasks = sortTasks(preTasks); // Sort tasks before call show tasks
-    showTasks(); // Call showTasks after tasks have been fetched
+    // Sort tasks before call show tasks
+    tasks = sortTasks(preTasks);
+    // Call showTasks function
+    showTasks(); 
   } catch (error) {
     console.error("Error fetching tasks:", error);
   }
@@ -139,14 +140,14 @@ function sortTasks(tasks) {
   return tasks.sort(compareTasks);
 }
 
-// Função para listar as tarefas nos quadros
+// Function to list the tasks in the tables
 function showTasks() {
-  // Limpar os quadros antes de listar novamente
+  // Clear the frames before listing again
   document.getElementById("todo-cards").innerHTML = "";
   document.getElementById("doing-cards").innerHTML = "";
   document.getElementById("done-cards").innerHTML = "";
 
-  // Iterar sobre as tarefas e adicioná-las aos quadros apropriados
+  // Iterate over the tasks and add them to the appropriate boards
   for (const t of tasks) {
     const cardElement = createCardElement(t.taskId, t.title, t.priority);
     const columnElement = document.getElementById(t.column);
@@ -154,20 +155,20 @@ function showTasks() {
   }
 }
 
-// Função para criar um elemento de cartão HTML para uma tarefa
+// Function to create an HTML card element for a task
 function createCardElement(taskId, title, priority) {
-  // Cria uma Div e atribui a className "card"
+  // Create a Div and assign the className "card"
   const cardElement = document.createElement("div");
   cardElement.className = "card";
 
   // Set the task ID as a data attribute
   cardElement.setAttribute("task_Id", taskId);
 
-  // Cria uma Div e atribui a className "card-header"
+  // Create a Div and assign the className "card-header"
   const cardHeaderElement = document.createElement("div");
   cardHeaderElement.className = "card-header";
 
-  // Definir classes com base na prioridade
+  // Define classes based on priority
   if (priority == 100) {
     cardHeaderElement.classList.add("low-priority");
   } else if (priority == 300) {
@@ -176,21 +177,21 @@ function createCardElement(taskId, title, priority) {
     cardHeaderElement.classList.add("high-priority");
   }
 
-  // Altera o textContent para o título da tarefa
+  // Change the textContent to the task title
   cardHeaderElement.textContent = title;
 
-  // Adicionar Event Listener para exibir opções
+  // Add Event Listener to display options
   cardHeaderElement.addEventListener("click", function () {
     showOptions(cardElement);
   });
-  // Adiciona a Div cardHeaderElement dentro da cardElement
+  // Append cardHeaderElement to cardElement
   cardElement.appendChild(cardHeaderElement);
   return cardElement;
 }
 
-// Mostra os botões de opções de cada tarefa
+// Shows the options buttons for each task
 function showOptions(cardElement) {
-  // Verificar se já há opções exibidas, se sim, remover (evita duplicar criação de botões com clicks sucessivos)
+  // Check if there are already options displayed, if so, remove (avoids duplicate creation of buttons with successive clicks)
   const existingOptions = cardElement.querySelector(".task-options");
   if (existingOptions) {
     existingOptions.remove();
