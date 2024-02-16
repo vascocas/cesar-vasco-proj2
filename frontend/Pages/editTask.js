@@ -70,10 +70,10 @@ async function getAllTasks() {
     const selectedId = sessionStorage.getItem("taskId");
     let selectedTask = null;
     for (const t of tasks) {
-    if (t.taskId == selectedId) {
-    selectedTask = t;
-    break;
-    }
+      if (t.taskId == selectedId) {
+        selectedTask = t;
+        break;
+      }
     }
 
     // Declare and assign variables to the title and description elements of the task
