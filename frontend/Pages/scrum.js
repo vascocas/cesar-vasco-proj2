@@ -77,14 +77,14 @@ btn_logout.onclick = async function () {
     }
   );
   if (response.status === 200) {
-    alert("Logout successful.");
+    alert("Logout realizado com sucesso.");
     // Limpa a localstorage
     localStorage.clear();
     // Guarda o username no armazenamento local
     window.location.href = "../index.html";
   } else {
     //Mostra mensagem de alerta do backend
-    alert("Logout failed.");
+    alert("Logout falhou.");
   }
 };
 
@@ -120,31 +120,18 @@ function compareTasks(taskA, taskB) {
   if (taskA.priority !== taskB.priority) {
     return taskB.priority - taskA.priority;
   }
-
-  // Compare by start date
+  // If priority is equal, compare by start date
   const startDateA = new Date(taskA.startDate);
   const startDateB = new Date(taskB.startDate);
   if (startDateA.getTime() !== startDateB.getTime()) {
     return startDateA.getTime() - startDateB.getTime();
   }
-
   // If start dates are equal, compare by end date
-  // If endDate is empty for taskA but not for taskB, taskA should come after taskB
-  if (!taskA.endDate && taskB.endDate) {
-    return 1;
-  }
-  // If endDate is empty for taskB but not for taskA, taskB should come after taskA
-  else if (!taskB.endDate && taskA.endDate) {
-    return -1;
-  }
-  // If both endDate are empty or both are not empty, sort by end date as usual
-  else if (taskA.endDate && taskB.endDate) {
+  else {
     const endDateA = new Date(taskA.endDate);
     const endDateB = new Date(taskB.endDate);
     return endDateA.getTime() - endDateB.getTime();
   }
-  // If both endDate are empty, consider them equal
-  return 0;
 }
 
 // Function to sort tasks by multiple parameters

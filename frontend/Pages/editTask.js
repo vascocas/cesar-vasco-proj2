@@ -97,7 +97,7 @@ async function getAllTasks() {
     // On click and the button is labeled "Edit"
     async function editTask() {
       // Edit task logic
-      if (editButton.value === "Editar") {
+      if (editButton.value === "✎") {
         // Make the text fields editable
         titleText.disabled = false;
         descriptionText.disabled = false;
@@ -125,13 +125,15 @@ async function getAllTasks() {
           return;
         }
 
-        // Check if the start date and end date are not empty
-        if (
-          startDateText.value.trim() === "" ||
-          endDateText.value.trim() === ""
-        ) {
-          alert("Por favor preencha as datas.");
+        // Check if the start date is not empty
+        if (startDateText.value.trim() === "") {
+          alert("Por favor preencha a data inicial.");
           return;
+        }
+
+        // Check if the end date is not empty, if so replace for a default date to give the least priority
+        if (endDateText.value.trim() === "") {
+          endDateText.value = "2100-01-01";
         }
 
         // Function to ensure end date is always after start date
@@ -150,7 +152,7 @@ async function getAllTasks() {
           description: descriptionText.value,
           priority: priorityText.value,
           startDate: startDateText.value,
-          endDate: endDateText.value,
+          endDate: endDateText.valueDate,
         });
 
         const response = await fetch(

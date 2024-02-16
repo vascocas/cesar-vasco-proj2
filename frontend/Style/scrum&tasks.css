@@ -200,7 +200,7 @@ nav {
   margin-bottom: 10px;
   border: none;
   border-radius: 10px;
-  background: var(--color_dark);
+  background: var(--color_light);
   color: var(--white);
   font-family: var(--type_font);
   font-size: var(--font_size_small);
@@ -211,9 +211,7 @@ nav {
 
 #newTask_title::placeholder,
 #newTask_description::placeholder,
-#newTask_priority::placeholder,
-#newTask_startDate::placeholder,
-#newTask_endDate::placeholder {
+#newTask_priority::placeholder {
   font-family:var(--type_font);
   font-size: var(--font_size_small);
   color: var(--color_light);
