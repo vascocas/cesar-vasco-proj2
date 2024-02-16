@@ -2,11 +2,12 @@ window.onload = async function () {
   const loggedInUsername = localStorage.getItem("username");
 
   if (!loggedInUsername) {
-    window.location.href = "login.html"; // Redireciona para a página de login se não houver usuário autenticado
+    // Redirects to the login page if there is no authenticated user
+    window.location.href = "login.html";
     return;
   }
 
-  // Verifica se o usuário está autenticado antes de prosseguir
+  // Checks if the user is authenticated before proceeding
   try {
     const response = await fetch(
       `http://localhost:8080/backend/rest/users/getuser`
@@ -18,17 +19,18 @@ window.onload = async function () {
     fillProfile(data);
   } catch (error) {
     console.error("Error checking authentication:", error);
-    window.location.href = "login.html"; // Redireciona para a página de login se houver um erro ao verificar a autenticação
+    // Redirects to the login page if there is an error verifying authentication
+    window.location.href = "login.html";
   }
 };
 
-//Carrega toda a informação do user
+// Load all user information
 function fillProfile(user) {
-  // Atualizar a mensagem de boas vindas com o nome de utilizador
+  // Update the welcome message with the username
   document.getElementById("logged-in-username").innerHTML =
     "Bem vindo, " + user.username;
 
-  //Imagem de perfil
+  //Profile image
   const profilePic = document.querySelector(".profile-pic");
   if (user.photo) {
     profilePic.src = user.photo;
@@ -90,7 +92,8 @@ async function addTask() {
   const endDate = new Date(endDateInput.value);
   if (endDate < startDate) {
     alert("A data de conclusão não pode ser anterior à data inicial.");
-    endDateInput.value = ""; // Clear the end date field
+    // Clear the end date field
+    endDateInput.value = "";
     return;
   }
 

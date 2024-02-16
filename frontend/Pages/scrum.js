@@ -197,22 +197,22 @@ function showOptions(cardElement) {
     existingOptions.remove();
     return;
   }
-  // Criar Div para guardar as várias opções da tarefa
+  // Create Div to store the various task options
   const optionsContainer = document.createElement("div");
   optionsContainer.className = "task-options";
 
   // Get the task ID from the data attribute of the card element
   const taskId = cardElement.getAttribute("task_Id");
 
-  // Cria botões, adicionar Event Listener e chama função correspondente com o parâmetro de entrada o ID da tarefa
+  // Create buttons, add Event Listener and call corresponding function with input parameter task ID
   optionsContainer.innerHTML = `<button onclick="consultTask('${taskId}')">Consultar</button>
   <button onclick="deleteTask('${taskId}')">Apagar</button>
   <button onclick="moveTask('${taskId}')">Mover</button>`;
 
-  // Adicionar opções de tarefa ao cardElement
+  // Add task options to cardElement
   cardElement.appendChild(optionsContainer);
 
-  // Adicionar um Event Listener para fechar as opções quando se clica fora do cardElement
+  // Add an Event Listener to close the options when clicking outside the cardElement
   document.addEventListener("click", function closeOptions(event) {
     if (!cardElement.contains(event.target)) {
       optionsContainer.remove();
@@ -221,22 +221,22 @@ function showOptions(cardElement) {
   });
 }
 
-// Função consultar tarefa (Primeira das opções da tarefa)
+// Query task function (First of the task options)
 function consultTask(taskId) {
-  // Grava o titulo da tarefa no armazenamento da sessão para ser utilizado na página de Consultar/Editar
+  // Saves the task title in the session storage for use on the Consult/Edit page
   sessionStorage.setItem("taskId", taskId);
-  // Avança para a página de Consultar/Editar
+  // Navigate to the Consult/Edit page
   window.location.href = "editTask.html";
 }
 
-// Função apagar tarefa (Segunda das opções da tarefa)
+// Delete task function (Second of the task options)
 async function deleteTask(taskId) {
-  //Confirmação do utilizador de apagar tarefa
+  // User confirmation to delete task
   const userConfirmed = confirm(
     "Tem a certeza que pretende remover esta tarefa?"
   );
   if (userConfirmed) {
-    // Remover a tarefa da lista
+    // Remove the task from the list
     await fetch(
       `http://localhost:8080/backend/rest/users/${localStorage.getItem(
         "username"
@@ -261,15 +261,15 @@ async function deleteTask(taskId) {
         });
       }
     });
-    // Atualiza a UI para refletir a remoção da tarefa
+    // Update the UI to reflect the removal of the task
     getAllTasks();
     showTasks();
   }
 }
 
-// Função mover tarefa (Terceira das opções da tarefa)
+// Move task function (Third of the task options)
 async function moveTask(taskId) {
-  // Cria uma caixa de diálogo com botões das colunas
+  // Creates a dialogue box with column buttons
   Swal.fire({
     title: "Selecione a coluna de destino",
     input: "select",
@@ -282,7 +282,7 @@ async function moveTask(taskId) {
     showCancelButton: true,
     inputValidator: async (value) => {
       const destinationColumn = value;
-      // Pesquisa a tarefa dentro do array através taskId
+      // Search for the task within the array using taskId
       let selectedTask = null;
       for (const t of tasks) {
         if (t.taskId == taskId) {
@@ -290,11 +290,11 @@ async function moveTask(taskId) {
           break;
         }
       }
-      // Verifica se se está a tentar mover para própria coluna e previne essa ação
+      // Checks if it is trying to move to its own column and prevents this action
       if (selectedTask.column === destinationColumn) {
         alert("A tarefa já se encontra nesta coluna!");
       } else {
-        // Constroi variável com formato JSON para guardar elementos necessários para mudar de coluna (nome e coluna destino)
+        // Construct JSON-formatted variable to store elements needed to move the task (name and target column)
         let requestBody = JSON.stringify({
           taskId: taskId,
           column: destinationColumn,
@@ -315,8 +315,9 @@ async function moveTask(taskId) {
               body: requestBody,
             }
           );
-          await getAllTasks(); // Fetch all tasks again
-          showTasks(); // Update UI
+          // Fetch all tasks again to update UI
+          await getAllTasks();
+          showTasks();
         } catch (error) {
           console.error("Error moving task:", error);
         }

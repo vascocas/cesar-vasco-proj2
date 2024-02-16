@@ -1,5 +1,5 @@
-/* Formatação relativa à scrum.html --> */
-/* Formatação relativa a todo o body do documento html */
+/* Formatting relative to scrum.html --> */
+/* Formatting relative to the entire body of the html document */
 body {
   background-color: var(--color_light);
   font-family: var(--type_font);
@@ -120,7 +120,7 @@ nav {
   color: var(--white);
 }
 
-/* Formatação relativa às tasks.html --> */
+/* Formatting relative to tasks.html --> */
 
 .task-form {
   width: 100%;
