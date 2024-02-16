@@ -49,6 +49,16 @@ https://maven.apache.org/xsd/maven-4.0.0.xsd">
             <artifactId>javax.json-api</artifactId>
             <version>1.1.4</version>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.12.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.12.5</version>
+        </dependency>
     </dependencies>
 
     <build>

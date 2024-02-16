@@ -1,16 +1,19 @@
 package aor.paj.bean;
 
-import java.io.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
-
 import aor.paj.dto.Task;
-import jakarta.enterprise.context.ApplicationScoped;
 import aor.paj.dto.User;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
+
+import java.io.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @ApplicationScoped
 public class UserBean implements Serializable {
@@ -20,6 +23,7 @@ public class UserBean implements Serializable {
 
     final String filename = "users.json";
     private ArrayList<User> users;
+    private String filePath;
 
 
     public UserBean() {
@@ -33,6 +37,11 @@ public class UserBean implements Serializable {
             }
         }else
             users = new ArrayList<User>();
+    }
+
+    public UserBean(String filePath) {
+        this.filePath = filePath;
+        this.users = readFromJsonFile();
     }
 
     public void addUser(User u) {
@@ -239,5 +248,19 @@ public class UserBean implements Serializable {
             }
         }
         return false;
+    }
+
+    private ArrayList<User> readFromJsonFile() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            File file = new File(filePath);
+            if (!file.exists()) {
+                return new ArrayList<>(); // Se o arquivo não existe, retorna uma lista vazia
+            }
+            return mapper.readValue(file, new TypeReference<ArrayList<User>>() {});
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ArrayList<>(); // Em caso de erro, retorna uma lista vazia
+        }
     }
 }
