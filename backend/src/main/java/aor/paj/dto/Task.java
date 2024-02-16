@@ -1,4 +1,5 @@
 package aor.paj.dto;
+import jakarta.json.bind.annotation.JsonbDateFormat;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDate;
@@ -13,8 +14,10 @@ public class Task {
     @XmlElement
     private String description;
     @XmlElement
+    //@JsonbDateFormat(value = "yyyy-MM-dd")
     private LocalDate startDate;
     @XmlElement
+    //@JsonbDateFormat(value = "yyyy-MM-dd")
     private LocalDate endDate;
     @XmlElement
     private int priority;

@@ -34,7 +34,7 @@ async function getUser(loggedInUsername) {
       {
         method: "GET",
         headers: {
-          "Accept": "application/json",
+          Accept: "application/json",
         },
       }
     );
@@ -77,14 +77,14 @@ btn_logout.onclick = async function () {
     }
   );
   if (response.status === 200) {
-    alert("Logout successful.");
+    alert("Logout realizado com sucesso.");
     // Limpa a localstorage
     localStorage.clear();
     // Guarda o username no armazenamento local
     window.location.href = "../index.html";
   } else {
     //Mostra mensagem de alerta do backend
-    alert("Logout failed.");
+    alert("Logout falhou.");
   }
 };
 
@@ -101,7 +101,7 @@ async function getAllTasks() {
       {
         method: "GET",
         headers: {
-          "Accept": "application/json",
+          Accept: "application/json",
         },
       }
     );
@@ -120,31 +120,18 @@ function compareTasks(taskA, taskB) {
   if (taskA.priority !== taskB.priority) {
     return taskB.priority - taskA.priority;
   }
-
-  // Compare by start date
+  // If priority is equal, compare by start date
   const startDateA = new Date(taskA.startDate);
   const startDateB = new Date(taskB.startDate);
   if (startDateA.getTime() !== startDateB.getTime()) {
     return startDateA.getTime() - startDateB.getTime();
   }
-
   // If start dates are equal, compare by end date
-  // If endDate is empty for taskA but not for taskB, taskA should come after taskB
-  if (!taskA.endDate && taskB.endDate) {
-    return 1;
-  }
-  // If endDate is empty for taskB but not for taskA, taskB should come after taskA
-  else if (!taskB.endDate && taskA.endDate) {
-    return -1;
-  }
-  // If both endDate are empty or both are not empty, sort by end date as usual
-  else if (taskA.endDate && taskB.endDate) {
+  else {
     const endDateA = new Date(taskA.endDate);
     const endDateB = new Date(taskB.endDate);
     return endDateA.getTime() - endDateB.getTime();
   }
-  // If both endDate are empty, consider them equal
-  return 0;
 }
 
 // Function to sort tasks by multiple parameters
@@ -173,8 +160,8 @@ function createCardElement(taskId, title, priority) {
   const cardElement = document.createElement("div");
   cardElement.className = "card";
 
-   // Set the task ID as a data attribute
-   cardElement.setAttribute("task_Id", taskId);
+  // Set the task ID as a data attribute
+  cardElement.setAttribute("task_Id", taskId);
 
   // Cria uma Div e atribui a className "card-header"
   const cardHeaderElement = document.createElement("div");
@@ -216,9 +203,8 @@ function showOptions(cardElement) {
   // Get the task ID from the data attribute of the card element
   const taskId = cardElement.getAttribute("task_Id");
 
-// Cria botões, adicionar Event Listener e chama função correspondente com o parâmetro de entrada o ID da tarefa
-  optionsContainer.innerHTML = 
-  `<button onclick="consultTask('${taskId}')">Consultar</button>
+  // Cria botões, adicionar Event Listener e chama função correspondente com o parâmetro de entrada o ID da tarefa
+  optionsContainer.innerHTML = `<button onclick="consultTask('${taskId}')">Consultar</button>
   <button onclick="deleteTask('${taskId}')">Apagar</button>
   <button onclick="moveTask('${taskId}')">Mover</button>`;
 
@@ -257,7 +243,7 @@ async function deleteTask(taskId) {
       {
         method: "DELETE",
         headers: {
-          "Accept": "application/json",
+          Accept: "application/json",
           "Content-Type": "application/json",
           username: localStorage.getItem("username"),
           password: localStorage.getItem("password"),
@@ -274,7 +260,7 @@ async function deleteTask(taskId) {
         });
       }
     });
-       // Atualiza a UI para refletir a remoção da tarefa
+    // Atualiza a UI para refletir a remoção da tarefa
     getAllTasks();
     showTasks();
   }
@@ -295,13 +281,13 @@ async function moveTask(taskId) {
     showCancelButton: true,
     inputValidator: async (value) => {
       const destinationColumn = value;
-      // Pesquisa a tarefa dentro do array através taskId 
+      // Pesquisa a tarefa dentro do array através taskId
       let selectedTask = null;
       for (const t of tasks) {
-      if (t.taskId == taskId) {
-      selectedTask = t;
-      break;
-      }
+        if (t.taskId == taskId) {
+          selectedTask = t;
+          break;
+        }
       }
       // Verifica se se está a tentar mover para própria coluna e previne essa ação
       if (selectedTask.column === destinationColumn) {
@@ -315,7 +301,8 @@ async function moveTask(taskId) {
         try {
           await fetch(
             `http://localhost:8080/backend/rest/users/${localStorage.getItem(
-              "username")}/moveTask`,
+              "username"
+            )}/moveTask`,
             {
               method: "PUT",
               headers: {
@@ -333,6 +320,6 @@ async function moveTask(taskId) {
           console.error("Error moving task:", error);
         }
       }
-    }
+    },
   });
 }

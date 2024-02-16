@@ -1,8 +1,8 @@
 /* Criação de variáveis CSS*/
 :root{
-    --color_light: rgb(139, 151, 180);
-    --color_regular: rgb(105, 156, 182);
-    --color_dark: #01041e;
+    --color_light: rgb(186, 190, 201);
+    --color_regular: rgb(93, 166, 202);
+    --color_dark: rgb(9, 32, 44);
     --white: white;
     --type_font: sans-serif;
     --font_size_small: 16px;

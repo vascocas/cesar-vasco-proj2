@@ -74,10 +74,15 @@ async function addTask() {
     priorityInput.value = 100;
   }
 
-  // Check if the start date and end date are not empty
-  if (startDateInput.value.trim() === "" || endDateInput.value.trim() === "") {
-    alert("Por favor preencha as datas.");
+  // Check if the start date is not empty
+  if (startDateInput.value.trim() === "") {
+    alert("Por favor preencha a data inicial.");
     return;
+  }
+
+  // Check if the end date is not empty, if so replace for a default date to give the least priority
+  if (endDateInput.value.trim() === "") {
+    endDateInput.value = "2100-01-01";
   }
 
   // Function to ensure end date is always after start date
@@ -97,7 +102,6 @@ async function addTask() {
     startDate: startDateInput.value,
     endDate: endDateInput.value,
   };
-  console.log(newTask);
   const requestBody = JSON.stringify(newTask);
 
   // Send a POST request to add a new task to the backend server
@@ -120,8 +124,8 @@ async function addTask() {
       tasks.push(newTask);
       response.text().then(function (successMessage) {
         alert(successMessage);
-        // Clear the input fields after adding a new task
-        document.getElementById("newTask_form").reset();
+        // Redirect to Scrum Board page
+        document.location.href = "scrum.html";
       });
     } else {
       response.text().then(function (errorMessage) {
