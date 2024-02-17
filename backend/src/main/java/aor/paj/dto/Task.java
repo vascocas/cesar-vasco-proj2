@@ -1,5 +1,4 @@
 package aor.paj.dto;
-import jakarta.json.bind.annotation.JsonbDateFormat;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDate;
