@@ -9,7 +9,7 @@
   </head>
   <body class="tarefa">
     <header>
-      <!--Cabeçalho-->
+      <!--Header-->
       <h1>SCRUM BOARD</h1>
       <div class="profile-info">
         <div id="pic-container">
@@ -19,27 +19,26 @@
     </div>
     </header>
     <nav>
-      <!--Menu navegação com o botão Voltar ao Scrum Board-->
+      <!--Navigation menu with Back to Scrum Board button-->
       <input type="button" class="btn-nav" value="Voltar" onclick="location.href = 'scrum.html'"/>
     </nav>
     <div class="container">
       <form>
-        <!--Formulário com o título e descriçao da tarefa-->
         <div class="task-form">
           <h1 id="taskH1">TAREFA</h1>
           <div class="textfield">
             <label for="editTask_title" class="label">Título</label>
-            <!--Campo para receber o título-->
+            <!--Field to receive title-->
             <textarea class="editTask_textarea" id="editTask_title" disabled></textarea>
           </div>
           <div class="textfield">
             <label for="editTask_description" class="label">descrição</label>
-            <!--Campo para receber a descrição-->
+            <!--Field to receive description-->
             <textarea class="editTask_textarea" id="editTask_description" disabled></textarea>
           </div>
           <div class="textfield">
             <label for="editTask_priority" class="label">Prioridade</label>
-            <!--Campo para receber a prioridade-->
+            <!--Field to receive priority-->
             <select id="editTask_priority" class="editTask_textarea" disabled>
               <option value="100">Baixa</option>
               <option value="300">Média</option>
@@ -48,18 +47,17 @@
           </div>
           <div class="textfield">
             <label for="editTask_startDate" class="label">Data de início</label>
-            <!--Campo para receber a data inicial-->
+            <!--Field to receive start date-->
             <input type="date" class="editTask_textarea" id="editTask_startDate" disabled>
           </div>
           <div class="textfield">
             <label for="editTask_endDate" class="label">Data de fim</label>
-            <!--Campo para receber a data de conclusão-->
+            <!--Field to receive end date-->
             <input type="date" class="editTask_textarea" id="editTask_endDate" disabled>
           </div>
           <div>
-            <!--Botão editar-->
-            <input
-              type="button" id="editTask_btn_submit" class="btn-submit" value="Editar"/>
+            <!--Edit button-->
+            <input type="button" id="editTask_btn_submit" class="btn-submit" value="&#9998">
           </div>
         </div>
       </form>
@@ -68,6 +66,6 @@
       <p>2024 AoR. Todos os direitos reservados.</p>
     </footer>
   </body>
-  <!--Ficheiro javascript associado-->
+  <!--Associated javascript file-->
   <script src="editTask.js"></script>
 </html>

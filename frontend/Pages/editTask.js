@@ -1,12 +1,14 @@
+// Call user with username stored in localstorage
 window.onload = async function () {
   const loggedInUsername = localStorage.getItem("username");
 
   if (!loggedInUsername) {
-    window.location.href = "login.html"; // Redireciona para a página de login se não houver usuário autenticado
+    // Redirects to the login page if there is no authenticated user
+    window.location.href = "login.html";
     return;
   }
 
-  // Verifica se o usuário está autenticado antes de prosseguir
+  // Checks if the user is authenticated before proceeding
   try {
     const response = await fetch(
       `http://localhost:8080/backend/rest/users/getuser`
@@ -16,21 +18,21 @@ window.onload = async function () {
     }
     const data = await response.json();
     fillProfile(data);
-    console.log("User authenticated:", data);
-    // Se o usuário estiver autenticado, continue com o carregamento da página
+    // If the user is authenticated, continue loading the page
   } catch (error) {
     console.error("Error checking authentication:", error);
-    window.location.href = "login.html"; // Redireciona para a página de login se houver um erro ao verificar a autenticação
+    // Redirects to the login page if there is an error verifying authentication
+    window.location.href = "login.html";
   }
 };
 
-//Carrega toda a informação do user
+// Load all user information
 function fillProfile(user) {
-  // Atualizar a mensagem de boas vindas com o nome de utilizador
+  // Update the welcome message with the username
   document.getElementById("logged-in-username").innerHTML =
     "Bem vindo, " + user.username;
 
-  //Imagem de perfil
+  //Profile image
   const profilePic = document.querySelector(".profile-pic");
   if (user.photo) {
     profilePic.src = user.photo;
@@ -52,7 +54,7 @@ async function getAllTasks() {
       {
         method: "GET",
         headers: {
-          "Accept": "application/json",
+          Accept: "application/json",
         },
       }
     );
@@ -66,8 +68,16 @@ async function getAllTasks() {
 (async function () {
   try {
     await getAllTasks();
-    // Access tasks here
-    const index = sessionStorage.getItem("index");
+
+    // Access task here
+    const selectedId = sessionStorage.getItem("taskId");
+    let selectedTask = null;
+    for (const t of tasks) {
+      if (t.taskId == selectedId) {
+        selectedTask = t;
+        break;
+      }
+    }
 
     // Declare and assign variables to the title and description elements of the task
     let titleText = document.getElementById("editTask_title");
@@ -77,31 +87,27 @@ async function getAllTasks() {
     let endDateText = document.getElementById("editTask_endDate");
 
     // Assign values to the attributes of the selected task
-    titleText.value = tasks[index].title;
-    descriptionText.value = tasks[index].description;
-    priorityText.value = tasks[index].priority;
-    startDateText.value = tasks[index].startDate;
-    endDateText.value = tasks[index].endDate;
-
-    // Create this variable to store the value for the PUT html request
-    let queryText = tasks[index].title;
+    titleText.value = selectedTask.title;
+    descriptionText.value = selectedTask.description;
+    priorityText.value = selectedTask.priority;
+    startDateText.value = selectedTask.startDate;
+    endDateText.value = selectedTask.endDate;
 
     // Add an Event Listener to the Edit Task button
     const editButton = document.getElementById("editTask_btn_submit");
     editButton.onclick = editTask;
-    
 
-    // On click and the button is labeled "Edit"
+    // On click and the button is with edit sign
     async function editTask() {
       // Edit task logic
-      if (editButton.value === "Editar") {
+      if (editButton.value === "✎") {
         // Make the text fields editable
         titleText.disabled = false;
         descriptionText.disabled = false;
         priorityText.disabled = false;
         startDateText.disabled = false;
         endDateText.disabled = false;
-        // Change the button name to "Save"
+        // Change the button name to "Gravar"
         editButton.value = "Gravar";
       }
       // Save task logic
@@ -110,7 +116,9 @@ async function getAllTasks() {
         // Check maximum length of title
         if (titleText.value.length > maxLength) {
           alert(
-            "Ultrapassou o máximo de caracteres para o título= " + maxLength + "!"
+            "Ultrapassou o máximo de caracteres para o título= " +
+              maxLength +
+              "!"
           );
           return;
         }
@@ -119,59 +127,65 @@ async function getAllTasks() {
           alert("Por favor preencha o título.");
           return;
         }
-      
+
         // Check if the start date is not empty
         if (startDateText.value.trim() === "") {
           alert("Por favor preencha a data inicial.");
           return;
         }
-      
+
+        // Check if the end date is not empty, if so replace for a default date to give the least priority
+        if (endDateText.value.trim() === "") {
+          endDateText.value = "2100-01-01";
+        }
+
         // Function to ensure end date is always after start date
         const startDate = new Date(startDateText.value);
         const endDate = new Date(endDateText.value);
-      
+
         if (endDate < startDate) {
           alert("A data de conclusão não pode ser anterior à data inicial.");
           endDateText.value = ""; // Clear the end date field
           return;
         }
-        
-          // Update the task on the server
-          const requestBody = JSON.stringify({
-            title: titleText.value,
-            description: descriptionText.value,
-            priority: priorityText.value,
-            startDate: startDateText.value,
-            endDate: endDateText.value,
-          });
 
-          const response = await fetch(
-            `http://localhost:8080/backend/rest/users/${localStorage.getItem("username")}/updateTask/?taskTitle=` + encodeURIComponent(queryText),
-            {
-              method: "PUT",
-              headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                username: localStorage.getItem("username"),
-                password: localStorage.getItem("password"),
-              },
-              body: requestBody,
-            }
-          );
-          if (response.status === 200) {
-            const successMessage = await response.text();
-            alert(successMessage);
-          } else {
-            const errorMessage = await response.text();
-            alert(errorMessage);
+        // Update the task on the server
+        const requestBody = JSON.stringify({
+          title: titleText.value,
+          description: descriptionText.value,
+          priority: priorityText.value,
+          startDate: startDateText.value,
+          endDate: endDateText.valueDate,
+        });
+
+        const response = await fetch(
+          `http://localhost:8080/backend/rest/users/${localStorage.getItem(
+            "username"
+          )}/updateTask/?iD=` + encodeURIComponent(selectedId),
+          {
+            method: "PUT",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              username: localStorage.getItem("username"),
+              password: localStorage.getItem("password"),
+            },
+            body: requestBody,
           }
-
-          // Redirect to Scrum Board page
-          document.location.href = "scrum.html";
+        );
+        if (response.status === 200) {
+          const successMessage = await response.text();
+          alert(successMessage);
+        } else {
+          const errorMessage = await response.text();
+          alert(errorMessage);
         }
+
+        // Redirect to Scrum Board page
+        document.location.href = "scrum.html";
       }
     }
-   catch (error) {
+  } catch (error) {
     console.error("Error fetching tasks:", error);
   }
 })();

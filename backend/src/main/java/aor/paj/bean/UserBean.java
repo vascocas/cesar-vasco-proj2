@@ -216,10 +216,14 @@ public class UserBean implements Serializable {
         else return false;
     }
 
-    public boolean verifyTaskTitle(String userPath, String title) {
+    public boolean verifyTaskId(String userPath, long iD) {
         boolean exist = false;
-        for (Task existingTask : getUser(userPath).getUserTasks()) {
-            if (existingTask.getTitle().equals(title)) {
+        User user = getUser(userPath);
+        if (user == null) {
+            return false;
+        }
+        for (Task t : user.getUserTasks()) {
+            if (t.getTaskId()==iD) {
                 exist = true;
             }
         }
@@ -240,34 +244,50 @@ public class UserBean implements Serializable {
     }
 
     public ArrayList<Task> getTasks(String username) {
-
         return getUser(username).getUserTasks();
     }
 
-    public boolean removeTask(String userPath, String title) {
-        for (Task t : getUser(userPath).getUserTasks()) {
-            if (t.getTitle().equals(title)) {
-                getUser(userPath).getUserTasks().remove(t);
+
+    public boolean removeTask(String userPath, long iD) {
+        User user = getUser(userPath);
+        if (user == null) {
+            return false;
+        }
+        for (Task t : user.getUserTasks()) {
+            if (t.getTaskId()==iD) {
+                user.getUserTasks().remove(t);
                 return true;
             }
         }
         return false;
     }
 
-    public boolean moveTask(String userPath, String title, String newColumn) {
-        for (Task t : getUser(userPath).getUserTasks()) {
-            if (t.getTitle().equals(title)) {
-                t.setColumn(newColumn);
-                writeIntoJsonFile();
-                return true;
+    public boolean moveTask(String userPath, long iD, String newColumn) {
+        User user = getUser(userPath);
+        if (user == null) {
+            return false;
+        }
+        for (Task t : user.getUserTasks()) {
+            if (t.getTaskId() == iD) {
+                if (t.getColumn().equals(newColumn)) {
+                    return false;
+                } else {
+                    t.setColumn(newColumn);
+                    writeIntoJsonFile();
+                    return true;
+                }
             }
         }
         return false;
     }
 
-    public boolean updateTask(String userPath, String title, String newTitle, String newDescription, int newPriority, LocalDate newStartDate, LocalDate newEndDate) {
-        for (Task t : getUser(userPath).getUserTasks()) {
-            if (t.getTitle().equals(title)) {
+    public boolean updateTask(String userPath, long iD, String newTitle, String newDescription, int newPriority, LocalDate newStartDate, LocalDate newEndDate) {
+        User user = getUser(userPath);
+        if (user == null) {
+            return false;
+        }
+        for (Task t : user.getUserTasks()) {
+            if (t.getTaskId()==iD) {
                 t.setTitle(newTitle);
                 t.setDescription(newDescription);
                 t.setPriority(newPriority);

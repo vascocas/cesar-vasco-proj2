@@ -2,11 +2,12 @@ window.onload = async function () {
   const loggedInUsername = localStorage.getItem("username");
 
   if (!loggedInUsername) {
-    window.location.href = "login.html"; // Redireciona para a página de login se não houver usuário autenticado
+    // Redirects to the login page if there is no authenticated user
+    window.location.href = "login.html";
     return;
   }
 
-  // Verifica se o usuário está autenticado antes de prosseguir
+  // Checks if the user is authenticated before proceeding
   try {
     const response = await fetch(
       `http://localhost:8080/backend/rest/users/getuser`
@@ -18,17 +19,18 @@ window.onload = async function () {
     fillProfile(data);
   } catch (error) {
     console.error("Error checking authentication:", error);
-    window.location.href = "login.html"; // Redireciona para a página de login se houver um erro ao verificar a autenticação
+    // Redirects to the login page if there is an error verifying authentication
+    window.location.href = "login.html";
   }
 };
 
-//Carrega toda a informação do user
+// Load all user information
 function fillProfile(user) {
-  // Atualizar a mensagem de boas vindas com o nome de utilizador
+  // Update the welcome message with the username
   document.getElementById("logged-in-username").innerHTML =
     "Bem vindo, " + user.username;
 
-  //Imagem de perfil
+  //Profile image
   const profilePic = document.querySelector(".profile-pic");
   if (user.photo) {
     profilePic.src = user.photo;
@@ -62,6 +64,7 @@ async function addTask() {
     );
     return;
   }
+
   // Prevent creating tasks with empty title
   else if (titleInput.value === "") {
     alert("Por favor preencha o título.");
@@ -79,13 +82,18 @@ async function addTask() {
     return;
   }
 
+  // Check if the end date is not empty, if so replace for a default date to give the least priority
+  if (endDateInput.value.trim() === "") {
+    endDateInput.value = "2100-01-01";
+  }
+
   // Function to ensure end date is always after start date
   const startDate = new Date(startDateInput.value);
   const endDate = new Date(endDateInput.value);
-
   if (endDate < startDate) {
     alert("A data de conclusão não pode ser anterior à data inicial.");
-    endDateInput.value = ""; // Clear the end date field
+    // Clear the end date field
+    endDateInput.value = "";
     return;
   }
 
@@ -107,10 +115,10 @@ async function addTask() {
     {
       method: "POST",
       headers: {
-        "Accept": "application/json",
+        Accept: "application/json",
         "Content-Type": "application/json",
-        "username": localStorage.getItem("username"),
-        "password": localStorage.getItem("password")
+        username: localStorage.getItem("username"),
+        password: localStorage.getItem("password"),
       },
       body: requestBody,
     }
@@ -119,8 +127,8 @@ async function addTask() {
       tasks.push(newTask);
       response.text().then(function (successMessage) {
         alert(successMessage);
-        // Clear the input fields after adding a new task
-        document.getElementById("newTask_form").reset();
+        // Redirect to Scrum Board page
+        document.location.href = "scrum.html";
       });
     } else {
       response.text().then(function (errorMessage) {
