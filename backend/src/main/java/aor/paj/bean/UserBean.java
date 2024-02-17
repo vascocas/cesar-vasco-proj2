@@ -2,18 +2,20 @@ package aor.paj.bean;
 
 import aor.paj.dto.Task;
 import aor.paj.dto.User;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
+import jakarta.json.bind.JsonbException;
 
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 @ApplicationScoped
 public class UserBean implements Serializable {
@@ -29,14 +31,27 @@ public class UserBean implements Serializable {
     public UserBean() {
         File f = new File(filename);
         if(f.exists()){
+            FileReader filereader = null;
             try {
-                FileReader filereader = new FileReader(f);
+                filereader = new FileReader(f);
                 users = JsonbBuilder.create().fromJson(filereader, new ArrayList<User>() {}.getClass().getGenericSuperclass());
             } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Arquivo não encontrado: " + filename, e);
+            } catch (JsonbException e) {
+                throw new RuntimeException("Erro ao desserializar o JSON do arquivo: " + filename, e);
+            } finally {
+                if (filereader != null) {
+                    try {
+                        filereader.close();
+                    } catch (IOException e) {
+                        // Logar ou lidar com a exceção de fechamento do FileReader
+                        e.printStackTrace();
+                    }
+                }
             }
-        }else
+        } else {
             users = new ArrayList<User>();
+        }
     }
 
     public UserBean(String filePath) {
@@ -91,7 +106,7 @@ public class UserBean implements Serializable {
         return false;
     }
 
-    private void writeIntoJsonFile(){
+    public void writeIntoJsonFile(){
         Jsonb jsonb =  JsonbBuilder.create(new JsonbConfig().withFormatting(true));
         try {
             jsonb.toJson(users, new FileOutputStream(filename));
@@ -203,10 +218,17 @@ public class UserBean implements Serializable {
         return exist;
     }
 
-    public void addTaskUser(String username, Task t) {
-        User u = getUser(username);
-        u.getUserTasks().add(t);
-        writeIntoJsonFile();
+    public void addTaskUser(String username, Task task) {
+        User user = getUser(username);
+        if (user != null) {
+            ArrayList<Task> userTasks = user.getUserTasks();
+            if (userTasks == null) {
+                userTasks = new ArrayList<>();
+                user.setUserTasks(userTasks);
+            }
+            userTasks.add(task);
+            writeIntoJsonFile();
+        }
     }
 
     public ArrayList<Task> getTasks(String username) {
@@ -251,16 +273,33 @@ public class UserBean implements Serializable {
     }
 
     private ArrayList<User> readFromJsonFile() {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            File file = new File(filePath);
-            if (!file.exists()) {
-                return new ArrayList<>(); // Se o arquivo não existe, retorna uma lista vazia
+        ArrayList<User> userList = new ArrayList<>();
+        File file = new File(filePath);
+        if (!file.exists()) {
+            return userList; // Se o arquivo não existe, retorna uma lista vazia
+        }
+
+        try (InputStream inputStream = new FileInputStream(file);
+             JsonReader jsonReader = Json.createReader(inputStream)) {
+
+            JsonArray jsonArray = jsonReader.readArray();
+            for (JsonObject jsonObject : jsonArray.getValuesAs(jakarta.json.JsonObject.class)) {
+                // Extrair os campos do objeto JSON e criar um objeto User
+                String username = jsonObject.getString("username");
+                String password = jsonObject.getString("password");
+                String email = jsonObject.getString("email");
+                String firstName = jsonObject.getString("firstName");
+                String lastName = jsonObject.getString("lastName");
+                String phoneNumber = jsonObject.getString("phoneNumber");
+                String photo = jsonObject.getString("photo");
+
+                User user = new User(username, password, email, firstName, lastName, phoneNumber, photo);
+                userList.add(user);
             }
-            return mapper.readValue(file, new TypeReference<ArrayList<User>>() {});
         } catch (IOException e) {
             e.printStackTrace();
-            return new ArrayList<>(); // Em caso de erro, retorna uma lista vazia
         }
+
+        return userList;
     }
 }
