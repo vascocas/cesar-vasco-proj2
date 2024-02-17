@@ -206,7 +206,8 @@ nav {
   font-size: var(--font_size_small);
   box-shadow: 5px 5px 20px -12px;
   border: 2px solid var(--color_regular);
-  word-wrap: break-word;  
+  word-wrap: break-word; 
+  resize: none;
 }
 
 #newTask_title::placeholder,

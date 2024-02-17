@@ -109,7 +109,7 @@ async function getAllTasks() {
     // Sort tasks before call show tasks
     tasks = sortTasks(preTasks);
     // Call showTasks function
-    showTasks(); 
+    showTasks();
   } catch (error) {
     console.error("Error fetching tasks:", error);
   }
@@ -299,28 +299,34 @@ async function moveTask(taskId) {
           taskId: taskId,
           column: destinationColumn,
         });
-        try {
-          await fetch(
-            `http://localhost:8080/backend/rest/users/${localStorage.getItem(
-              "username"
-            )}/moveTask`,
-            {
-              method: "PUT",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                username: localStorage.getItem("username"),
-                password: localStorage.getItem("password"),
-              },
-              body: requestBody,
-            }
-          );
-          // Fetch all tasks again to update UI
-          await getAllTasks();
-          showTasks();
-        } catch (error) {
-          console.error("Error moving task:", error);
-        }
+        await fetch(
+          `http://localhost:8080/backend/rest/users/${localStorage.getItem(
+            "username"
+          )}/moveTask`,
+          {
+            method: "PUT",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              username: localStorage.getItem("username"),
+              password: localStorage.getItem("password"),
+            },
+            body: requestBody,
+          }
+        ).then(function (response) {
+          if (response.status === 200) {
+            response.text().then(function (successMessage) {
+              console.log(successMessage);
+            });
+          } else {
+            response.text().then(function (errorMessage) {
+              alert(errorMessage);
+            });
+          }
+        });
+        // Fetch all tasks again to update UI
+        getAllTasks();
+        showTasks();
       }
     },
   });

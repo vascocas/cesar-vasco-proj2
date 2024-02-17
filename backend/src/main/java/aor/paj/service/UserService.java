@@ -210,8 +210,12 @@ public class UserService {
     @GET
     @Path("{username}/tasks")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Task> getTasks(@PathParam("username") String userPath) {
-        return userBean.getTasks(userPath);
+    public Response getTasks(@PathParam("username") String userPath) {
+        if (userBean.getUser(userPath)==null) {
+            return Response.status(404).entity("Utilizador não existe").build();
+        }
+        List<Task> tasks = userBean.getTasks(userPath);
+        return Response.status(200).entity(tasks).build();
     }
 
     // Delete Task

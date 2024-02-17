@@ -32,7 +32,115 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": " {\r\n    \"title\":\"Teste1234\",\r\n    \"description\": \"descrição_nova_tarefa\",\r\n    \"priority\": 100,\r\n    \"startDate\": \"2024-02-07\",\r\n    \"endDate\": \"2024-02-07\"\r\n}",
+							"raw": " {\r\n    \"title\":\"Teste12345\",\r\n    \"description\": \"descrição_nova_tarefa\",\r\n    \"priority\": 100,\r\n    \"startDate\": \"2024-02-06\",\r\n    \"endDate\": \"2024-02-07\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/backend/rest/users/:username/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"backend",
+								"rest",
+								"users",
+								":username",
+								"tasks"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "{{username}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add task wrong user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "{{$randomUserName}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"title\":\"Teste12345\",\r\n    \"description\": \"descrição_nova_tarefa\",\r\n    \"priority\": 100,\r\n    \"startDate\": \"2024-02-06\",\r\n    \"endDate\": \"2024-02-07\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/backend/rest/users/:username/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"backend",
+								"rest",
+								"users",
+								":username",
+								"tasks"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "{{username}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add task empty task name",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"title\":\"\",\r\n    \"description\": \"descrição_nova_tarefa\",\r\n    \"priority\": 100,\r\n    \"startDate\": \"2024-02-06\",\r\n    \"endDate\": \"2024-02-07\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -93,6 +201,35 @@
 					"response": []
 				},
 				{
+					"name": "Get all tasks wrong user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/backend/rest/users/:username/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"backend",
+								"rest",
+								"users",
+								":username",
+								"tasks"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "{{$randomUserName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Delete task",
 					"request": {
 						"method": "DELETE",
@@ -118,7 +255,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/backend/rest/users/vas/delete/?iD={{taskId2}}",
+							"raw": "http://localhost:8080/backend/rest/users/:username/delete/?iD={{taskId2}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -128,7 +265,7 @@
 								"backend",
 								"rest",
 								"users",
-								"vas",
+								":username",
 								"delete",
 								""
 							],
@@ -136,6 +273,124 @@
 								{
 									"key": "iD",
 									"value": "{{taskId2}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "{{username}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete task wrong user",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{$randomUserName}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/backend/rest/users/:username/delete/?iD={{taskId2}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"backend",
+								"rest",
+								"users",
+								":username",
+								"delete",
+								""
+							],
+							"query": [
+								{
+									"key": "iD",
+									"value": "{{taskId2}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "{{username}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete task wrong Id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/backend/rest/users/:username/delete/?iD=123",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"backend",
+								"rest",
+								"users",
+								":username",
+								"delete",
+								""
+							],
+							"query": [
+								{
+									"key": "iD",
+									"value": "123"
+								}
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "{{username}}"
 								}
 							]
 						}
@@ -160,7 +415,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": " {\r\n    \"endDate\": \"01.12.2024\",\r\n    \"priority\": \"500\",\r\n    \"startDate\": \"01.01.2024\",\r\n    \"description\": \"descricao do testes\",\r\n    \"title\":\"tarefa_teste_15\"\r\n}",
+							"raw": "{\r\n        \"column\": \"done-cards\",\r\n        \"description\": \"tterfds\",\r\n        \"endDate\": \"2100-01-01\",\r\n        \"priority\": 300,\r\n        \"startDate\": \"2024-02-23\",\r\n        \"taskId\": 1708095362,\r\n        \"title\": \"Tarefa_teste_123\"\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -168,7 +423,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/backend/rest/users/vas/updateTask/?iD={{taskId1}}",
+							"raw": "http://localhost:8080/backend/rest/users/:username/updateTask/?iD={{taskId1}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -178,7 +433,7 @@
 								"backend",
 								"rest",
 								"users",
-								"vas",
+								":username",
 								"updateTask",
 								""
 							],
@@ -186,6 +441,124 @@
 								{
 									"key": "iD",
 									"value": "{{taskId1}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "{{username}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update task wrong password",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{$randomPassword}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"column\": \"done-cards\",\r\n        \"description\": \"tterfds\",\r\n        \"endDate\": \"2100-01-01\",\r\n        \"priority\": 300,\r\n        \"startDate\": \"2024-02-23\",\r\n        \"taskId\": 1708095362,\r\n        \"title\": \"Tarefa_teste_123\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/backend/rest/users/:username/updateTask/?iD={{taskId1}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"backend",
+								"rest",
+								"users",
+								":username",
+								"updateTask",
+								""
+							],
+							"query": [
+								{
+									"key": "iD",
+									"value": "{{taskId1}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "{{username}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update task empty task name",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"column\": \"done-cards\",\r\n        \"description\": \"tterfds\",\r\n        \"endDate\": \"2100-01-01\",\r\n        \"priority\": 300,\r\n        \"startDate\": \"2024-02-23\",\r\n        \"taskId\": 1708095362,\r\n        \"title\": \"\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/backend/rest/users/:username/updateTask/?iD={{taskId1}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"backend",
+								"rest",
+								"users",
+								":username",
+								"updateTask",
+								""
+							],
+							"query": [
+								{
+									"key": "iD",
+									"value": "{{taskId1}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "{{username}}"
 								}
 							]
 						}
@@ -218,7 +591,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/backend/rest/users/vasco/moveTask",
+							"raw": "http://localhost:8080/backend/rest/users/:username/moveTask",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -228,8 +601,63 @@
 								"backend",
 								"rest",
 								"users",
-								"vasco",
+								":username",
 								"moveTask"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "{{username}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Move task wrong destination",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "username",
+								"value": "{{username}}",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"taskId\": 1708076882,\r\n    \"column\":\"doing\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/backend/rest/users/:username/moveTask",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"backend",
+								"rest",
+								"users",
+								":username",
+								"moveTask"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "{{username}}"
+								}
 							]
 						}
 					},
