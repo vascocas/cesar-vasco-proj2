@@ -60,6 +60,21 @@ footer{
     flex-direction: column;
     margin-right: 20px;
 }
+
+.left-login-image:hover{
+    cursor: pointer;
+}
+
+#signup_footer{
+    width: 100%;
+    height: 25px;
+    font-family: var(--type_font);
+    font-size: var(--font_size_medium_low);
+    color: var(--white);
+    text-align: center;
+    bottom: 0;
+    background: var(--color_regular);
+}
  
 footer p{
     margin: 0;

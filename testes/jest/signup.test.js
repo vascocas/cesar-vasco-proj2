@@ -24,11 +24,11 @@ test("Obter todos os users", async () => {
     const users = await signup.getAllUsers();
     expect(users).toContainEqual({
         email: "user1@abc.pt",
-        firstName: "alterado",
+        firstName: "user",
         lastName: "1",
         password: "123B5",
-        phoneNumber: "91123456",
-        photo: "https://a.storyblok.com/f/191576/1200x800/faa88c639f/round_profil_picture_before_.webp",
+        phoneNumber: "912345678",
+        photo: "https://tinyjpg.com/images/social/website.jpg",
         userTasks: [],
         username: "user1"
     });

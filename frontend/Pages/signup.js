@@ -18,8 +18,12 @@ if(typeof window !== 'undefined') {
 
             const usernameExists = await checkIfUsernameExists(username.value);
 
+            console.log(phonenumberValid(phoneNumber) + " phone");
+            console.log(isPasswordValid(password.value) + " password");
+            console.log(usernameExists + " user");
 
-            if(registed===201 && phonenumberValid(phoneNumber) && isPasswordValid(password) && !usernameExists) {
+
+            if(registed===201 && phonenumberValid(phoneNumber) && isPasswordValid(password.value)) {
                 alert('Registo efetuado com sucesso.');
                 // Limpa o formulário após a submissão
                 document.getElementById('registerForm').reset();
@@ -34,6 +38,11 @@ if(typeof window !== 'undefined') {
                 alert('Número de telefone inválido.');
             }
              
+        });
+
+        document.querySelector(".left-login-image").addEventListener("click", function() {
+
+            window.location.href="../index.html";
         });
 
     });
@@ -113,7 +122,7 @@ async function checkIfUsernameExists(input) {
     // Verifica se o input já existe entre os usuários
     for (let user of users) {
         if (user.username === input) {
-            return true; // Se encontrar, retorna true
+            return true;
         }
     }
     return false;

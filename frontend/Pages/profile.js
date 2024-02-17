@@ -28,9 +28,20 @@ btnEditPhoto.addEventListener('click', function(){
 })
 
 //Atualiza foto instantaneamente
-document.getElementById('profile_url').addEventListener('change',function(){
-    readPhoto;
-})
+document.getElementById('profile_url').addEventListener('input', function(){
+    let url = this.value.trim(); // Obter o value do input
+    let photoInst = document.getElementById('profile-picModal');
+
+    // Verificar URL
+    if (url !== '') {
+        // Update o src para o novo URL
+        photoInst.src = url;
+        document.getElementsByClassName("profile-pic")[0].src = url;
+    } else {
+        // Se o URL é vazio, atualiza o src para a imagem padrão
+        photoInst.src = '../Resources/profile_pic_default.png';
+    }
+});
 
 //Clicar no título reencaminha para scrum.html
 let btn_title = document.getElementById('profile_titlePage');
@@ -95,7 +106,7 @@ document.getElementById('profile_save').addEventListener('click', async function
 });
 
 
-function checkAuthentication(){
+/*function checkAuthentication(){
     fetch(`http://localhost:8080/backend/rest/getuser`)
     .then(response => {
       if (!response.ok) {
@@ -110,7 +121,7 @@ function checkAuthentication(){
     .catch(error => {
         window.location.href = 'login.html';
     });
-}
+}*/
   
 function showProfilePage(){
 window.location.href = 'profile.html';
@@ -208,7 +219,9 @@ function phonenumberValid(input) {
   let phone = /^([9]{1})([0-9]{8})$/;
   if(input.value.match(phone)) {
         return input.value;
-    } else {
+    } else if(input.value==""){
+        return input.placeholder;
+    }else{
         alert('Invalid phone number. Your previous number is unchanged.');
         return input.placeholder;
     }
@@ -227,6 +240,7 @@ function goToScrum(){
     window.location.href = 'scrum.html';
 }
 
+//Abrir Modal Password
 function openPassModal(){
     //Desfoca o background do modal
     document.getElementsByClassName("container")[0].style.filter = "blur(5px)";
@@ -281,21 +295,11 @@ document.getElementById('changePasswordForm').addEventListener('submit', async f
 
     } else {
         alert('Failed to change password.');
-        }
+    }
 });
 
 
-function readPhoto(){
-    let photoInst = document.getElementById('profile-picModal');
-    let url = document.getElementById('profile_url').value;
-
-    if (url !== '') {
-        photoInst.src = url;
-    } else {
-        photoInst.src = document.getElementById('profile_url').placeholder;
-    }
-}
-
+//Função que verifica se o usuário está efetivamente logado
 async function loadPage(){
 
   if (!loggedInUsername) {
