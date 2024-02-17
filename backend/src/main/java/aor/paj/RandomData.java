@@ -1,10 +1,9 @@
 package aor.paj;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import java.io.FileWriter;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -12,11 +11,15 @@ import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
-
+import aor.paj.dto.Task;
 import aor.paj.bean.UserBean;
 import aor.paj.dto.User;
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
 
 public class RandomData {
 
@@ -26,9 +29,11 @@ public class RandomData {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         if (args.length < 2) {
-            System.out.println("Uso: java -jar clientapp.jar <comando> <argumentos>");
+            System.out.println("Argumentos insuficientes");
             return;
         }
+
+        UserBean userBean = new UserBean(FILE_PATH); // leitura do ficheiro json
 
         String command = args[0];
 
@@ -39,7 +44,7 @@ public class RandomData {
                     return;
                 }
                 int numUsers = Integer.parseInt(args[1]);
-                adicionarUsuarios(numUsers);
+                adicionarUsuarios(numUsers, userBean);
                 break;
             case "add_tasks":
                 if (args.length != 4) {
@@ -49,14 +54,21 @@ public class RandomData {
                 String username = args[1];
                 String password = args[2];
                 int numTasks = Integer.parseInt(args[3]);
-                adicionarTarefas(username, password, numTasks);
+                adicionarTarefas(username, password, numTasks, userBean);
                 break;
             default:
                 System.out.println("Comando inválido");
         }
     }
 
-    private static void adicionarTarefas(String usuario, String senha, int quantidade) {
+    /**
+     *
+     * @param user
+     * @param password
+     * @param quantidade
+     * @param userBean
+     */
+    private static void adicionarTarefas(String user, String password, int quantidade, UserBean userBean) {
         try {
             for (int i = 0; i < quantidade; i++) {
                 // Chamada à API Boredapi para obter uma nova tarefa aleatória
@@ -67,21 +79,44 @@ public class RandomData {
                 int responseCode = connection.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     // Ler a resposta da API
-                    String responseBody = connection.getResponseMessage();
-                    System.out.println("Tarefa obtida: " + responseBody);
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder responseBody = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        responseBody.append(line);
+                    }
+                    reader.close();
 
+                    // Analisar a resposta JSON
+                    JsonObject jsonObject = Json.createReader(new StringReader(responseBody.toString())).readObject();
+                    String tarefa = jsonObject.getString("activity");
 
-                    System.out.println("Tarefa adicionada para o usuário " + usuario);
+                    // Criar uma nova instância de Task com os dados obtidos da API
+                    Task task = new Task(tarefa, "", 100, LocalDate.now(), LocalDate.now().plusDays(1));
+
+                    // Adicionar a tarefa ao user
+                    userBean.addTaskUser(user, task);
+
+                    System.out.println("Tarefa adicionada a " + user);
                 } else {
                     System.out.println("Falha ao obter tarefa aleatória. Código de resposta: " + responseCode);
                 }
             }
+
+            userBean.writeIntoJsonFile();
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void adicionarUsuarios(int quantidade) {
+    /**
+     *
+     * @param quantidade
+     * @param userBean
+     */
+    private static void adicionarUsuarios(int quantidade, UserBean userBean) {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(RANDOM_USER_API_URL + "?results=" + quantidade))
@@ -95,11 +130,14 @@ public class RandomData {
                 JsonObject jsonResponse = jsonReader.readObject();
 
                 if (jsonResponse.containsKey("results")) {
-                    List<User> userList = new ArrayList<>();
+                    JsonArray resultsArray = jsonResponse.getJsonArray("results");
 
-                    jsonResponse.getJsonArray("results").forEach(result -> {
+                    ArrayList<User> userList = new ArrayList<>();
+
+                    resultsArray.forEach(result -> {
                         JsonObject userJson = (JsonObject) result;
 
+                        //Grava informação da API
                         String username = userJson.getJsonObject("login").getString("username");
                         String password = userJson.getJsonObject("login").getString("password");
                         String email = userJson.getString("email");
@@ -113,10 +151,9 @@ public class RandomData {
                     });
 
                     // Adicionar os usuários ao arquivo JSON
-
-                    adicionarUsuariosAoJSON(userList);
+                    adicionarUsuariosAoJSON(userList, userBean);
                 } else {
-                    System.out.println("Erro ao processar a resposta da API Randomuser");
+                    System.out.println("Erro ao processar a resposta da API Randomuser: 'results' não encontrado");
                 }
             } else {
                 System.out.println("Falha ao chamar a API Randomuser. Código de resposta: " + response.statusCode());
@@ -126,15 +163,16 @@ public class RandomData {
         }
     }
 
-    private static void adicionarUsuariosAoJSON(List<User> userList) {
-        try (FileWriter fileWriter = new FileWriter(FILE_PATH)) {
-            for (User user : userList) {
-                UserBean userBean = new UserBean(FILE_PATH);
-                userBean.addUser(user);
-            }
-            System.out.println("Usuários adicionados ao arquivo JSON com sucesso.");
-        } catch (IOException e) {
-            e.printStackTrace();
+    /**
+     *
+     * @param userList
+     * @param userBean
+     */
+    private static void adicionarUsuariosAoJSON(ArrayList<User> userList, UserBean userBean) {
+        for (User user : userList) {
+            userBean.addUser(user); // Adicionar cada usuário à instância de UserBean
         }
+        System.out.println("Usuários adicionados ao arquivo JSON com sucesso.");
     }
+
 }
