@@ -77,15 +77,15 @@ nav {
 }
 
 .high-priority{
-  background-color: red;
+  background-color: var(--color_high_priority);
 }
 
 .medium-priority{
-  background-color: yellow;
+  background-color: var(--color_medium_priority);
 }
 
 .low-priority{
-  background-color: green;
+  background-color: var(--color_low_priority);
 }
 
 .card-header {
@@ -201,12 +201,13 @@ nav {
   border: none;
   border-radius: 10px;
   background: var(--color_light);
-  color: var(--white);
+  color: var(--black);
   font-family: var(--type_font);
   font-size: var(--font_size_small);
   box-shadow: 5px 5px 20px -12px;
   border: 2px solid var(--color_regular);
-  word-wrap: break-word;  
+  word-wrap: break-word; 
+  resize: none;
 }
 
 #newTask_title::placeholder,

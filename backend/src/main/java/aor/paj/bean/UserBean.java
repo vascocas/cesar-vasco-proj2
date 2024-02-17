@@ -202,9 +202,9 @@ public class UserBean implements Serializable {
     }
 
     public ArrayList<Task> getTasks(String username) {
-
         return getUser(username).getUserTasks();
     }
+
 
     public boolean removeTask(String userPath, long iD) {
         User user = getUser(userPath);

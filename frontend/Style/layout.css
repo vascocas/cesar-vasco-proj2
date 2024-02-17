@@ -4,6 +4,10 @@
     --color_regular: rgb(93, 166, 202);
     --color_dark: rgb(9, 32, 44);
     --white: white;
+    --black: black;
+    --color_high_priority: red;
+    --color_medium_priority: rgb(180, 180, 27);
+    --color_low_priority: green;
     --type_font: sans-serif;
     --font_size_small: 16px;
     --font_size_medium_low: 20px;
