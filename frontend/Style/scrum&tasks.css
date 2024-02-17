@@ -211,11 +211,10 @@ nav {
 }
 
 #newTask_title::placeholder,
-#newTask_description::placeholder,
-#newTask_priority::placeholder {
+#newTask_description::placeholder {
   font-family:var(--type_font);
   font-size: var(--font_size_small);
-  color: var(--color_light);
+  color: var(--black);
 }
 
 #logged-in-username{

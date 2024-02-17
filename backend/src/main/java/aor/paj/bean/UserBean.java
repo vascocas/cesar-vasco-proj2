@@ -16,10 +16,6 @@ import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 import jakarta.json.bind.JsonbException;
 
-import java.io.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
-
 @ApplicationScoped
 public class UserBean implements Serializable {
 
@@ -59,6 +55,15 @@ public class UserBean implements Serializable {
     public UserBean(String filePath) {
         this.filePath = filePath;
         this.users = readFromJsonFile();
+    }
+
+    public void writeIntoJsonFile(){
+        Jsonb jsonb =  JsonbBuilder.create(new JsonbConfig().withFormatting(true));
+        try {
+            jsonb.toJson(users, new FileOutputStream(filename));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void addUser(User u) {
@@ -106,15 +111,6 @@ public class UserBean implements Serializable {
             }
         }
         return false;
-    }
-
-    public void writeIntoJsonFile(){
-        Jsonb jsonb =  JsonbBuilder.create(new JsonbConfig().withFormatting(true));
-        try {
-            jsonb.toJson(users, new FileOutputStream(filename));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public boolean usernameExists(String username,ArrayList<User> users){
