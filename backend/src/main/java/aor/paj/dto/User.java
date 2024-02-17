@@ -42,10 +42,8 @@ public class User {
     @XmlElement
     private ArrayList<Task> userTasks;
 
-
     public User() {
     }
-
     public User(String username, String password, String email, String firstName, String lastName, String phoneNumber, String photo) {
         this.username = username;
         this.password = password;

@@ -2,7 +2,6 @@ package aor.paj.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import aor.paj.bean.UserBean;
 import aor.paj.dto.Task;
 import aor.paj.dto.User;
@@ -23,7 +22,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.Path;
 
-
 @Path("/users")
 public class UserService {
 
@@ -32,7 +30,6 @@ public class UserService {
 
     @Context
     private HttpServletRequest request;
-
 
     @GET
     @Path("/all")
@@ -123,7 +120,7 @@ public class UserService {
                              @HeaderParam("phoneNumber") String phoneNumber,
                              @HeaderParam("photo") String photo) {
 
-        ArrayList users = userBean.getUsers();
+        ArrayList<User> users = userBean.getUsers();
 
         if (username == null || username.isEmpty() || password == null || password.isEmpty() || email == null || email.isEmpty()) {
             return Response.status(400).entity("Username, password, and email are required.").build();
@@ -185,75 +182,107 @@ public class UserService {
     public Response addTask(Task t, @HeaderParam("username") String user,
                             @HeaderParam("password") String pass,
                             @PathParam("username") String userPath) {
+        // User authentication checks
         if (!userBean.verifyUsername(userPath, user)) {
-            return Response.status(400).entity("Unauthorized user").build();
+            return Response.status(403).entity("Utilizador sem autorização").build();
         }
         if (!userBean.verifyPassword(userPath, pass)) {
-            return Response.status(400).entity("Unauthorized user").build();
+            return Response.status(403).entity("Utilizador sem autorização").build();
         }
-        if (userBean.verifyTaskTitle(userPath, t.getTitle())) {
-            return Response.status(400).entity("Task with this title already exists").build();
+        // Repeated taskId check
+        if (userBean.verifyTaskId(userPath, t.getTaskId())) {
+            return Response.status(400).entity("Tarefa com este iD já existe").build();
+        }
+        // Empty task name check
+        if (t.getTitle().isEmpty()) {
+            return Response.status(400).entity("Por favor preencha o Título").build();
+        }
+        // If priority value is blank or different from the set values, set default value
+        int priority = t.getPriority();
+        if (priority != 100 && priority != 300 && priority != 500) {
+            t.setPriority(100);
         }
         userBean.addTaskUser(userPath, t);
-        return Response.status(200).entity("A new task is created").build();
+        return Response.status(200).entity("Nova tarefa criada com sucesso").build();
     }
 
     // Get All Tasks
     @GET
     @Path("{username}/tasks")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Task> getTasks(@PathParam("username") String userPath) {
-        return userBean.getTasks(userPath);
+    public Response getTasks(@PathParam("username") String userPath) {
+        if (userBean.getUser(userPath)==null) {
+            return Response.status(404).entity("Utilizador não existe").build();
+        }
+        List<Task> tasks = userBean.getTasks(userPath);
+        return Response.status(200).entity(tasks).build();
     }
 
     // Delete Task
     @DELETE
     @Path("{username}/delete")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response removeTask(@QueryParam("title") String title, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
+    public Response removeTask(@QueryParam("iD") long iD, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
+        // User authentication checks
         if (!userBean.verifyUsername(user, userPath)) {
-            return Response.status(400).entity("Unauthorized user").build();
+            return Response.status(403).entity("Utilizador sem autorização").build();
         }
         if (!userBean.verifyPassword(userPath, pass)) {
-            return Response.status(400).entity("Unauthorized user").build();
+            return Response.status(403).entity("Utilizador sem autorização").build();
         }
-        boolean deleted =  userBean.removeTask(userPath, title);
+        boolean deleted =  userBean.removeTask(userPath, iD);
         if (!deleted)
-            return Response.status(400).entity("Task with this title is not found").build();
-        return Response.status(200).entity("Task deleted").build();
+            return Response.status(400).entity("Tarefa com este iD não encontrada").build();
+        return Response.status(200).entity("Tarefa apagada").build();
     }
 
-
+    // Move Task
     @PUT
     @Path("{username}/moveTask")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response moveTask(Task t, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
-        if (!userBean.verifyUsername(user, userPath)) {
-            return Response.status(400).entity("Unauthorized user").build();
+        // User authentication checks
+        if (!userBean.verifyUsername(userPath, user)) {
+            return Response.status(403).entity("Utilizador sem autorização").build();
         }
         if (!userBean.verifyPassword(userPath, pass)) {
-            return Response.status(400).entity("Unauthorized user").build();
+            return Response.status(403).entity("Utilizador sem autorização").build();
         }
-        boolean updated = userBean.moveTask(userPath, t.getTitle(), t.getColumn());
+        String destinationColumn = t.getColumn();
+        // Check if destination column is one of the default options
+        if (!(destinationColumn.equals("todo-cards") || destinationColumn.equals("doing-cards") || destinationColumn.equals("done-cards"))) {
+            return Response.status(400).entity("A coluna de destino não é válida").build();
+        }
+        boolean updated = userBean.moveTask(userPath, t.getTaskId(), t.getColumn());
         if (!updated)
-            return Response.status(400).entity("Task with this title is not found").build();
-        return Response.status(200).entity("Task moved to the new column").build();
+            return Response.status(400).entity("Tarefa com este iD não encontrada").build();
+        return Response.status(200).entity("Tarefa movida de coluna").build();
     }
 
-
+    // Edit task content
     @PUT
     @Path("{username}/updateTask")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateDescription(Task t, @QueryParam("taskTitle") String taskTitle, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
-        if (!userBean.verifyUsername(user, userPath)) {
-            return Response.status(400).entity("Unauthorized user").build();
+    public Response updateDescription(Task t, @QueryParam("iD") long iD, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
+        // User authentication checks
+        if (!userBean.verifyUsername(userPath, user)) {
+            return Response.status(403).entity("Utilizador sem autorização").build();
         }
         if (!userBean.verifyPassword(userPath, pass)) {
-            return Response.status(400).entity("Unauthorized user").build();
+            return Response.status(403).entity("Utilizador sem autorização").build();
         }
-        boolean updated = userBean.updateTask(userPath, taskTitle, t.getTitle(), t.getDescription(), t.getPriority(), t.getStartDate(), t.getEndDate());
+        // Empty task name check
+        if (t.getTitle().isEmpty()) {
+            return Response.status(400).entity("Por favor preencha o Título").build();
+        }
+        // If priority value is blank or different from the set values, set default value
+        int priority = t.getPriority();
+        if (priority != 100 && priority != 300 && priority != 500) {
+            t.setPriority(100);
+        }
+        boolean updated = userBean.updateTask(userPath, iD, t.getTitle(), t.getDescription(), t.getPriority(), t.getStartDate(), t.getEndDate());
         if (!updated)
-            return Response.status(400).entity("Task with this title is not found").build();
-        return Response.status(200).entity("Task content updated").build();
+            return Response.status(400).entity("Tarefa com este iD não encontrada").build();
+        return Response.status(200).entity("Conteúdo da tarefa actualizado").build();
     }
 }
