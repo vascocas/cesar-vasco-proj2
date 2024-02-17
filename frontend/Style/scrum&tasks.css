@@ -1,7 +1,7 @@
 /* Formatação relativa à scrum.html --> */
 /* Formatação relativa a todo o body do documento html */
 body {
-  background-color: var(--color_light);
+  background-color: var(--white);
   font-family: var(--type_font);
   font-size: var(--font_size_medium_low);
   color: var(--white);
@@ -27,20 +27,19 @@ nav {
 }
 
 .btn-nav {
-  width: 25%;
-  padding: 10px 0;
-  margin: 5px;
+  padding: 2%;
+  margin: 2%;
   border: none;
   border-radius: 10px;
   outline: none;
   text-transform: uppercase;
   font-weight: 700;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   color: var(--white);
   background: var(--color_regular);
   cursor: pointer;
   box-shadow: 5px 5px 20px -12px;
-  font-size: var(--font_size_medium_low);
+  font-size: var(--font_size_small);
 }
 
 .btn-nav:hover {
@@ -77,22 +76,23 @@ nav {
 }
 
 .high-priority{
-  background-color: red;
+  background-color: #B81D13;
 }
 
 .medium-priority{
-  background-color: yellow;
+  background-color: #EFB700;
+  color: black;
 }
 
 .low-priority{
-  background-color: green;
+  background-color: #008450;
 }
 
 .card-header {
   border-radius: 6px;
   box-shadow: 5px 5px 20px -12px;
   margin: 10px;
-  border: 2px solid var(--color_regular);
+  border: 2px solid var(--color_light);
   cursor: pointer;
   text-align: left;
   padding: 5px;
@@ -221,4 +221,14 @@ nav {
 
 #logged-in-username{
   cursor: pointer;
+}
+
+#logged-in-username:hover{
+  font-weight: bold;
+}
+
+#scrum_logo{
+    width: 26%;
+    height: auto;
+    margin: 3%;
 }

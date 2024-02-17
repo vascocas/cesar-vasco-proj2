@@ -11,6 +11,7 @@
     <div class="container">
       <!--Div para separar o ecrã a meio. É colocada uma imagem do lado esquerdo-->
       <div class="left-login">
+        <img src="../Resources/agileflow-high-resolution-logo-transparent.png" id="logo">
         <img
           src="../Resources/imageLogin.svg" class="left-login-image" alt="escritorio animação"
         />
@@ -20,17 +21,17 @@
         <form id="loginForm">
           <!--Painel login-->
           <div class="card-login">
-            <h2>Bem vindo ao</h2>
-            <h1>SCRUM BOARD</h1>
+            <div id="welcome_container">
+              <h2>Bem vindo ao</h2>
+              <img src="../Resources/agileflow-high-resolution-logo-white-transparent.png" id="logo_welcome">
+            </div>
             <div class="textfield">
               <!--Campos para receber o nome de utilizador-->
-              <label for="login_usertext" class="label">Utilizador</label>
-              <input type="text" id="login_usertext" name="login_usertext" placeholder="Insira o seu nome de utilizador" required>
+              <input type="text" id="login_usertext" name="login_usertext" placeholder="Utilizador" required>
             </div>
             <div class="textfield">
               <!--Campos para receber a password-->
-              <label for="login_password" class="label">Password</label>
-              <input type="password" id="login_password" name="login_password" placeholder="Insira a sua password" required>
+              <input type="password" id="login_password" name="login_password" placeholder="Password" required>
             </div>
             <div>
               <!--Botão login-->

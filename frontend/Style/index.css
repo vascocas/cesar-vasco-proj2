@@ -38,13 +38,14 @@ body {
 
 /* Características do painel de login*/
 .card-login {
-  width: 450px;
+  width: 400px;
   padding: 30px;
   background: var(--color_regular);
   border-radius: 20px; /* Arredondamento dos vértices do painel*/
   box-shadow: 10px 10px 20px -12px; /* Adiciona uma sombra ao painel*/
   color: var(--white); /* Atribui cor ao titulo do painel*/
   box-sizing: border-box; /* Determina as dimensões do painel*/
+  margin: 40px;
 }
 
 /* Características do titulo do painel (Scrum Board)*/

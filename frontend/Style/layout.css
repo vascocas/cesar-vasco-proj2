@@ -1,7 +1,7 @@
 /* Criação de variáveis CSS*/
 :root{
     --color_light: rgb(139, 151, 180);
-    --color_regular: rgb(105, 156, 182);
+    --color_regular: #2c94d9;
     --color_dark: #01041e;
     --white: white;
     --type_font: sans-serif;
@@ -16,11 +16,11 @@ header {
     justify-content: space-between;
     align-items: center;
     font-family: var(--type_font);
-    font-size: var(--font_size_large);
+    font-size: var(--font_size_medium_low);
     text-align: left;
-    background-color: var(--color_dark);
+    background-color: var(--white);
     padding: 2px;
-    color: var(--white);
+    color: var(--color_dark);
 }
 
 footer{
@@ -42,7 +42,7 @@ footer{
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 5px;
+    margin-bottom: 2%;
 }
 
 .profile-pic {
@@ -54,21 +54,38 @@ footer{
     display: flex;
     align-items: center;
     flex-direction: column;
-    margin-right: 20px;
+    margin: 2%;
 }
 
-.left-login-image:hover{
+#logo{
+    width: 70%;
+    height: auto;
     cursor: pointer;
 }
 
+#welcome_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 10%;
+}
+
+#logo_welcome{
+    width: 50%;
+    height: auto;
+}
+
 #signup_footer{
+    position: fixed;
+    bottom: 0;
+    left: 0;
     width: 100%;
     height: 25px;
     font-family: var(--type_font);
     font-size: var(--font_size_medium_low);
     color: var(--white);
     text-align: center;
-    bottom: 0;
     background: var(--color_regular);
 }
  
