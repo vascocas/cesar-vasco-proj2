@@ -12,6 +12,7 @@ import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 import jakarta.json.bind.JsonbException;
+import jakarta.json.bind.annotation.JsonbTransient;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -24,6 +25,7 @@ public class UserBean implements Serializable {
     LoginBean loginBean;
 
     final String filename = "users.json";
+
     private ArrayList<User> users;
     private String filePath;
 
@@ -106,11 +108,17 @@ public class UserBean implements Serializable {
         return false;
     }
 
-    public void writeIntoJsonFile(){
-        Jsonb jsonb =  JsonbBuilder.create(new JsonbConfig().withFormatting(true));
+    public void writeIntoJsonFile() {
+        Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withFormatting(true));
         try {
             jsonb.toJson(users, new FileOutputStream(filename));
         } catch (FileNotFoundException e) {
+            // Se o arquivo não puder ser encontrado, lança uma exceção
+            System.err.println("Arquivo não encontrado: " + filename);
+            throw new RuntimeException(e);
+        } catch (JsonbException e) {
+            // Se ocorrer um erro durante a serialização JSON, lança uma exceção
+            System.err.println("Erro ao serializar a lista de usuários para JSON: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
