@@ -123,7 +123,7 @@ public class UserBean implements Serializable {
         }
     }
 
-    public boolean usernameExists(String username,ArrayList<User> users){
+    public boolean usernameExists(String username){
         for (User u : users){
             if (u.getUsername().equals(username)){
                 return true;

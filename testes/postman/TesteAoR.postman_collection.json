@@ -1,0 +1,687 @@
+{
+	"info": {
+		"_postman_id": "2fd2afaa-fe0a-41aa-a405-fd9b9efe5643",
+		"name": "TesteAoR",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32787355"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Login",
+					"item": [
+						{
+							"name": "Login correct",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"Response time is less than 200ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "username",
+										"value": "user_teste",
+										"type": "text"
+									},
+									{
+										"key": "password",
+										"value": "123A5",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/backend/rest/users/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"backend",
+										"rest",
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login wrong password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "username",
+										"value": "user1",
+										"type": "text"
+									},
+									{
+										"key": "password",
+										"value": "456QQ",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/backend/rest/users/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"backend",
+										"rest",
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login wrong username",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "username",
+										"value": "user123",
+										"type": "text"
+									},
+									{
+										"key": "password",
+										"value": "456Q",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/backend/rest/users/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"backend",
+										"rest",
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Update User",
+					"item": [
+						{
+							"name": "Update User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "username",
+										"value": "user1",
+										"type": "text"
+									},
+									{
+										"key": "password",
+										"value": "123aa",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"alterado@abc.pt\",\r\n    \"firstName\": \"alterado\",\r\n    \"lastName\": \"2\",\r\n    \"phoneNumber\": \"91123456\",\r\n    \"photo\": \"https://a.storyblok.com/f/191576/1200x800/faa88c639f/round_profil_picture_before_.webp\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/backend/rest/users/update",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"backend",
+										"rest",
+										"users",
+										"update"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Bad Update User",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "username",
+										"value": "user00",
+										"type": "text"
+									},
+									{
+										"key": "password",
+										"value": "123aa",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"alterado@abc.pt\",\r\n    \"firstName\": \"alterado\",\r\n    \"lastName\": \"2\",\r\n    \"phoneNumber\": \"91123456\",\r\n    \"photo\": \"https://a.storyblok.com/f/191576/1200x800/faa88c639f/round_profil_picture_before_.webp\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/backend/rest/users/update",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"backend",
+										"rest",
+										"users",
+										"update"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Register",
+					"item": [
+						{
+							"name": "Register Good",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "username",
+										"value": "user_teste",
+										"type": "text"
+									},
+									{
+										"key": "password",
+										"value": "123A5",
+										"type": "text"
+									},
+									{
+										"key": "email",
+										"value": "user_teste@abc.pt",
+										"type": "text"
+									},
+									{
+										"key": "firstName",
+										"value": "user",
+										"type": "text"
+									},
+									{
+										"key": "lastName",
+										"value": "teste",
+										"type": "text"
+									},
+									{
+										"key": "phoneNumber",
+										"value": "912345678",
+										"type": "text"
+									},
+									{
+										"key": "photo",
+										"value": "https://a.storyblok.com/f/191576/1200x800/faa88c639f/round_profil_picture_before_.webp",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/backend/rest/users/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"backend",
+										"rest",
+										"users",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Register Bad Username",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "username",
+										"value": "user_teste",
+										"type": "text"
+									},
+									{
+										"key": "password",
+										"value": "123A5",
+										"type": "text"
+									},
+									{
+										"key": "email",
+										"value": "user_teste@abc.pt",
+										"type": "text"
+									},
+									{
+										"key": "firstName",
+										"value": "user",
+										"type": "text"
+									},
+									{
+										"key": "lastName",
+										"value": "teste",
+										"type": "text"
+									},
+									{
+										"key": "phoneNumber",
+										"value": "912345678",
+										"type": "text"
+									},
+									{
+										"key": "photo",
+										"value": "https://a.storyblok.com/f/191576/1200x800/faa88c639f/round_profil_picture_before_.webp",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/backend/rest/users/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"backend",
+										"rest",
+										"users",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Register Bad Email",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"user1\",\r\n    \"password\": \"123A5\",\r\n    \"email\": \"user1@abc.pt\",\r\n    \"firstName\": \"user\",\r\n    \"lastName\": \"1\",\r\n    \"phoneNumber\": \"91123456\",\r\n    \"photo\": \"https://a.storyblok.com/f/191576/1200x800/faa88c639f/round_profil_picture_before_.webp\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/backend/rest/users/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"backend",
+										"rest",
+										"users",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Register Bad Phone",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"user2\",\r\n    \"password\": \"123A5\",\r\n    \"email\": \"user2@abc.pt\",\r\n    \"firstName\": \"user\",\r\n    \"lastName\": \"1\",\r\n    \"phoneNumber\": \"91123456\",\r\n    \"photo\": \"https://a.storyblok.com/f/191576/1200x800/faa88c639f/round_profil_picture_before_.webp\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/backend/rest/users/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"backend",
+										"rest",
+										"users",
+										"register"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Password",
+					"item": [
+						{
+							"name": "Change Password Good",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "username",
+										"value": "user1",
+										"type": "text"
+									},
+									{
+										"key": "oldpassword",
+										"value": "123A5",
+										"type": "text"
+									},
+									{
+										"key": "newpassword",
+										"value": "123B5",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8080/backend/rest/users/update/password",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"backend",
+										"rest",
+										"users",
+										"update",
+										"password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Incorrect Old Password",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "username",
+										"value": "user1",
+										"type": "text"
+									},
+									{
+										"key": "oldpassword",
+										"value": "123A5",
+										"type": "text"
+									},
+									{
+										"key": "newpassword",
+										"value": "123XX",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8080/backend/rest/users/update/password",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"backend",
+										"rest",
+										"users",
+										"update",
+										"password"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"ctn\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/backend/rest/users/delete?username=user_para_registo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"backend",
+								"rest",
+								"users",
+								"delete"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "user_para_registo"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\":1,\"title\":\"activity1\",\"description\":\"this activity is the first activity in my list\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/backend/rest/users/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"backend",
+								"rest",
+								"users",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verificar se alguém está logado",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/backend/rest/users/getuser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"backend",
+								"rest",
+								"users",
+								"getuser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/backend/rest/users/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"backend",
+								"rest",
+								"users",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

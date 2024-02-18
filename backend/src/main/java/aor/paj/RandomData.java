@@ -70,39 +70,43 @@ public class RandomData {
      */
     private static void adicionarTarefas(String user, String password, int quantidade, UserBean userBean) {
         try {
-            for (int i = 0; i < quantidade; i++) {
-                // Chamada à API Boredapi para obter uma nova tarefa aleatória
-                URL apiUrl = new URL(BORED_API_URL);
-                HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
-                connection.setRequestMethod("GET");
+            // Verificar se o usuário existe antes de adicionar tarefas
+            if (userBean.usernameExists(user)) {
+                for (int i = 0; i < quantidade; i++) {
+                    // Chamada à API Boredapi para obter uma nova tarefa aleatória
+                    URL apiUrl = new URL(BORED_API_URL);
+                    HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
+                    connection.setRequestMethod("GET");
 
-                int responseCode = connection.getResponseCode();
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    // Ler a resposta da API
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                    StringBuilder responseBody = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        responseBody.append(line);
+                    int responseCode = connection.getResponseCode();
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        // Ler a resposta da API
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                        StringBuilder responseBody = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            responseBody.append(line);
+                        }
+                        reader.close();
+
+                        // Analisar a resposta JSON
+                        JsonObject jsonObject = Json.createReader(new StringReader(responseBody.toString())).readObject();
+                        String tarefa = jsonObject.getString("activity");
+
+                        // Criar uma nova instância de Task com os dados obtidos da API
+                        Task task = new Task(tarefa, "", 100, LocalDate.now(), LocalDate.now().plusDays(1));
+
+                        // Adicionar a tarefa ao usuário existente
+                        userBean.addTaskUser(user, task);
+
+                        System.out.println("Tarefa adicionada a " + user);
+                    } else {
+                        System.out.println("Falha ao obter tarefa aleatória. Código de resposta: " + responseCode);
                     }
-                    reader.close();
-
-                    // Analisar a resposta JSON
-                    JsonObject jsonObject = Json.createReader(new StringReader(responseBody.toString())).readObject();
-                    String tarefa = jsonObject.getString("activity");
-
-                    // Criar uma nova instância de Task com os dados obtidos da API
-                    Task task = new Task(tarefa, "", 100, LocalDate.now(), LocalDate.now().plusDays(1));
-
-                    // Adicionar a tarefa ao user
-                    userBean.addTaskUser(user, task);
-
-                    System.out.println("Tarefa adicionada a " + user);
-                } else {
-                    System.out.println("Falha ao obter tarefa aleatória. Código de resposta: " + responseCode);
                 }
+            } else {
+                System.out.println("Usuário não encontrado: " + user);
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }

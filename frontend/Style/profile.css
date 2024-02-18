@@ -8,7 +8,7 @@ body {
 .container {
     display: flex;
     max-width: 600px;
-    margin: 50px auto;
+    margin: 20px auto;
     padding: 20px;
     background-color: rgb(130, 194, 247);
     border-radius: 8px;
@@ -129,7 +129,8 @@ input:disabled {
     border-radius: 8px;
     flex-direction: column;
     align-items: center;
-    background: #ccc;
+    background: white;
+    border: 2px solid gray;
  }
 
  .modal-header {
