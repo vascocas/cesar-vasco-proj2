@@ -1,8 +1,11 @@
 /* Criação de variáveis CSS*/
 :root{
-    --color_light: rgb(139, 151, 180);
+    --color_light: rgb(194, 200, 214);
     --color_regular: #2c94d9;
     --color_dark: #01041e;
+    --color_high_priority: #B81D13;
+    --color_medium_priority: #EFB700;
+    --color_low_priority: #008450;
     --white: white;
     --type_font: sans-serif;
     --font_size_small: 16px;
