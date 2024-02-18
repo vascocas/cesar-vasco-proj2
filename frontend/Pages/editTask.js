@@ -155,7 +155,7 @@ async function getAllTasks() {
           description: descriptionText.value,
           priority: priorityText.value,
           startDate: startDateText.value,
-          endDate: endDateText.valueDate,
+          endDate: endDateText.value,
         });
 
         const response = await fetch(

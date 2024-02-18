@@ -15,10 +15,8 @@ public class Task {
     @XmlElement
     private String description;
     @XmlElement
-    @NotBlank(message = "Por favor insira a data inicial")
     private LocalDate startDate;
     @XmlElement
-    @NotBlank(message = "Por favor insira a data de conclusão")
     private LocalDate endDate;
     @XmlElement
     private int priority;

@@ -43,7 +43,6 @@ public class UserService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUser(@PathParam("username") String username) {
         User user = userBean.getUser(username);
-
         if (user == null) {
             return Response.status(400).entity("User with this username is not found").build();
         }
@@ -226,10 +225,7 @@ public class UserService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response removeTask(@QueryParam("iD") long iD, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
         // User authentication checks
-        if (!userBean.verifyUsername(user, userPath)) {
-            return Response.status(403).entity("Utilizador sem autorização").build();
-        }
-        if (!userBean.verifyPassword(userPath, pass)) {
+        if (!authenticateUser(userPath, user, pass)) {
             return Response.status(403).entity("Utilizador sem autorização").build();
         }
         boolean deleted =  userBean.removeTask(userPath, iD);
