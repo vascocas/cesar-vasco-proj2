@@ -66,7 +66,7 @@ public class UserService {
     public Response updateUser(User updatedUser,
                                @HeaderParam("username") String username,
                                @HeaderParam("password") String password) {
-        boolean updated = userBean.updateUser(username,
+        boolean updated = userBean.updateUser(username, password,
                 updatedUser.getEmail(),
                 updatedUser.getFirstName(),
                 updatedUser.getLastName(),
@@ -84,13 +84,8 @@ public class UserService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response loginUser(@HeaderParam("username") String username,
                               @HeaderParam("password") String password) {
-
-        System.out.println(username + " , " + password);
-
         User user = userBean.getUser(username);
-
         if (user == null) {
-            System.out.println("user null");
             return Response.status(401).entity("User with this username is not found").build();
         } else if (!user.getPassword().equals(password)) {
             return Response.status(401).entity("Invalid password").build();
@@ -175,18 +170,25 @@ public class UserService {
         return Response.status(200).entity("User password updated").build();
     }
 
+
+    // User authentication
+    private boolean authenticateUser(String userPath, String user, String pass) {
+        if (!userBean.verifyUsername(userPath, user) || !userBean.verifyPassword(userPath, pass)) {
+            return false;
+        }
+        return true;
+    }
+
     // Add Task
     @POST
     @Path("{username}/tasks")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response addTask(Task t, @HeaderParam("username") String user,
                             @HeaderParam("password") String pass,
                             @PathParam("username") String userPath) {
         // User authentication checks
-        if (!userBean.verifyUsername(userPath, user)) {
-            return Response.status(403).entity("Utilizador sem autorização").build();
-        }
-        if (!userBean.verifyPassword(userPath, pass)) {
+        if (!authenticateUser(userPath, user, pass)) {
             return Response.status(403).entity("Utilizador sem autorização").build();
         }
         // Repeated taskId check
@@ -206,7 +208,7 @@ public class UserService {
         return Response.status(200).entity("Nova tarefa criada com sucesso").build();
     }
 
-    // Get All Tasks
+    // Get Tasks of a user
     @GET
     @Path("{username}/tasks")
     @Produces(MediaType.APPLICATION_JSON)
@@ -240,12 +242,10 @@ public class UserService {
     @PUT
     @Path("{username}/moveTask")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response moveTask(Task t, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
         // User authentication checks
-        if (!userBean.verifyUsername(userPath, user)) {
-            return Response.status(403).entity("Utilizador sem autorização").build();
-        }
-        if (!userBean.verifyPassword(userPath, pass)) {
+        if (!authenticateUser(userPath, user, pass)) {
             return Response.status(403).entity("Utilizador sem autorização").build();
         }
         String destinationColumn = t.getColumn();
@@ -263,12 +263,10 @@ public class UserService {
     @PUT
     @Path("{username}/updateTask")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response updateDescription(Task t, @QueryParam("iD") long iD, @HeaderParam("username") String user, @HeaderParam("password") String pass, @PathParam("username") String userPath) {
         // User authentication checks
-        if (!userBean.verifyUsername(userPath, user)) {
-            return Response.status(403).entity("Utilizador sem autorização").build();
-        }
-        if (!userBean.verifyPassword(userPath, pass)) {
+        if (!authenticateUser(userPath, user, pass)) {
             return Response.status(403).entity("Utilizador sem autorização").build();
         }
         // Empty task name check

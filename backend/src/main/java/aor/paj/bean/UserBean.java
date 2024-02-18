@@ -88,9 +88,12 @@ public class UserBean implements Serializable {
         return false;
     }
 
-    public boolean updateUser(String username,String email, String firstName, String lastName, String phoneNumber, String photo) {
-        for (User u : users) {
-            if (u.getUsername().equals(username)) {
+    public boolean updateUser(String username,String password, String email, String firstName, String lastName, String phoneNumber, String photo) {
+        User u = getUser(username);
+        if (u == null) {
+            return false;
+        }
+            if (u.getPassword().equals(password)) {
                 if (email!=u.getEmail()){u.setEmail(email);}
 
                 if (firstName != u.getFirstName()){u.setFirstName(firstName);}
@@ -104,7 +107,6 @@ public class UserBean implements Serializable {
                 writeIntoJsonFile();
                 return true;
             }
-        }
         return false;
     }
 
@@ -190,7 +192,6 @@ public class UserBean implements Serializable {
     public boolean verifyPassword(String username, String oldPassword){
 
         User user=getUser(username);
-
         if (user!=null){
             String password = user.getPassword();
             return password.equals(oldPassword);

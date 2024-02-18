@@ -1,4 +1,5 @@
 package aor.paj.dto;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDate;
@@ -9,12 +10,15 @@ public class Task {
     @XmlElement
     private String column;
     @XmlElement
+    @NotBlank(message = "Por favor insira o titulo")
     private String title;
     @XmlElement
     private String description;
     @XmlElement
+    @NotBlank(message = "Por favor insira a data inicial")
     private LocalDate startDate;
     @XmlElement
+    @NotBlank(message = "Por favor insira a data de conclusão")
     private LocalDate endDate;
     @XmlElement
     private int priority;
