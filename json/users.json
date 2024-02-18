@@ -1,0 +1,513 @@
+[
+    {
+        "email": "shreya.almeida@example.com",
+        "firstName": "Shreya",
+        "lastName": "Almeida",
+        "password": "wutang",
+        "phoneNumber": "9152026010",
+        "photo": "https://randomuser.me/api/portraits/women/9.jpg",
+        "userTasks": [
+            {
+                "column": "todo-cards",
+                "description": "",
+                "endDate": "2024-02-19",
+                "priority": 100,
+                "startDate": "2024-02-18",
+                "taskId": 1708250722,
+                "title": "Take a hike at a local park"
+            },
+            {
+                "column": "todo-cards",
+                "description": "",
+                "endDate": "2024-02-19",
+                "priority": 100,
+                "startDate": "2024-02-18",
+                "taskId": 1708250723,
+                "title": "Organize your movie collection"
+            },
+            {
+                "column": "todo-cards",
+                "description": "",
+                "endDate": "2024-02-19",
+                "priority": 100,
+                "startDate": "2024-02-18",
+                "taskId": 1708250723,
+                "title": "Write a thank you letter to an influential person in your life"
+            }
+        ],
+        "username": "blackdog506"
+    },
+    {
+        "email": "ignacio.cano@example.com",
+        "firstName": "Ignacio",
+        "lastName": "Cano",
+        "password": "sanchez",
+        "phoneNumber": "955-583-293",
+        "photo": "https://randomuser.me/api/portraits/men/19.jpg",
+        "userTasks": [
+        ],
+        "username": "beautifulostrich688"
+    },
+    {
+        "email": "volkan.durak@example.com",
+        "firstName": "Volkan",
+        "lastName": "Durak",
+        "password": "honor",
+        "phoneNumber": "987654321",
+        "photo": "https://randomuser.me/api/portraits/men/10.jpg",
+        "userTasks": [
+        ],
+        "username": "whitekoala426"
+    },
+    {
+        "email": "sophia.lo@example.com",
+        "firstName": "Sophia",
+        "lastName": "Lo",
+        "password": "stafford",
+        "phoneNumber": "P65 Y22-7411",
+        "photo": "https://randomuser.me/api/portraits/women/62.jpg",
+        "userTasks": [
+        ],
+        "username": "orangebear818"
+    },
+    {
+        "email": "mounaim.sheikh@example.com",
+        "firstName": "Mounaim",
+        "lastName": "Sheikh",
+        "password": "showing",
+        "phoneNumber": "(003) 3725270",
+        "photo": "https://randomuser.me/api/portraits/men/76.jpg",
+        "userTasks": [
+        ],
+        "username": "purplefrog119"
+    },
+    {
+        "email": "veera.hautala@example.com",
+        "firstName": "Veera",
+        "lastName": "Hautala",
+        "password": "fritz",
+        "phoneNumber": "07-509-648",
+        "photo": "https://randomuser.me/api/portraits/women/20.jpg",
+        "userTasks": [
+        ],
+        "username": "crazygorilla684"
+    },
+    {
+        "email": "teresa.mendoza@example.com",
+        "firstName": "Teresa",
+        "lastName": "Mendoza",
+        "password": "magick",
+        "phoneNumber": "031-582-9970",
+        "photo": "https://randomuser.me/api/portraits/women/40.jpg",
+        "userTasks": [
+        ],
+        "username": "angrybird292"
+    },
+    {
+        "email": "randall.hale@example.com",
+        "firstName": "Randall",
+        "lastName": "Hale",
+        "password": "6666",
+        "phoneNumber": "061-869-7541",
+        "photo": "https://randomuser.me/api/portraits/men/45.jpg",
+        "userTasks": [
+        ],
+        "username": "purpleduck325"
+    },
+    {
+        "email": "eugenia.ferrer@example.com",
+        "firstName": "Eugenia",
+        "lastName": "Ferrer",
+        "password": "terefon",
+        "phoneNumber": "973-615-839",
+        "photo": "https://randomuser.me/api/portraits/women/81.jpg",
+        "userTasks": [
+        ],
+        "username": "silvermeercat789"
+    },
+    {
+        "email": "glen.coleman@example.com",
+        "firstName": "Glen",
+        "lastName": "Coleman",
+        "password": "funny",
+        "phoneNumber": "00-3367-9518",
+        "photo": "https://randomuser.me/api/portraits/men/86.jpg",
+        "userTasks": [
+        ],
+        "username": "silverduck688"
+    },
+    {
+        "email": "adan.laboy@example.com",
+        "firstName": "Adán",
+        "lastName": "Laboy",
+        "password": "lover1",
+        "phoneNumber": "(658) 824 0293",
+        "photo": "https://randomuser.me/api/portraits/men/63.jpg",
+        "userTasks": [
+        ],
+        "username": "beautifulgoose366"
+    },
+    {
+        "email": "isaac.lee@example.com",
+        "firstName": "Isaac",
+        "lastName": "Lee",
+        "password": "penguins",
+        "phoneNumber": "(171)-943-8363",
+        "photo": "https://randomuser.me/api/portraits/men/8.jpg",
+        "userTasks": [
+        ],
+        "username": "whiteladybug142"
+    },
+    {
+        "email": "glen.burns@example.com",
+        "firstName": "Glen",
+        "lastName": "Burns",
+        "password": "commando",
+        "phoneNumber": "09-2525-8630",
+        "photo": "https://randomuser.me/api/portraits/men/84.jpg",
+        "userTasks": [
+        ],
+        "username": "whitegoose920"
+    },
+    {
+        "email": "julisa.scholten@example.com",
+        "firstName": "Julisa",
+        "lastName": "Scholten",
+        "password": "hound",
+        "phoneNumber": "(0181) 904983",
+        "photo": "https://randomuser.me/api/portraits/women/25.jpg",
+        "userTasks": [
+        ],
+        "username": "bigrabbit422"
+    },
+    {
+        "email": "rebecca.guillaume@example.com",
+        "firstName": "Rebecca",
+        "lastName": "Guillaume",
+        "password": "321321",
+        "phoneNumber": "076 193 89 71",
+        "photo": "https://randomuser.me/api/portraits/women/56.jpg",
+        "userTasks": [
+        ],
+        "username": "blackfrog358"
+    },
+    {
+        "email": "leo.simmmons@example.com",
+        "firstName": "Leo",
+        "lastName": "Simmmons",
+        "password": "kingdom",
+        "phoneNumber": "(961) 501-9216",
+        "photo": "https://randomuser.me/api/portraits/men/8.jpg",
+        "userTasks": [
+        ],
+        "username": "goldenleopard476"
+    },
+    {
+        "email": "riley.johnson@example.com",
+        "firstName": "Riley",
+        "lastName": "Johnson",
+        "password": "infantry",
+        "phoneNumber": "(618)-533-7568",
+        "photo": "https://randomuser.me/api/portraits/men/15.jpg",
+        "userTasks": [
+        ],
+        "username": "angrycat410"
+    },
+    {
+        "email": "nicoline.thomsen@example.com",
+        "firstName": "Nicoline",
+        "lastName": "Thomsen",
+        "password": "apollo",
+        "phoneNumber": "32945159",
+        "photo": "https://randomuser.me/api/portraits/women/71.jpg",
+        "userTasks": [
+        ],
+        "username": "happyzebra611"
+    },
+    {
+        "email": "aleksandar.perrin@example.com",
+        "firstName": "Aleksandar",
+        "lastName": "Perrin",
+        "password": "gore",
+        "phoneNumber": "078 903 91 77",
+        "photo": "https://randomuser.me/api/portraits/men/56.jpg",
+        "userTasks": [
+        ],
+        "username": "reddog773"
+    },
+    {
+        "email": "eeli.seppala@example.com",
+        "firstName": "Eeli",
+        "lastName": "Seppala",
+        "password": "modena",
+        "phoneNumber": "09-202-056",
+        "photo": "https://randomuser.me/api/portraits/men/62.jpg",
+        "userTasks": [
+        ],
+        "username": "bigleopard376"
+    },
+    {
+        "email": "wibke.hohne@example.com",
+        "firstName": "Wibke",
+        "lastName": "Höhne",
+        "password": "lover",
+        "phoneNumber": "0220-6540487",
+        "photo": "https://randomuser.me/api/portraits/women/25.jpg",
+        "userTasks": [
+        ],
+        "username": "brownduck340"
+    },
+    {
+        "email": "julian.dufour@example.com",
+        "firstName": "Julian",
+        "lastName": "Dufour",
+        "password": "&amp;",
+        "phoneNumber": "03-53-93-13-64",
+        "photo": "https://randomuser.me/api/portraits/men/34.jpg",
+        "userTasks": [
+        ],
+        "username": "blackrabbit879"
+    },
+    {
+        "email": "peyton.jennings@example.com",
+        "firstName": "Peyton",
+        "lastName": "Jennings",
+        "password": "2626",
+        "phoneNumber": "06-3843-3580",
+        "photo": "https://randomuser.me/api/portraits/women/72.jpg",
+        "userTasks": [
+        ],
+        "username": "brownpanda504"
+    },
+    {
+        "email": "travis.reed@example.com",
+        "firstName": "Travis",
+        "lastName": "Reed",
+        "password": "shelby",
+        "phoneNumber": "01068 146123",
+        "photo": "https://randomuser.me/api/portraits/men/35.jpg",
+        "userTasks": [
+        ],
+        "username": "angrybutterfly599"
+    },
+    {
+        "email": "ouafaa.juliana@example.com",
+        "firstName": "Ouafaa",
+        "lastName": "Juliana",
+        "password": "stocking",
+        "phoneNumber": "(0586) 729134",
+        "photo": "https://randomuser.me/api/portraits/women/95.jpg",
+        "userTasks": [
+        ],
+        "username": "happywolf257"
+    },
+    {
+        "email": "lily.walker@example.com",
+        "firstName": "Lily",
+        "lastName": "Walker",
+        "password": "cars",
+        "phoneNumber": "N69 F67-0583",
+        "photo": "https://randomuser.me/api/portraits/women/4.jpg",
+        "userTasks": [
+        ],
+        "username": "lazygorilla954"
+    },
+    {
+        "email": "amisha.huijbers@example.com",
+        "firstName": "Amisha",
+        "lastName": "Huijbers",
+        "password": "joke",
+        "phoneNumber": "(045) 3009973",
+        "photo": "https://randomuser.me/api/portraits/women/41.jpg",
+        "userTasks": [
+        ],
+        "username": "heavymouse529"
+    },
+    {
+        "email": "caleb.jones@example.com",
+        "firstName": "Caleb",
+        "lastName": "Jones",
+        "password": "terefon",
+        "phoneNumber": "(991)-226-3561",
+        "photo": "https://randomuser.me/api/portraits/men/99.jpg",
+        "userTasks": [
+        ],
+        "username": "heavygorilla873"
+    },
+    {
+        "email": "jurema.darocha@example.com",
+        "firstName": "Jurema",
+        "lastName": "da Rocha",
+        "password": "beauty",
+        "phoneNumber": "(36) 8765-1246",
+        "photo": "https://randomuser.me/api/portraits/women/57.jpg",
+        "userTasks": [
+        ],
+        "username": "ticklishladybug547"
+    },
+    {
+        "email": "enzo.gonzalez@example.com",
+        "firstName": "Enzo",
+        "lastName": "Gonzalez",
+        "password": "railroad",
+        "phoneNumber": "01-92-28-33-96",
+        "photo": "https://randomuser.me/api/portraits/men/53.jpg",
+        "userTasks": [
+        ],
+        "username": "crazyfish894"
+    },
+    {
+        "email": "andreo.gomes@example.com",
+        "firstName": "Andreo",
+        "lastName": "Gomes",
+        "password": "video",
+        "phoneNumber": "(35) 1157-4519",
+        "photo": "https://randomuser.me/api/portraits/men/4.jpg",
+        "userTasks": [
+        ],
+        "username": "silvergorilla975"
+    },
+    {
+        "email": "rozaliya.horishko@example.com",
+        "firstName": "Rozaliya",
+        "lastName": "Horishko",
+        "password": "infinity",
+        "phoneNumber": "(099) K32-5299",
+        "photo": "https://randomuser.me/api/portraits/women/24.jpg",
+        "userTasks": [
+        ],
+        "username": "purplebear279"
+    },
+    {
+        "email": "bradley.turner@example.com",
+        "firstName": "Bradley",
+        "lastName": "Turner",
+        "password": "arrows",
+        "phoneNumber": "(595) 496-4829",
+        "photo": "https://randomuser.me/api/portraits/men/90.jpg",
+        "userTasks": [
+        ],
+        "username": "beautifulelephant860"
+    },
+    {
+        "email": "maja.thomsen@example.com",
+        "firstName": "Maja",
+        "lastName": "Thomsen",
+        "password": "chickens",
+        "phoneNumber": "74424472",
+        "photo": "https://randomuser.me/api/portraits/women/57.jpg",
+        "userTasks": [
+        ],
+        "username": "purplesnake363"
+    },
+    {
+        "email": "claudia.carmona@example.com",
+        "firstName": "Claudia",
+        "lastName": "Carmona",
+        "password": "3006",
+        "phoneNumber": "935-755-779",
+        "photo": "https://randomuser.me/api/portraits/women/30.jpg",
+        "userTasks": [
+        ],
+        "username": "organickoala453"
+    },
+    {
+        "email": "zelita.ribeiro@example.com",
+        "firstName": "Zelita",
+        "lastName": "Ribeiro",
+        "password": "chuan",
+        "phoneNumber": "(98) 9689-7987",
+        "photo": "https://randomuser.me/api/portraits/women/6.jpg",
+        "userTasks": [
+        ],
+        "username": "whiteostrich964"
+    },
+    {
+        "email": "iva.ciric@example.com",
+        "firstName": "Iva",
+        "lastName": "Ćirić",
+        "password": "anything",
+        "phoneNumber": "027-4507-374",
+        "photo": "https://randomuser.me/api/portraits/women/81.jpg",
+        "userTasks": [
+        ],
+        "username": "goldenfish712"
+    },
+    {
+        "email": "infante.monteiro@example.com",
+        "firstName": "Infante",
+        "lastName": "Monteiro",
+        "password": "aramis",
+        "phoneNumber": "(32) 3662-6423",
+        "photo": "https://randomuser.me/api/portraits/men/65.jpg",
+        "userTasks": [
+        ],
+        "username": "purplemouse455"
+    },
+    {
+        "email": "christoffer.mortensen@example.com",
+        "firstName": "Christoffer",
+        "lastName": "Mortensen",
+        "password": "qwert",
+        "phoneNumber": "94459790",
+        "photo": "https://randomuser.me/api/portraits/men/7.jpg",
+        "userTasks": [
+        ],
+        "username": "organicsnake889"
+    },
+    {
+        "email": "olivia.flores@example.com",
+        "firstName": "Olivia",
+        "lastName": "Flores",
+        "password": "logitech",
+        "phoneNumber": "017687 03167",
+        "photo": "https://randomuser.me/api/portraits/women/77.jpg",
+        "userTasks": [
+        ],
+        "username": "brownzebra366"
+    },
+    {
+        "email": "user1@abc.pt",
+        "firstName": "user",
+        "lastName": "1",
+        "password": "123B5",
+        "phoneNumber": "974185260",
+        "photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSn6la0dOXP7G7oy6b1-xmmmZSTvY2y612sYg&usqp=CAU",
+        "userTasks": [
+        ],
+        "username": "user1teste"
+    },
+    {
+        "email": "user_1teste@abc.pt",
+        "firstName": "user",
+        "lastName": "1",
+        "password": "123B5",
+        "phoneNumber": "974185268",
+        "photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSn6la0dOXP7G7oy6b1-xmmmZSTvY2y612sYg&usqp=CAU",
+        "userTasks": [
+        ],
+        "username": "user1"
+    },
+    {
+        "email": "user_teste@abc.pt",
+        "firstName": "user",
+        "lastName": "teste",
+        "password": "123A5",
+        "phoneNumber": "912345678",
+        "photo": "https://a.storyblok.com/f/191576/1200x800/faa88c639f/round_profil_picture_before_.webp",
+        "userTasks": [
+        ],
+        "username": "user_teste"
+    },
+    {
+        "email": "user_registo@abc.pt",
+        "firstName": "user",
+        "lastName": "registo",
+        "password": "987Z1",
+        "phoneNumber": "974185263",
+        "photo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSn6la0dOXP7G7oy6b1-xmmmZSTvY2y612sYg&usqp=CAU",
+        "userTasks": [
+        ],
+        "username": "user_para_registo"
+    }
+]

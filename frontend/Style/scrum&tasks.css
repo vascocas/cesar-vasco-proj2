@@ -16,7 +16,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
   text-align: center;
 }
 
@@ -27,8 +26,8 @@ nav {
 }
 
 .btn-nav {
-  padding: 2%;
-  margin: 2%;
+  padding: 1%;
+  margin-left: 2%;
   border: none;
   border-radius: 10px;
   outline: none;
@@ -44,6 +43,14 @@ nav {
 
 .btn-nav:hover {
   background-color: var(--color_dark);
+}
+
+#scrum_btn_logout{
+  font-weight: 400;
+  letter-spacing: 0;
+  margin-left: 0;
+  padding: 3%;
+  margin-top: 2%;
 }
 
 .left-menu,
@@ -224,7 +231,7 @@ nav {
 }
 
 #logged-in-username:hover{
-  font-weight: bold;
+  text-decoration: underline;
 }
 
 #scrum_logo{
