@@ -14,39 +14,33 @@
         <form id="registerForm">
           <!--Painel login-->
           <div class="card-login">
-            <h2>Bem vindo ao</h2>
-            <h1>SCRUM BOARD</h1>
+            <div id="welcome_container">
+              <h2>Bem vindo ao</h2>
+              <img src="../Resources/agileflow-high-resolution-logo-white-transparent.png" id="logo_welcome">
+            </div>
             <div class="textfield">
               <!--Campo para receber o nome de utilizador-->
-              <label for="signup_usertext" class="label">Utilizador</label>
-              <input type="text" id="signup_usertext" name="signup_usertext" placeholder="Insira o seu nome de utilizador" required>
+              <input type="text" id="signup_usertext" name="signup_usertext" placeholder="Utilizador" required>
             </div>
             <div class="textfield">
               <!--Campo para receber a password-->
-              <label for="signup_password" class="label">Password</label>
-              <input type="password" id="signup_password" id="signup_password" placeholder="Insira a sua password" required>
+              <input type="password" id="signup_password" id="signup_password" placeholder="Password" required>
             </div>
             <div class="textfield">
                 <!--Campo para receber o email-->
-                <label for="signup_email">Email:</label>
-                <input type="email" id="signup_email" name="signup_email" placeholder="Insira o seu email" required>
+                <input type="email" id="signup_email" name="signup_email" placeholder="Email" required>
             </div>
             <div class="textfield">
-                <label for="signup_firstName">Primeiro Nome:</label>
-                <input type="text" id="signup_firstName" name="signup_firstName" placeholder="Insira o seu primeiro nome" required>
+                <input type="text" id="signup_firstName" name="signup_firstName" placeholder="Primeiro Nome" required>
             </div>
             <div class="textfield">
-                <label for="signup_lastName">Último Nome:</label>
-                <input type="text" id="signup_lastName" name="signup_lastName" placeholder="Insira o seu apelido" required>
+                <input type="text" id="signup_lastName" name="signup_lastName" placeholder="Último Nome" required>
             </div>
             <div class="textfield">
-                <label for="signup_phone">Número de Telefone:</label>
-                <input type="tel" id="signup_phone" name="signup_phone" placeholder="Insira o seu número de telemóvel" required>
+                <input type="tel" id="signup_phone" name="signup_phone" placeholder="Número de Telemóvel" required>
             </div>
-
             <div class="textfield">
-              <label for="signup_photoURL">URL da Fotografia:</label>
-              <input type="url" id="signup_photoURL" name="signup_photoURL" placeholder="Coloque aqui o URL da sua foto" required>
+              <input type="url" id="signup_photoURL" name="signup_photoURL" placeholder="URL da Fotografia de Perfil" required>
             </div>
 
             <div>
@@ -58,6 +52,7 @@
       </div>
       <!--imagem do lado direito-->
       <div class="left-login">
+        <img src="../Resources/agileflow-high-resolution-logo-transparent.png" id="logo">
         <img
           src="../Resources/imageLogin.svg" class="left-login-image" alt="escritorio animação"
         />

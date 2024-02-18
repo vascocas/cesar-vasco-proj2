@@ -24,7 +24,7 @@ if(typeof window !== 'undefined') {
             }
         });
 
-        document.querySelector(".left-login-image").addEventListener("click", function() {
+        document.getElementById('logo').addEventListener("click", function() {
 
             window.location.href="../index.html";
         });

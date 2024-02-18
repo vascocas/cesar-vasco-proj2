@@ -103,9 +103,6 @@ public class RandomData {
                 }
             }
 
-            userBean.writeIntoJsonFile();
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }

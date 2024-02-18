@@ -1,8 +1,5 @@
 package aor.paj.bean;
 
-import java.io.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import aor.paj.dto.Task;
 import aor.paj.dto.User;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -15,6 +12,11 @@ import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbConfig;
 import jakarta.json.bind.JsonbException;
+import jakarta.json.bind.annotation.JsonbTransient;
+
+import java.io.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 @ApplicationScoped
 public class UserBean implements Serializable {
@@ -23,8 +25,10 @@ public class UserBean implements Serializable {
     LoginBean loginBean;
 
     final String filename = "users.json";
+
     private ArrayList<User> users;
     private String filePath;
+
 
     public UserBean() {
         File f = new File(filename);
@@ -57,15 +61,6 @@ public class UserBean implements Serializable {
         this.users = readFromJsonFile();
     }
 
-    public void writeIntoJsonFile(){
-        Jsonb jsonb =  JsonbBuilder.create(new JsonbConfig().withFormatting(true));
-        try {
-            jsonb.toJson(users, new FileOutputStream(filename));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public void addUser(User u) {
         users.add(u);
         writeIntoJsonFile();
@@ -93,7 +88,7 @@ public class UserBean implements Serializable {
         return false;
     }
 
-    public boolean updateUser(String username, String email, String firstName, String lastName, String phoneNumber, String photo) {
+    public boolean updateUser(String username,String email, String firstName, String lastName, String phoneNumber, String photo) {
         for (User u : users) {
             if (u.getUsername().equals(username)) {
                 if (email!=u.getEmail()){u.setEmail(email);}
@@ -111,6 +106,21 @@ public class UserBean implements Serializable {
             }
         }
         return false;
+    }
+
+    public void writeIntoJsonFile() {
+        Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withFormatting(true));
+        try {
+            jsonb.toJson(users, new FileOutputStream(filename));
+        } catch (FileNotFoundException e) {
+            // Se o arquivo não puder ser encontrado, lança uma exceção
+            System.err.println("Arquivo não encontrado: " + filename);
+            throw new RuntimeException(e);
+        } catch (JsonbException e) {
+            // Se ocorrer um erro durante a serialização JSON, lança uma exceção
+            System.err.println("Erro ao serializar a lista de usuários para JSON: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean usernameExists(String username,ArrayList<User> users){
@@ -180,6 +190,7 @@ public class UserBean implements Serializable {
     public boolean verifyPassword(String username, String oldPassword){
 
         User user=getUser(username);
+
         if (user!=null){
             String password = user.getPassword();
             return password.equals(oldPassword);

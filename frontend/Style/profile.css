@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color:white;
 }
 
 .container {
@@ -10,7 +10,7 @@ body {
     max-width: 600px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #fff;
+    background-color: rgb(130, 194, 247);
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     align-items: center;
@@ -76,8 +76,11 @@ input:disabled {
     background-color: var(--color_dark);
 }
 
-#profile_titlePage:hover {
+#profile_titlePage{
     cursor: pointer;
+    width: 26%;
+    height: auto;
+    margin: 3%;
 }
 
 /*Botões que abrem Modals*/
