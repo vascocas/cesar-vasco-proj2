@@ -83,23 +83,23 @@ nav {
 }
 
 .high-priority{
-  background-color: #B81D13;
+  background-color: var(--color_high_priority);
 }
 
 .medium-priority{
-  background-color: #EFB700;
-  color: black;
+  background-color: var(--color_medium_priority);
+  color: var(--color_dark);
 }
 
 .low-priority{
-  background-color: #008450;
+  background-color: var(--color_low_priority);
 }
 
 .card-header {
   border-radius: 6px;
   box-shadow: 5px 5px 20px -12px;
   margin: 10px;
-  border: 2px solid var(--color_light);
+  border: 2px solid var(--color_regular);
   cursor: pointer;
   text-align: left;
   padding: 5px;
@@ -207,23 +207,21 @@ nav {
   margin-bottom: 10px;
   border: none;
   border-radius: 10px;
-  background: var(--color_dark);
-  color: var(--white);
+  background: var(--color_light);
+  color: var(--color_dark);
   font-family: var(--type_font);
   font-size: var(--font_size_small);
   box-shadow: 5px 5px 20px -12px;
   border: 2px solid var(--color_regular);
-  word-wrap: break-word;  
+  word-wrap: break-word;
+  resize: none;
 }
 
 #newTask_title::placeholder,
-#newTask_description::placeholder,
-#newTask_priority::placeholder,
-#newTask_startDate::placeholder,
-#newTask_endDate::placeholder {
+#newTask_description::placeholder {
   font-family:var(--type_font);
   font-size: var(--font_size_small);
-  color: var(--color_light);
+  color: var(--color_dark);
 }
 
 #logged-in-username{
