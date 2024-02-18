@@ -125,7 +125,7 @@ public class UserService {
         if (username == null || username.isEmpty() || password == null || password.isEmpty() || email == null || email.isEmpty()) {
             return Response.status(400).entity("Username, password, and email are required.").build();
         } else {
-            if (userBean.usernameExists(username, users)) {
+            if (userBean.usernameExists(username)) {
                 //409 Indica que a solicitação não pode ser concluída devido a um conflito com o estado atual do pedido.
                 return Response.status(409).entity("Username already taken.").build();
             } else if (!userBean.validatePassword(password)) {
